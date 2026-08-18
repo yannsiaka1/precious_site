@@ -1,3 +1,7 @@
+import { Button } from "@/components/ui/Button";
+import { Reveal } from "@/components/ui/Reveal";
+import { useParallax } from "@/hooks/useParallax";
+
 /**
  * Section d'ouverture, reprise de la maquette « section_1 ».
  *
@@ -6,6 +10,8 @@
  * d'écran, alors qu'un halo incrusté dériverait au recadrage.
  */
 export function Hero() {
+  const bottles = useParallax<HTMLDivElement>(26);
+
   return (
     <section
       id="accueil"
@@ -15,6 +21,8 @@ export function Hero() {
         src="/assets/hero-fond.webp"
         alt=""
         aria-hidden="true"
+        width={1512}
+        height={895}
         className="absolute inset-0 -z-20 h-full w-full object-cover"
       />
 
@@ -26,66 +34,86 @@ export function Hero() {
       />
 
       <div className="page-x grid w-full items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-6">
-        {/* Décalage vers le bas : cale le titre sur le milieu des bouteilles. */}
-        <div className="animate-[rise_900ms_var(--ease-out-soft)_both] lg:mt-[9vh]">
-          <p className="text-eyebrow text-gold-ink">Artisanat Végétal</p>
-          <p className="text-eyebrow mt-1.5 text-ink/70">
-            Jus · Donuts · Événements · Transmission
-          </p>
+        <div>
+          <Reveal variant="fade">
+            <p className="text-eyebrow text-gold-ink">Artisanat Végétal</p>
+            <p className="text-eyebrow mt-1.5 text-ink/70">
+              Jus · Donuts · Événements · Transmission
+            </p>
+          </Reveal>
 
-          <h1 className="mt-8 font-display text-ink [text-shadow:0_2px_14px_rgba(255,255,255,0.55)]">
-            <span className="block text-[clamp(1.3rem,2.35vw,2.2rem)] leading-[1.25] tracking-[0.01em] uppercase">
-              La{" "}
-              <span className="text-[clamp(2.4rem,4.5vw,4.2rem)]">Nature</span>{" "}
-              dans
-            </span>
-            <span className="mt-1 block text-[clamp(2.4rem,4.5vw,4.2rem)] leading-[1.15] tracking-[0.01em] uppercase">
-              chaque goutte.
-            </span>
-          </h1>
+          <Reveal delay={120}>
+            <h1 className="mt-8 font-display text-ink [text-shadow:0_2px_14px_rgba(255,255,255,0.55)]">
+              <span className="block text-[clamp(1.3rem,2.35vw,2.2rem)] leading-[1.25] tracking-[0.01em] uppercase">
+                La{" "}
+                <span className="text-[clamp(2.4rem,4.5vw,4.2rem)]">
+                  Nature
+                </span>{" "}
+                dans
+              </span>
+              <span className="mt-1 block text-[clamp(2.4rem,4.5vw,4.2rem)] leading-[1.15] tracking-[0.01em] uppercase">
+                chaque goutte.
+              </span>
+            </h1>
+          </Reveal>
 
-          <p className="mt-8 max-w-[30rem] text-[clamp(1.1rem,1.45vw,1.4rem)] leading-[1.45] text-ink">
-            Prenez soin de votre santé et de votre bien-être avec nos jus
-            pressés et nos créations gourmandes.
-          </p>
-          <p className="mt-3 max-w-[30rem] text-[clamp(1.1rem,1.45vw,1.4rem)] leading-[1.45] text-ink">
-            Puis faites de ce savoir-faire le vôtre, avec notre ebook et nos
-            ateliers de formation.
-          </p>
+          {/* Les deux phrases forment un seul bloc de lecture. */}
+          <Reveal delay={240} className="mt-8 grid max-w-[30rem] gap-1.5">
+            <p className="text-[clamp(1.1rem,1.45vw,1.4rem)] leading-[1.45] text-ink">
+              Prenez soin de votre santé et de votre bien-être avec nos jus
+              pressés et nos créations gourmandes.
+            </p>
+            <p className="text-[clamp(1.1rem,1.45vw,1.4rem)] leading-[1.45] text-ink">
+              Puis faites de ce savoir-faire le vôtre, avec notre ebook et nos
+              ateliers de formation.
+            </p>
+          </Reveal>
 
-          <div className="mt-9 flex flex-wrap items-center gap-x-10 gap-y-4">
-            <a
-              href="#creations"
-              className="font-display text-[clamp(1rem,1.25vw,1.2rem)] tracking-wide text-brand-red decoration-1 underline-offset-[10px] hover:underline"
-            >
+          {/* Le second appel à l'action est légèrement décalé vers le bas :
+              les deux se lisent comme deux propositions distinctes. */}
+          <Reveal
+            delay={360}
+            className="mt-12 flex flex-wrap items-start gap-4 sm:gap-5"
+          >
+            <Button as="a" href="#creations" variant="red" size="lg">
               Découvrir nos créations
-            </a>
-            <a
+            </Button>
+            <Button
+              as="a"
               href="#academie"
-              className="font-display text-[clamp(1rem,1.25vw,1.2rem)] tracking-wide text-ink decoration-1 underline-offset-[10px] hover:underline"
+              variant="forest"
+              size="lg"
+              className="sm:translate-y-4"
             >
               Explorer les formations
-            </a>
-          </div>
+            </Button>
+          </Reveal>
         </div>
 
-        <div className="animate-[rise_1100ms_var(--ease-out-soft)_both]">
-          <img
-            src="/assets/hero-bouteilles.webp"
-            alt="Six bouteilles de jus de gingembre Precious alignées"
-            width={781}
-            height={429}
-            fetchPriority="high"
-            decoding="async"
-            className="w-full origin-center scale-y-[1.07] object-contain drop-shadow-[0_26px_46px_rgba(90,80,20,0.22)]"
-          />
+        <div
+          ref={bottles.ref}
+          style={bottles.style}
+          className="will-change-transform"
+        >
+          <Reveal variant="zoom" delay={200}>
+            <img
+              src="/assets/hero-bouteilles.webp"
+              alt="Six bouteilles de jus de gingembre Precious alignées"
+              width={781}
+              height={429}
+              fetchPriority="high"
+              decoding="async"
+              className="w-full origin-center scale-y-[1.07] object-contain drop-shadow-[0_26px_46px_rgba(90,80,20,0.22)]"
+            />
 
-          <ul className="mt-10 flex flex-wrap justify-center gap-x-7 gap-y-2 font-ui text-xs font-bold tracking-[0.14em] text-ink/60 uppercase">
-            <li>100 % naturel</li>
-            <li>Sans alcool</li>
-            <li>Sur commande</li>
-            <li>En magasin</li>
-          </ul>
+            <ul className="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 font-ui text-xs font-bold tracking-[0.14em] text-ink/60 uppercase">
+              <li>100 % naturel</li>
+              <li>Sans alcool</li>
+              <li>Sans arôme artificiel</li>
+              <li>Sur commande</li>
+              <li>En magasin</li>
+            </ul>
+          </Reveal>
         </div>
       </div>
     </section>

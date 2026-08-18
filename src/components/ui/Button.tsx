@@ -1,21 +1,27 @@
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "dark" | "light" | "ghost";
-type Size = "md" | "sm";
+type Variant = "red" | "forest" | "onDark" | "onLight";
+type Size = "md" | "lg";
 
+/**
+ * Appels à l'action du site : un rectangle fin, dans le même trait que les
+ * onglets et les filets des en-têtes. Chaque variante a son propre survol,
+ * pour distinguer l'action principale de l'action secondaire.
+ */
 const variants: Record<Variant, string> = {
-  primary:
-    "bg-mango text-ink shadow-[0_12px_28px_rgba(242,169,0,0.25)] hover:shadow-[0_18px_38px_rgba(242,169,0,0.35)]",
-  dark: "bg-forest text-paper hover:bg-forest-deep",
-  light: "bg-paper text-forest-deep hover:bg-cream",
-  ghost:
-    "border border-current/25 text-current hover:border-current/60 hover:bg-current/5",
+  red: "border-ink/45 text-ink hover:border-brand-red hover:bg-brand-red hover:text-paper",
+  forest:
+    "border-ink/45 text-ink hover:border-forest-deep hover:bg-forest-deep hover:text-mango",
+  onDark:
+    "border-paper/55 text-paper hover:scale-[1.05] hover:border-paper hover:bg-paper hover:text-forest-deep",
+  onLight:
+    "border-forest/40 text-forest hover:border-forest hover:bg-forest hover:text-paper",
 };
 
 const sizes: Record<Size, string> = {
-  md: "min-h-13 px-6 text-sm",
-  sm: "min-h-11 px-5 text-[0.8125rem]",
+  md: "px-6 py-3 text-[0.95rem]",
+  lg: "px-6 py-3.5 text-[clamp(0.92rem,1.05vw,1.05rem)] sm:px-7",
 };
 
 type ButtonProps<T extends ElementType> = {
@@ -25,10 +31,9 @@ type ButtonProps<T extends ElementType> = {
   children: ReactNode;
 } & Omit<ComponentPropsWithoutRef<T>, "as" | "children">;
 
-/** Bouton et lien-bouton : une seule apparence, deux balises possibles. */
 export function Button<T extends ElementType = "button">({
   as,
-  variant = "primary",
+  variant = "red",
   size = "md",
   className,
   children,
@@ -39,9 +44,10 @@ export function Button<T extends ElementType = "button">({
   return (
     <Tag
       className={cn(
-        "group inline-flex items-center justify-center gap-2.5 rounded-full font-ui font-bold tracking-tight",
-        "transition-[transform,box-shadow,background-color] duration-200 ease-(--ease-out-soft)",
-        "hover:-translate-y-0.5 active:translate-y-0",
+        "group inline-flex items-center justify-center gap-3 border font-display tracking-[0.06em] uppercase",
+        "transition-[background-color,border-color,color,transform,box-shadow] duration-300 ease-(--ease-out-soft)",
+        "hover:-translate-y-0.5 hover:shadow-[0_10px_26px_rgba(23,50,31,0.14)] active:translate-y-0",
+        "motion-reduce:transform-none motion-reduce:transition-colors",
         "disabled:pointer-events-none disabled:opacity-60",
         variants[variant],
         sizes[size],

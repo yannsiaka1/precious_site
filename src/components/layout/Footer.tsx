@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { footerLinks, navigation, site } from "@/content/site";
 import { SocialLinks } from "@/components/ui/SocialLinks";
+import { Reveal } from "@/components/ui/Reveal";
 
 interface FooterProps {
   /** Reprend l'adresse saisie ici et l'amène au formulaire de contact. */
@@ -20,13 +21,13 @@ export function Footer({ onQuickWrite }: FooterProps) {
   return (
     <footer className="grain page-x bg-leaf pt-20 pb-8 text-paper">
       <div className="mx-auto grid w-full max-w-[82rem] gap-12 md:grid-cols-2 lg:grid-cols-[1.3fr_repeat(3,1fr)]">
-        <div>
+        <Reveal>
           <p className="font-display text-3xl tracking-wide">{site.name}</p>
           <p className="mt-5 max-w-72 text-paper/75">{site.promise}</p>
           <SocialLinks className="mt-7" />
-        </div>
+        </Reveal>
 
-        <nav aria-label="Pied de page">
+        <Reveal as="nav" delay={100} aria-label="Pied de page">
           <p className="text-eyebrow font-bold text-mango">Exploration</p>
           <ul className="mt-5 grid gap-3.5">
             {[...navigation, ...footerLinks].map((link) => (
@@ -37,7 +38,7 @@ export function Footer({ onQuickWrite }: FooterProps) {
               </li>
             ))}
           </ul>
-        </nav>
+        </Reveal>
 
         <div>
           <p className="text-eyebrow font-bold text-mango">La maison</p>

@@ -8,14 +8,14 @@ interface ImagePairCarouselProps {
   resetKey: string;
 }
 
-const DELAY = 5200;
+const DELAY = 3200;
 
 function Slide({ image, visible }: { image: GalleryImage; visible: boolean }) {
   return (
     <figure
       aria-hidden={!visible}
       className={cn(
-        "absolute inset-0 transition-opacity duration-700 ease-(--ease-out-soft)",
+        "absolute inset-0 transition-opacity duration-500 ease-(--ease-out-soft)",
         visible ? "opacity-100" : "opacity-0",
       )}
     >
@@ -24,7 +24,10 @@ function Slide({ image, visible }: { image: GalleryImage; visible: boolean }) {
         alt={image.alt}
         loading="lazy"
         decoding="async"
-        className="h-full w-full object-cover"
+        width={820}
+        height={615}
+        sizes="(max-width: 1023px) 100vw, 45vw"
+        className="h-full w-full object-cover object-center"
       />
       {image.caption ? (
         <>
@@ -82,7 +85,7 @@ export function ImagePairCarousel({
       {[0, 1].map((slot) => (
         <div
           key={slot}
-          className="relative aspect-4/3 overflow-hidden rounded-sm bg-cream"
+          className="relative aspect-4/3 w-full overflow-hidden rounded-sm bg-cream"
         >
           {images.map((image, index) => (
             <Slide

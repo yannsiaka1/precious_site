@@ -38,7 +38,7 @@ export function SocialLinks({ className }: { className?: string }) {
               <a
                 href={network.href}
                 target="_blank"
-                rel="noreferrer"
+                rel="noreferrer noopener"
                 aria-label={network.label}
                 className="block transition-[color,transform] duration-200 hover:-translate-y-0.5 hover:text-brand-red"
               >

@@ -26,7 +26,7 @@ export function Realisations() {
           title="Un aperçu de l'univers Precious"
         />
 
-        <div className="mt-20 grid gap-4 sm:auto-rows-[15rem] sm:grid-cols-2 lg:auto-rows-[16rem] lg:grid-cols-4">
+        <div className="mt-24 grid gap-4 sm:auto-rows-[15rem] sm:grid-cols-2 lg:auto-rows-[16rem] lg:grid-cols-4">
           {albums.map((album, index) => {
             const cover = album.images[0];
             if (!cover) return null;
@@ -48,7 +48,10 @@ export function Realisations() {
                     alt=""
                     loading="lazy"
                     decoding="async"
-                    className="h-72 w-full object-cover transition-transform duration-700 ease-(--ease-out-soft) group-hover:scale-[1.05] sm:h-full"
+                    width={820}
+                    height={615}
+                    sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
+                    className="h-60 w-full object-cover object-center transition-transform duration-700 ease-(--ease-out-soft) group-hover:scale-[1.05] sm:h-full"
                   />
                   <span
                     aria-hidden="true"

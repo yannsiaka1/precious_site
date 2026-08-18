@@ -15,10 +15,10 @@ interface RevealProps {
 }
 
 const hidden: Record<Variant, string> = {
-  up: "translate-y-8 opacity-0",
-  left: "-translate-x-8 opacity-0",
-  right: "translate-x-8 opacity-0",
-  zoom: "scale-[0.97] opacity-0",
+  up: "translate-y-10 opacity-0",
+  left: "-translate-x-12 opacity-0",
+  right: "translate-x-12 opacity-0",
+  zoom: "scale-[0.95] opacity-0",
   fade: "opacity-0",
 };
 
@@ -42,7 +42,7 @@ export function Reveal({
       data-reveal=""
       style={{ transitionDelay: `${delay}ms` }}
       className={cn(
-        "transition-[opacity,transform] duration-[850ms] ease-(--ease-out-soft) will-change-[opacity,transform] motion-reduce:transition-none",
+        "transition-[opacity,transform] duration-[1100ms] ease-(--ease-out-soft) will-change-[opacity,transform] motion-reduce:transition-none",
         inView ? "translate-none scale-100 opacity-100" : hidden[variant],
         className,
       )}

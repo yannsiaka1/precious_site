@@ -2,8 +2,7 @@ import { ebook, formation } from "@/content/offerings";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { EbookCover } from "@/components/ui/EbookCover";
 import { Reveal } from "@/components/ui/Reveal";
-import { Arrow } from "@/components/ui/Arrow";
-import { cn } from "@/lib/cn";
+import { Button } from "@/components/ui/Button";
 
 /**
  * Appel à l'action d'une offre.
@@ -19,25 +18,27 @@ function OfferAction({
   url: string;
   tone: "light" | "dark";
 }) {
-  const className = cn(
-    "group inline-flex items-center gap-2.5 font-display text-lg tracking-wide decoration-1 underline-offset-[10px] hover:underline",
-    tone === "dark" ? "text-lime" : "text-brand-red",
-  );
+  const variant = tone === "dark" ? "onDark" : "red";
 
   if (!url) {
     return (
-      <a href="#contact" className={className}>
+      <Button as="a" href="#contact" variant={variant} size="lg">
         {label}
-        <Arrow />
-      </a>
+      </Button>
     );
   }
 
   return (
-    <a href={url} target="_blank" rel="noreferrer" className={className}>
+    <Button
+      as="a"
+      href={url}
+      target="_blank"
+      rel="noreferrer noopener"
+      variant={variant}
+      size="lg"
+    >
       {label}
-      <Arrow direction="up-right" />
-    </a>
+    </Button>
   );
 }
 
@@ -54,7 +55,7 @@ export function Academy() {
           title="Le savoir-faire se savoure. Il se partage aussi."
         />
 
-        <div className="mt-20 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+        <div className="mt-28 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
           <Reveal className="flex">
             <article className="flex flex-col bg-linear-135 from-forest via-[#2d7e35] to-[#7aa729] p-8 sm:p-12 lg:p-14">
               <div className="flex flex-wrap justify-between gap-4 font-ui text-xs font-bold tracking-[0.16em] text-lime uppercase">
@@ -70,14 +71,16 @@ export function Academy() {
               </p>
 
               <ul className="mt-9 grid gap-6 sm:grid-cols-2">
-                {formation.modules.map((module) => (
-                  <li
+                {formation.modules.map((module, position) => (
+                  <Reveal
+                    as="li"
                     key={module.title}
+                    delay={position * 120}
                     className="border-l border-lime/50 pl-4"
                   >
                     <p className="font-display text-lg">{module.title}</p>
                     <p className="mt-1.5 text-paper/75">{module.detail}</p>
-                  </li>
+                  </Reveal>
                 ))}
               </ul>
 
@@ -114,14 +117,20 @@ export function Academy() {
               <p className="mt-5 text-ink/75">{ebook.intro}</p>
 
               <ul className="mt-7 grid gap-3">
-                {ebook.highlights.map((item) => (
-                  <li key={item} className="flex gap-3">
+                {ebook.highlights.map((item, position) => (
+                  <Reveal
+                    as="li"
+                    key={item}
+                    delay={position * 110}
+                    variant="left"
+                    className="flex gap-3"
+                  >
                     <span
                       aria-hidden="true"
                       className="mt-2.5 block size-1.5 shrink-0 rounded-full bg-mango"
                     />
                     {item}
-                  </li>
+                  </Reveal>
                 ))}
               </ul>
 

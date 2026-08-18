@@ -2,8 +2,8 @@ import { useEffect, useId, useRef, useState } from "react";
 import type { Service } from "@/content/types";
 import { site } from "@/content/site";
 import { submitRequest, type SubmitOutcome } from "@/lib/submitRequest";
-import { fieldClass, labelClass } from "@/components/ui/formStyles";
-import { Arrow } from "@/components/ui/Arrow";
+import { fieldClass, labelClass, limits } from "@/components/ui/formStyles";
+import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 
 type Status = "idle" | "sending" | "done" | "error";
@@ -101,14 +101,9 @@ export function RequestForm({ service, onClose }: RequestFormProps) {
             ? "Merci pour votre confiance. Nous revenons vers vous rapidement."
             : "Votre messagerie s'est ouverte avec la demande pré-remplie. Il ne reste qu'à l'envoyer."}
         </p>
-        <button
-          type="button"
-          onClick={onClose}
-          className="group mt-8 inline-flex items-center gap-2.5 font-display text-lg text-brand-red decoration-1 underline-offset-[10px] hover:underline"
-        >
+        <Button variant="red" className="mt-8" onClick={onClose}>
           Revenir à {service.title.toLowerCase()}
-          <Arrow />
-        </button>
+        </Button>
       </div>
     );
   }
@@ -160,6 +155,7 @@ export function RequestForm({ service, onClose }: RequestFormProps) {
             autoComplete="name"
             placeholder="Votre nom"
             className={fieldClass}
+            {...limits.name}
           />
         </label>
 
@@ -171,8 +167,11 @@ export function RequestForm({ service, onClose }: RequestFormProps) {
             type="email"
             required
             autoComplete="email"
+            inputMode="email"
+            spellCheck={false}
             placeholder="vous@exemple.com"
             className={fieldClass}
+            {...limits.email}
           />
         </label>
 
@@ -187,8 +186,10 @@ export function RequestForm({ service, onClose }: RequestFormProps) {
             name="phone"
             type="tel"
             autoComplete="tel"
+            inputMode="tel"
             placeholder="514 000 0000"
             className={fieldClass}
+            {...limits.phone}
           />
         </label>
 
@@ -205,6 +206,10 @@ export function RequestForm({ service, onClose }: RequestFormProps) {
               type={field.type}
               required={field.required}
               placeholder={field.placeholder}
+              inputMode={field.type === "number" ? "numeric" : undefined}
+              min={field.type === "number" ? 1 : undefined}
+              max={field.type === "number" ? 2000 : undefined}
+              maxLength={field.type === "text" ? 120 : undefined}
               className={fieldClass}
             />
           </label>
@@ -222,6 +227,7 @@ export function RequestForm({ service, onClose }: RequestFormProps) {
             required
             placeholder="Parfums, contraintes, questions…"
             className={cn(fieldClass, "resize-y")}
+            {...limits.message}
           />
         </label>
 
@@ -235,14 +241,14 @@ export function RequestForm({ service, onClose }: RequestFormProps) {
           </p>
         ) : null}
 
-        <button
+        <Button
           type="submit"
+          variant="red"
           disabled={status === "sending"}
-          className="group mt-2 inline-flex w-fit items-center gap-2.5 font-display text-lg tracking-wide text-brand-red decoration-1 underline-offset-[10px] hover:underline disabled:opacity-60 sm:col-span-2"
+          className="mt-2 w-fit sm:col-span-2"
         >
           {status === "sending" ? "Envoi en cours…" : "Envoyer ma demande"}
-          <Arrow />
-        </button>
+        </Button>
       </form>
     </div>
   );

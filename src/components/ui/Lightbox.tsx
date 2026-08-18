@@ -170,6 +170,8 @@ export function Lightbox({
                 alt=""
                 loading="lazy"
                 decoding="async"
+                width={820}
+                height={615}
                 className="h-full w-full object-cover"
               />
             </button>

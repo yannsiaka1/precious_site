@@ -5,7 +5,7 @@ import { submitRequest, type SubmitOutcome } from "@/lib/submitRequest";
 import { fieldClass, labelClass, limits } from "@/components/ui/formStyles";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Reveal } from "@/components/ui/Reveal";
-import { Arrow } from "@/components/ui/Arrow";
+import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 
 type Status = "idle" | "sending" | "done" | "error";
@@ -163,14 +163,13 @@ export function Contact({
                       ? "Merci pour votre confiance. Nous revenons vers vous rapidement."
                       : "Votre messagerie s'est ouverte avec la demande pré-remplie. Il ne reste qu'à l'envoyer."}
                   </p>
-                  <button
-                    type="button"
+                  <Button
+                    variant="red"
+                    className="mt-8"
                     onClick={() => setStatus("idle")}
-                    className="group mt-8 inline-flex items-center gap-2.5 font-display text-lg text-brand-red decoration-1 underline-offset-[10px] hover:underline"
                   >
                     Faire une autre demande
-                    <Arrow />
-                  </button>
+                  </Button>
                 </div>
               ) : (
                 <form
@@ -212,6 +211,8 @@ export function Contact({
                       type="email"
                       required
                       autoComplete="email"
+                      inputMode="email"
+                      spellCheck={false}
                       placeholder="vous@exemple.com"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
@@ -230,6 +231,7 @@ export function Contact({
                       name="phone"
                       type="tel"
                       autoComplete="tel"
+                      inputMode="tel"
                       placeholder="514 000 0000"
                       className={fieldClass}
                       {...limits.phone}
@@ -310,16 +312,17 @@ export function Contact({
                     </p>
                   ) : null}
 
-                  <button
+                  <Button
                     type="submit"
+                    variant="red"
+                    size="lg"
                     disabled={status === "sending"}
-                    className="group col-span-full mt-1 inline-flex w-fit items-center gap-2.5 font-display text-lg tracking-wide text-brand-red decoration-1 underline-offset-[10px] hover:underline disabled:opacity-60"
+                    className="col-span-full mt-1 w-fit"
                   >
                     {status === "sending"
                       ? "Envoi en cours…"
                       : "Envoyer ma demande"}
-                    <Arrow />
-                  </button>
+                  </Button>
                 </form>
               )}
             </div>

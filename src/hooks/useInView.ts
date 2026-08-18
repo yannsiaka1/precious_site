@@ -12,7 +12,7 @@ interface Options {
  * Socle des apparitions au scroll, sans bibliothèque d'animation.
  */
 export function useInView<T extends HTMLElement>({
-  rootMargin = "0px 0px -12% 0px",
+  rootMargin = "0px 0px -8% 0px",
   once = true,
 }: Options = {}) {
   const ref = useRef<T>(null);

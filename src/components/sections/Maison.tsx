@@ -24,7 +24,7 @@ export function Maison() {
       <div className="mx-auto w-full max-w-[82rem]">
         <SectionHeader eyebrow="La maison" title="À propos de Precious" />
 
-        <Reveal delay={80} className="mt-20">
+        <Reveal delay={80} className="mt-24">
           {/* Sommaire : chaque chapitre est un onglet, la barre indique
               l'avancement dans le récit. */}
           <ol className="grid gap-px overflow-hidden border-y border-ink/15 sm:grid-cols-3">
@@ -80,10 +80,13 @@ export function Maison() {
             alt={chapter.alt}
             loading="lazy"
             decoding="async"
+            width={640}
+            height={854}
+            sizes="(max-width: 1023px) 100vw, 33vw"
             className={cn(
               "w-full object-cover shadow-(--shadow-soft)",
               chapter.imageStyle === "portrait"
-                ? "aspect-[483/814] max-h-[34rem] object-top"
+                ? "aspect-[483/814] max-h-[24rem] object-top sm:max-h-[34rem]"
                 : "aspect-4/3",
             )}
           />
@@ -95,8 +98,12 @@ export function Maison() {
             </p>
 
             <div className="mt-8 grid gap-5 text-[clamp(1.02rem,1.2vw,1.15rem)] leading-[1.6] text-ink/80">
-              {chapter.paragraphs.map((paragraph) => (
-                <p key={paragraph.slice(0, 24)} className="max-w-[62ch]">
+              {chapter.paragraphs.map((paragraph, position) => (
+                <p
+                  key={paragraph.slice(0, 24)}
+                  style={{ animationDelay: `${220 + position * 140}ms` }}
+                  className="max-w-[62ch] animate-[chapter_700ms_var(--ease-out-soft)_both]"
+                >
                   {paragraph}
                 </p>
               ))}

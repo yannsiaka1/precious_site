@@ -1,8 +1,8 @@
 import { savoirFaire } from "@/content/offerings";
 import type { ServiceId } from "@/content/types";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
-import { Arrow } from "@/components/ui/Arrow";
 import { cn } from "@/lib/cn";
 
 /** Décalages verticaux des trois colonnes, repris de la maquette. */
@@ -21,7 +21,7 @@ export function SavoirFaire({ onGoTo }: SavoirFaireProps) {
   return (
     <section
       id="savoir-faire"
-      className="grain page-x bg-leaf py-20 text-paper md:py-28"
+      className="grain page-x bg-leaf py-20 text-paper md:py-28 lg:py-32"
     >
       <div className="mx-auto w-full max-w-[82rem]">
         <SectionHeader
@@ -30,12 +30,13 @@ export function SavoirFaire({ onGoTo }: SavoirFaireProps) {
           title="Une seule maison, trois façons de faire plaisir."
         />
 
-        <ul className="mt-20 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-[10.4%]">
+        {/* Colonnes de 26,4 % séparées par 10,4 % — proportions de la maquette. */}
+        <ul className="mt-24 grid gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-[10.4%]">
           {savoirFaire.map((card, index) => (
             <Reveal
               key={card.title}
               as="li"
-              delay={index * 110}
+              delay={index * 160}
               className={cn("flex flex-col", offsets[card.offset])}
             >
               <div className="border-l border-paper/50 pl-4">
@@ -45,6 +46,18 @@ export function SavoirFaire({ onGoTo }: SavoirFaireProps) {
                 </p>
               </div>
 
+              <p className="mt-5 max-w-[36ch] text-paper/85">
+                {card.description}
+              </p>
+
+              <Button
+                variant="onDark"
+                className="mt-7 w-fit"
+                onClick={() => onGoTo(card.target)}
+              >
+                Voir les détails
+              </Button>
+
               <img
                 src={card.image}
                 alt={card.alt}
@@ -52,24 +65,13 @@ export function SavoirFaire({ onGoTo }: SavoirFaireProps) {
                 decoding="async"
                 width={662}
                 height={1054}
-                className="mt-6 aspect-[331/527] w-full object-cover"
+                sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 27vw"
+                className="mt-8 aspect-[331/527] w-full object-cover object-center"
               />
 
               <h3 className="mt-6 font-display text-2xl text-paper">
                 {card.title}
               </h3>
-              <p className="mt-3 max-w-[34ch] text-paper/85">
-                {card.description}
-              </p>
-
-              <button
-                type="button"
-                onClick={() => onGoTo(card.target)}
-                className="group mt-5 inline-flex w-fit items-center gap-2.5 border-b border-paper/50 pb-1 font-ui text-xs font-bold tracking-[0.16em] uppercase transition-colors hover:border-mango hover:text-mango"
-              >
-                Voir les détails
-                <Arrow />
-              </button>
             </Reveal>
           ))}
         </ul>

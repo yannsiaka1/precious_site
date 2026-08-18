@@ -4,9 +4,9 @@ import type { ServiceId } from "@/content/types";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ImagePairCarousel } from "@/components/ui/ImagePairCarousel";
 import { RequestForm } from "@/components/sections/RequestForm";
+import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
-import { Arrow } from "@/components/ui/Arrow";
 import { cn } from "@/lib/cn";
 
 /** Pictogrammes des onglets, repris de la maquette. */
@@ -155,8 +155,12 @@ export function Services({ activeId, onActiveChange }: ServicesProps) {
                   <p className="mt-6 text-ink/75">{active.description}</p>
 
                   <ul className="mt-7 grid gap-3">
-                    {active.features.map((feature) => (
-                      <li key={feature} className="flex gap-3">
+                    {active.features.map((feature, position) => (
+                      <li
+                        key={feature}
+                        style={{ animationDelay: `${180 + position * 110}ms` }}
+                        className="flex animate-[panel_620ms_var(--ease-out-soft)_both] gap-3"
+                      >
                         <span
                           aria-hidden="true"
                           className="mt-2.5 block size-1.5 shrink-0 rounded-full bg-mango"
@@ -166,21 +170,13 @@ export function Services({ activeId, onActiveChange }: ServicesProps) {
                     ))}
                   </ul>
 
-                  <div className="mt-9 flex flex-wrap items-center gap-x-10 gap-y-4">
-                    <button
-                      type="button"
-                      onClick={() => setFormFor(activeId)}
-                      className="group inline-flex items-center gap-2.5 font-display text-[clamp(1rem,1.25vw,1.2rem)] tracking-wide text-brand-red decoration-1 underline-offset-[10px] hover:underline"
-                    >
+                  <div className="mt-9 flex flex-wrap items-center gap-4">
+                    <Button variant="red" onClick={() => setFormFor(activeId)}>
                       {active.action}
-                      <Arrow />
-                    </button>
-                    <a
-                      href="#contact"
-                      className="font-display text-[clamp(1rem,1.25vw,1.2rem)] tracking-wide text-ink decoration-1 underline-offset-[10px] hover:underline"
-                    >
+                    </Button>
+                    <Button as="a" href="#contact" variant="forest">
                       Poser une question
-                    </a>
+                    </Button>
                   </div>
                 </div>
               )}

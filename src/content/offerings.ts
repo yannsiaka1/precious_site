@@ -337,27 +337,35 @@ export const maison = [
 
 /**
  * Témoignages.
- * ⚠️ Ces citations viennent des maquettes, pas de clients identifiés. Avant
- * la mise en ligne, il faut de vrais avis, avec l'accord des personnes citées.
+ * ⚠️ PLACEHOLDERS — ces avis sont écrits pour donner le ton, ils ne
+ * proviennent pas de clients identifiés. Ils doivent être remplacés par de
+ * vrais témoignages, avec l'accord des personnes citées, avant que le site
+ * ne serve à autre chose qu'une démonstration.
  */
 export const testimonials = [
   {
     quote:
-      "En plus d'être super délicieux, ils ont respecté mon thème et ont transformé ma simple fête de dernière minute en événement mémorable.",
-    author: "Chloé",
-    role: "Anniversaire à Montréal",
+      "En plus d'être délicieux, ils ont respecté le thème de la soirée jusque dans les couleurs des verres. Ma fête organisée à la dernière minute est devenue un vrai événement.",
+    author: "Chloé N.",
+    role: "Anniversaire · Montréal",
   },
   {
     quote:
-      "Une révélation. J'ai redécouvert le vrai goût du fruit, sublimé par un savoir-faire d'exception. Precious n'est pas une marque, c'est un art de vivre.",
-    author: "Camille Verrier",
-    role: "Journaliste culinaire",
+      "Nous avons fait appel à Precious pour le mariage de ma sœur. Le bar à jus n'a pas désempli de la soirée, et plusieurs invités ont demandé les coordonnées avant de partir.",
+    author: "Arlette Mbarga",
+    role: "Mariage · Laval",
   },
   {
     quote:
-      "Le service était impeccable du début à la fin. Nos invités parlent encore du bar à jus et de la présentation des cocktails.",
-    author: "Jean B.",
-    role: "Événement d'entreprise",
+      "Le jus de gingembre est exactement celui que je cherchais depuis mon arrivée ici : franc, bien relevé, sans sucre inutile. J'en commande maintenant toutes les semaines.",
+    author: "Serge Fotso",
+    role: "Client fidèle",
+  },
+  {
+    quote:
+      "J'ai suivi la formation sur les cocktails naturels pour lancer mon service traiteur. Les explications étaient claires et surtout applicables dès le lendemain.",
+    author: "Nadège Ekwalla",
+    role: "Formation cocktails",
   },
 ];
 
