@@ -1,0 +1,48 @@
+/*
+ * Polices de la marque, auto-hébergées, sous-ensemble latin (suffisant pour le
+ * français). Fichiers dans /public/fonts, licences OFL jointes.
+ *
+ *   Cinzel    — titres, surtitres et titre du hero
+ *   Bellefair — texte courant
+ *   Akatab    — navigation, boutons, libellés (seule police disposant de gras)
+ */
+
+@font-face {
+  font-family: "Cinzel";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/cinzel-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Cinzel";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/cinzel-latin-700-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Bellefair";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/bellefair-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Akatab";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/akatab-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Akatab";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/akatab-latin-700-normal.woff2") format("woff2");
+}
