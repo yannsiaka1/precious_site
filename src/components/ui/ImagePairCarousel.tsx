@@ -27,7 +27,7 @@ function Slide({ image, visible }: { image: GalleryImage; visible: boolean }) {
         width={820}
         height={615}
         sizes="(max-width: 1023px) 100vw, 45vw"
-        className="h-full w-full object-cover object-center"
+        className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover/slide:scale-[1.04]"
       />
       {image.caption ? (
         <>
@@ -85,7 +85,7 @@ export function ImagePairCarousel({
       {[0, 1].map((slot) => (
         <div
           key={slot}
-          className="relative aspect-4/3 w-full overflow-hidden rounded-sm bg-cream"
+          className="group/slide relative aspect-4/3 w-full overflow-hidden rounded-sm bg-cream"
         >
           {images.map((image, index) => (
             <Slide

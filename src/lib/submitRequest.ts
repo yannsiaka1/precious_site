@@ -26,12 +26,14 @@ export type SubmitOutcome = "sent" | "handoff";
  * requête : on ne fait jamais confiance à ce qui sort du formulaire.
  */
 export function clean(value: string, max = 1500): string {
-  return value
-    // eslint-disable-next-line no-control-regex -- on retire justement les caractères de contrôle
-    .replace(/[\u0000-\u001f\u007f]/g, " ")
-    .replace(/[<>]/g, "")
-    .trim()
-    .slice(0, max);
+  return (
+    value
+      // eslint-disable-next-line no-control-regex -- on retire justement les caractères de contrôle
+      .replace(/[\u0000-\u001f\u007f]/g, " ")
+      .replace(/[<>]/g, "")
+      .trim()
+      .slice(0, max)
+  );
 }
 
 function buildMailto(payload: RequestPayload): string {

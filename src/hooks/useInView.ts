@@ -1,8 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 
 interface Options {
-  /** Marge de déclenchement : négative en bas = l'élément doit être bien entré. */
+  /**
+   * Marge de déclenchement. La valeur négative en bas retarde l'apparition :
+   * l'élément est déjà bien entré dans l'écran quand l'animation démarre,
+   * ce qui la rend visible au lieu de se jouer hors champ.
+   */
   rootMargin?: string;
+  /** Part de l'élément qui doit être visible avant de déclencher. */
+  threshold?: number;
   /** Une fois visible, on arrête d'observer. */
   once?: boolean;
 }
@@ -12,7 +18,8 @@ interface Options {
  * Socle des apparitions au scroll, sans bibliothèque d'animation.
  */
 export function useInView<T extends HTMLElement>({
-  rootMargin = "0px 0px -8% 0px",
+  rootMargin = "0px 0px -12% 0px",
+  threshold = 0.15,
   once = true,
 }: Options = {}) {
   const ref = useRef<T>(null);
@@ -20,6 +27,9 @@ export function useInView<T extends HTMLElement>({
 
   useEffect(() => {
     const element = ref.current;
+
+    // Sans IntersectionObserver, on affiche tout : mieux vaut une page sans
+    // animation qu'une page vide.
     if (!element || typeof IntersectionObserver === "undefined") {
       setInView(true);
       return;
@@ -35,12 +45,12 @@ export function useInView<T extends HTMLElement>({
           setInView(false);
         }
       },
-      { rootMargin, threshold: 0.05 },
+      { rootMargin, threshold: [0, threshold] },
     );
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, [rootMargin, once]);
+  }, [rootMargin, threshold, once]);
 
   return { ref, inView } as const;
 }

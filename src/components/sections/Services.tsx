@@ -6,7 +6,7 @@ import { ImagePairCarousel } from "@/components/ui/ImagePairCarousel";
 import { RequestForm } from "@/components/sections/RequestForm";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, STAGGER } from "@/components/ui/Reveal";
 import { cn } from "@/lib/cn";
 
 /** Pictogrammes des onglets, repris de la maquette. */
@@ -67,7 +67,7 @@ export function Services({ activeId, onActiveChange }: ServicesProps) {
           title="Choisissez votre expérience."
         />
 
-        <Reveal delay={80} className="mt-16 flex justify-center">
+        <Reveal delay={STAGGER} className="mt-16 flex justify-center">
           <p className="max-w-[52ch] text-center text-[clamp(1.05rem,1.35vw,1.3rem)] leading-[1.55] text-ink/80">
             Une envie gourmande, une commande de boissons ou un événement à
             imaginer ? Parcourez chaque univers, puis envoyez votre demande en
@@ -75,7 +75,7 @@ export function Services({ activeId, onActiveChange }: ServicesProps) {
           </p>
         </Reveal>
 
-        <Reveal delay={120} className="mt-12">
+        <Reveal delay={STAGGER * 2} className="mt-12">
           <div
             role="tablist"
             aria-label="Univers Precious"
@@ -130,13 +130,13 @@ export function Services({ activeId, onActiveChange }: ServicesProps) {
           aria-labelledby={`onglet-${activeId}`}
           className="mt-10 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]"
         >
-          <Reveal variant="left">
+          <Reveal variant="up">
             <ImagePairCarousel images={active.gallery} resetKey={active.id} />
           </Reveal>
 
           {/* Le panneau de droite bascule entre présentation et formulaire.
               La clé relance l'animation d'entrée à chaque changement. */}
-          <Reveal variant="right" delay={90} className="self-stretch">
+          <Reveal variant="up" delay={STAGGER} className="self-stretch">
             <div
               key={showForm ? `form-${activeId}` : `intro-${activeId}`}
               className="h-full animate-[panel_420ms_var(--ease-out-soft)_both] bg-butter"

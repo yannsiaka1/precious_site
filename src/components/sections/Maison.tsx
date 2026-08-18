@@ -1,8 +1,16 @@
 import { useState } from "react";
 import { maison } from "@/content/offerings";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, STAGGER } from "@/components/ui/Reveal";
 import { cn } from "@/lib/cn";
+
+/**
+ * Section « La maison » — le récit de la marque en trois chapitres.
+ *
+ * Carrousel volontairement manuel : on y lit trois paragraphes, une rotation
+ * automatique couperait la lecture. Le sommaire numéroté sert à la fois de
+ * navigation et de repère de progression.
+ */
 
 /**
  * « La maison » en trois chapitres.
@@ -24,7 +32,7 @@ export function Maison() {
       <div className="mx-auto w-full max-w-[82rem]">
         <SectionHeader eyebrow="La maison" title="À propos de Precious" />
 
-        <Reveal delay={80} className="mt-24">
+        <Reveal delay={STAGGER} className="mt-24">
           {/* Sommaire : chaque chapitre est un onglet, la barre indique
               l'avancement dans le récit. */}
           <ol className="grid gap-px overflow-hidden border-y border-ink/15 sm:grid-cols-3">

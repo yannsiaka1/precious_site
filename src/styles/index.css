@@ -56,6 +56,18 @@
     scroll-behavior: smooth;
     scroll-padding-top: 6rem;
     -webkit-text-size-adjust: 100%;
+
+    /*
+     * Filet de sécurité contre le défilement latéral sur téléphone.
+     * `clip` plutôt que `hidden` : `hidden` transformerait <html> en conteneur
+     * de défilement et casserait l'en-tête collant. La vraie règle reste de ne
+     * jamais décaler un élément horizontalement hors de la page.
+     */
+    overflow-x: clip;
+  }
+
+  body {
+    overflow-x: clip;
   }
 
   body {
@@ -176,6 +188,17 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Flottement en boucle de l'indicateur de défilement. */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(0.55rem);
   }
 }
 

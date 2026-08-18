@@ -4,9 +4,22 @@ import { services } from "@/content/offerings";
 import { submitRequest, type SubmitOutcome } from "@/lib/submitRequest";
 import { fieldClass, labelClass, limits } from "@/components/ui/formStyles";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, STAGGER } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+
+/**
+ * Section « Contact » — dernier bloc de la page.
+ *
+ * À gauche : le discours et les coordonnées, tirés de `content/site.ts`.
+ * À droite : le formulaire général, celui qui accepte n'importe quel sujet.
+ * Les trois autres formulaires (un par univers) vivent dans RequestForm et
+ * partagent avec celui-ci le moteur d'envoi (`lib/submitRequest`) et les
+ * styles de champ (`ui/formStyles`).
+ *
+ * Le sujet est piloté depuis la page pour qu'un clic ailleurs puisse le
+ * pré-sélectionner ; `prefillEmail` reçoit l'adresse saisie en pied de page.
+ */
 
 type Status = "idle" | "sending" | "done" | "error";
 
@@ -37,6 +50,7 @@ export function Contact({
   const confirmationRef = useRef<HTMLDivElement>(null);
   const ids = useId();
 
+  // Adresse venue du pied de page : on la reporte dans le champ courriel.
   useEffect(() => {
     if (prefillEmail) setEmail(prefillEmail);
   }, [prefillEmail]);
@@ -46,10 +60,18 @@ export function Contact({
       confirmationRef.current?.focus({ preventScroll: true });
   }, [status]);
 
+  /**
+   * Envoi du formulaire.
+   * Les valeurs sont nettoyées et bornées dans `submitRequest` : la
+   * validation du navigateur empêche les erreurs de saisie, pas les requêtes
+   * forgées.
+   */
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    if (data.get("website")) return; // piège à robots
+
+    // Piège à robots : ce champ est invisible, seul un script le remplit.
+    if (data.get("website")) return;
 
     setStatus("sending");
     setError("");
@@ -130,7 +152,7 @@ export function Contact({
             </ul>
           </Reveal>
 
-          <Reveal delay={90}>
+          <Reveal delay={STAGGER}>
             <div className="rounded-2xl bg-paper/85 p-6 shadow-(--shadow-soft) backdrop-blur-sm sm:p-9 lg:p-11">
               {status === "done" ? (
                 <div

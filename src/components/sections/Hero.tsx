@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/Button";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, STAGGER } from "@/components/ui/Reveal";
 import { useParallax } from "@/hooks/useParallax";
 
 /**
@@ -23,6 +23,8 @@ export function Hero() {
         aria-hidden="true"
         width={1512}
         height={895}
+        fetchPriority="high"
+        sizes="100vw"
         className="absolute inset-0 -z-20 h-full w-full object-cover"
       />
 
@@ -42,7 +44,7 @@ export function Hero() {
             </p>
           </Reveal>
 
-          <Reveal delay={120}>
+          <Reveal delay={STAGGER}>
             <h1 className="mt-8 font-display text-ink [text-shadow:0_2px_14px_rgba(255,255,255,0.55)]">
               <span className="block text-[clamp(1.3rem,2.35vw,2.2rem)] leading-[1.25] tracking-[0.01em] uppercase">
                 La{" "}
@@ -58,7 +60,10 @@ export function Hero() {
           </Reveal>
 
           {/* Les deux phrases forment un seul bloc de lecture. */}
-          <Reveal delay={240} className="mt-8 grid max-w-[30rem] gap-1.5">
+          <Reveal
+            delay={STAGGER * 2}
+            className="mt-8 grid max-w-[30rem] gap-1.5"
+          >
             <p className="text-[clamp(1.1rem,1.45vw,1.4rem)] leading-[1.45] text-ink">
               Prenez soin de votre santé et de votre bien-être avec nos jus
               pressés et nos créations gourmandes.
@@ -72,7 +77,7 @@ export function Hero() {
           {/* Le second appel à l'action est légèrement décalé vers le bas :
               les deux se lisent comme deux propositions distinctes. */}
           <Reveal
-            delay={360}
+            delay={STAGGER * 3}
             className="mt-12 flex flex-wrap items-start gap-4 sm:gap-5"
           >
             <Button as="a" href="#creations" variant="red" size="lg">
@@ -95,7 +100,7 @@ export function Hero() {
           style={bottles.style}
           className="will-change-transform"
         >
-          <Reveal variant="zoom" delay={200}>
+          <Reveal variant="zoom" delay={STAGGER}>
             <img
               src="/assets/hero-bouteilles.webp"
               alt="Six bouteilles de jus de gingembre Precious alignées"
@@ -103,6 +108,7 @@ export function Hero() {
               height={429}
               fetchPriority="high"
               decoding="async"
+              sizes="(max-width: 1023px) 92vw, 48vw"
               className="w-full origin-center scale-y-[1.07] object-contain drop-shadow-[0_26px_46px_rgba(90,80,20,0.22)]"
             />
 
@@ -116,6 +122,33 @@ export function Hero() {
           </Reveal>
         </div>
       </div>
+
+      {/* Repère de défilement : signale que la page continue, sans texte. */}
+      <a
+        href="#savoir-faire"
+        aria-label="Aller à la section suivante"
+        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 text-ink/45 transition-colors hover:text-ink lg:block"
+      >
+        <svg
+          viewBox="0 0 24 34"
+          width="22"
+          height="31"
+          fill="none"
+          aria-hidden="true"
+          className="animate-[float_2.2s_ease-in-out_infinite] motion-reduce:animate-none"
+        >
+          <rect
+            x="1"
+            y="1"
+            width="22"
+            height="32"
+            rx="11"
+            stroke="currentColor"
+            strokeWidth="1.4"
+          />
+          <circle cx="12" cy="10" r="2.2" fill="currentColor" />
+        </svg>
+      </a>
     </section>
   );
 }

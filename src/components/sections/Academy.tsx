@@ -1,8 +1,16 @@
 import { ebook, formation } from "@/content/offerings";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { EbookCover } from "@/components/ui/EbookCover";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, STAGGER } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
+
+/**
+ * Section « L'académie Precious » — la formation et l'ebook.
+ *
+ * Deux cartes de hauteur identique alimentées par `formation` et `ebook`
+ * (content/offerings.ts). Tant que l'URL Payhip d'une offre est vide, son
+ * bouton renvoie au formulaire de contact plutôt que nulle part.
+ */
 
 /**
  * Appel à l'action d'une offre.
@@ -57,7 +65,7 @@ export function Academy() {
 
         <div className="mt-28 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
           <Reveal className="flex">
-            <article className="flex flex-col bg-linear-135 from-forest via-[#2d7e35] to-[#7aa729] p-8 sm:p-12 lg:p-14">
+            <article className="flex flex-col bg-linear-135 from-forest via-[#2d7e35] to-[#7aa729] p-8 transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_18px_44px_rgba(0,0,0,0.28)] sm:p-12 lg:p-14">
               <div className="flex flex-wrap justify-between gap-4 font-ui text-xs font-bold tracking-[0.16em] text-lime uppercase">
                 <span>{formation.badge}</span>
                 <span>{formation.format}</span>
@@ -75,7 +83,7 @@ export function Academy() {
                   <Reveal
                     as="li"
                     key={module.title}
-                    delay={position * 120}
+                    delay={position * STAGGER}
                     className="border-l border-lime/50 pl-4"
                   >
                     <p className="font-display text-lg">{module.title}</p>
@@ -100,8 +108,8 @@ export function Academy() {
             </article>
           </Reveal>
 
-          <Reveal delay={110} className="flex">
-            <article className="flex flex-col bg-cream p-8 text-ink sm:p-12 lg:p-14">
+          <Reveal delay={STAGGER} className="flex">
+            <article className="flex flex-col bg-cream p-8 text-ink transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_18px_44px_rgba(0,0,0,0.22)] sm:p-12 lg:p-14">
               <div className="flex flex-wrap justify-between gap-4 font-ui text-xs font-bold tracking-[0.16em] text-forest uppercase">
                 <span>{ebook.badge}</span>
                 <span>{ebook.format}</span>
@@ -121,8 +129,8 @@ export function Academy() {
                   <Reveal
                     as="li"
                     key={item}
-                    delay={position * 110}
-                    variant="left"
+                    delay={position * STAGGER}
+                    variant="up"
                     className="flex gap-3"
                   >
                     <span

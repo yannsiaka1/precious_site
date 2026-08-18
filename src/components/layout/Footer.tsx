@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { footerLinks, navigation, site } from "@/content/site";
 import { SocialLinks } from "@/components/ui/SocialLinks";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, STAGGER } from "@/components/ui/Reveal";
+
+/**
+ * Pied de page.
+ *
+ * Quatre colonnes : identité, navigation, coordonnées, prise de contact
+ * rapide. Le champ courriel ne crée pas d'inscription à une infolettre : il
+ * reporte l'adresse saisie dans le formulaire de contact, plus haut.
+ */
 
 interface FooterProps {
   /** Reprend l'adresse saisie ici et l'amène au formulaire de contact. */
@@ -27,7 +35,7 @@ export function Footer({ onQuickWrite }: FooterProps) {
           <SocialLinks className="mt-7" />
         </Reveal>
 
-        <Reveal as="nav" delay={100} aria-label="Pied de page">
+        <Reveal as="nav" delay={STAGGER} aria-label="Pied de page">
           <p className="text-eyebrow font-bold text-mango">Exploration</p>
           <ul className="mt-5 grid gap-3.5">
             {[...navigation, ...footerLinks].map((link) => (

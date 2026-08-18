@@ -2,8 +2,16 @@ import { useState } from "react";
 import { albums } from "@/content/offerings";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Lightbox } from "@/components/ui/Lightbox";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, STAGGER } from "@/components/ui/Reveal";
 import { cn } from "@/lib/cn";
+
+/**
+ * Section « Réalisations » — quatre albums cliquables.
+ *
+ * Chaque carte ouvre la visionneuse plein écran (ui/Lightbox), qui gère la
+ * navigation clavier et le piégeage du focus via <dialog>. Les albums et
+ * leurs visuels sont définis dans `content/offerings.ts`.
+ */
 
 /**
  * Grille asymétrique : un grand album à gauche, deux petits à droite, un
@@ -34,14 +42,14 @@ export function Realisations() {
             return (
               <Reveal
                 key={album.id}
-                delay={index * 80}
+                delay={index * STAGGER}
                 className={cn("flex", layout[index])}
               >
                 <button
                   type="button"
                   onClick={() => setOpenId(album.id)}
                   aria-haspopup="dialog"
-                  className="group relative w-full overflow-hidden text-left"
+                  className="group relative w-full overflow-hidden text-left transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_18px_40px_rgba(23,50,31,0.22)]"
                 >
                   <img
                     src={cover.src}

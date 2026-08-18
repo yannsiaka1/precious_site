@@ -7,6 +7,19 @@ import { Button } from "@/components/ui/Button";
 import { fieldClass, labelClass, limits } from "@/components/ui/formStyles";
 import { cn } from "@/lib/cn";
 
+/**
+ * Section « Témoignages ».
+ *
+ * Un avis à la fois, en rotation automatique (DELAY), avec arrêt au survol,
+ * au focus clavier et pendant la saisie d'un nouvel avis. Le bouton
+ * « Laisser un avis » déplie ShareForm, qui passe par le même moteur d'envoi
+ * que les formulaires de commande.
+ *
+ * ⚠️ Les avis affichés viennent de `content/offerings.ts` et sont encore des
+ * textes de démonstration — voir l'avertissement sur place.
+ */
+
+/** Durée d'affichage d'un avis avant de passer au suivant, en millisecondes. */
 const DELAY = 4500;
 
 /** Formulaire d'avis : même moteur d'envoi que les autres formulaires. */
@@ -196,7 +209,7 @@ export function Testimonials() {
         <div className="relative mx-auto mt-24 max-w-[52rem]">
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute -top-6 -left-2 font-display text-[7rem] leading-none text-mango-soft select-none sm:-left-10"
+            className="pointer-events-none absolute -top-6 -left-1 font-display text-[7rem] leading-none text-mango-soft select-none lg:-left-10"
           >
             &rdquo;
           </span>

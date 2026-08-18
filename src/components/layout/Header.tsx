@@ -20,6 +20,8 @@ export function Header() {
   );
   const activeId = useActiveSection(sectionIds);
 
+  // Au-delà de quelques dizaines de pixels, l'en-tête prend son voile
+  // translucide ; en haut de page il reste transparent sur le hero.
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
@@ -27,6 +29,7 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Échap referme le menu mobile, comme n'importe quel panneau.
   useEffect(() => {
     if (!open) return;
     const onKey = (event: KeyboardEvent) => {
@@ -56,6 +59,7 @@ export function Header() {
             alt={`${site.name} ${site.tagline}`}
             width={201}
             height={159}
+            sizes="(max-width: 1023px) 80px, 104px"
             className="h-20 w-auto lg:h-26"
           />
         </a>

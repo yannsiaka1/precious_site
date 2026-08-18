@@ -2,6 +2,15 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { GalleryImage } from "@/content/types";
 import { cn } from "@/lib/cn";
 
+/**
+ * Visionneuse plein écran d'un album.
+ *
+ * Repose sur <dialog> et showModal() : le navigateur gère lui-même le
+ * piégeage du focus, la fermeture par Échap et l'inertie de l'arrière-plan.
+ * Les flèches du clavier changent de visuel ; les vignettes se chargent
+ * paresseusement au fil du défilement horizontal.
+ */
+
 interface LightboxProps {
   title: string;
   images: GalleryImage[];
@@ -112,10 +121,17 @@ export function Lightbox({
           </button>
 
           <figure className="flex min-h-0 flex-1 flex-col items-center">
+            {/* Visuel courant : chargé à la demande, en priorité sur les
+                vignettes puisque c'est lui qu'on regarde. */}
             <img
               key={current.src}
               src={current.src}
               alt={current.alt}
+              width={820}
+              height={615}
+              loading="eager"
+              decoding="async"
+              sizes="(max-width: 767px) 92vw, 70vw"
               className="max-h-full min-h-0 w-auto max-w-full animate-[fade_400ms_var(--ease-out-soft)_both] object-contain"
             />
             {current.caption ? (
@@ -172,6 +188,7 @@ export function Lightbox({
                 decoding="async"
                 width={820}
                 height={615}
+                sizes="96px"
                 className="h-full w-full object-cover"
               />
             </button>

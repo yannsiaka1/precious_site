@@ -39,5 +39,8 @@ export function useParallax<T extends HTMLElement>(strength = 24) {
     };
   }, [strength]);
 
-  return { ref, style: { transform: `translate3d(0, ${offset.toFixed(1)}px, 0)` } };
+  return {
+    ref,
+    style: { transform: `translate3d(0, ${offset.toFixed(1)}px, 0)` },
+  };
 }

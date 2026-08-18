@@ -2,8 +2,17 @@ import { savoirFaire } from "@/content/offerings";
 import type { ServiceId } from "@/content/types";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, STAGGER } from "@/components/ui/Reveal";
 import { cn } from "@/lib/cn";
+
+/**
+ * Section « Notre savoir-faire » — les trois univers de la maison.
+ *
+ * Ordre de chaque bloc, repris de la maquette : chapeau, description,
+ * bouton, image, titre. Les colonnes sont décalées verticalement (`offsets`).
+ * Le bouton renvoie soit à l'académie, soit à l'univers correspondant de la
+ * section « Nos créations », onglet déjà ouvert.
+ */
 
 /** Décalages verticaux des trois colonnes, repris de la maquette. */
 const offsets = {
@@ -36,8 +45,11 @@ export function SavoirFaire({ onGoTo }: SavoirFaireProps) {
             <Reveal
               key={card.title}
               as="li"
-              delay={index * 160}
-              className={cn("flex flex-col", offsets[card.offset])}
+              delay={index * STAGGER}
+              className={cn(
+                "group flex flex-col transition-transform duration-500 ease-out hover:-translate-y-2",
+                offsets[card.offset],
+              )}
             >
               <div className="border-l border-paper/50 pl-4">
                 <p className="font-display text-xl">{card.pillar}</p>
@@ -58,16 +70,19 @@ export function SavoirFaire({ onGoTo }: SavoirFaireProps) {
                 Voir les détails
               </Button>
 
-              <img
-                src={card.image}
-                alt={card.alt}
-                loading="lazy"
-                decoding="async"
-                width={662}
-                height={1054}
-                sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 27vw"
-                className="mt-8 aspect-[331/527] w-full object-cover object-center"
-              />
+              {/* Le cadre masque le débordement du zoom au survol. */}
+              <div className="mt-8 overflow-hidden">
+                <img
+                  src={card.image}
+                  alt={card.alt}
+                  loading="lazy"
+                  decoding="async"
+                  width={662}
+                  height={1054}
+                  sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 27vw"
+                  className="aspect-[331/527] w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.06]"
+                />
+              </div>
 
               <h3 className="mt-6 font-display text-2xl text-paper">
                 {card.title}

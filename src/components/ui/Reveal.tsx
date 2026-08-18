@@ -2,28 +2,43 @@ import type { ElementType, ReactNode } from "react";
 import { useInView } from "@/hooks/useInView";
 import { cn } from "@/lib/cn";
 
-type Variant = "up" | "left" | "right" | "zoom" | "fade";
+/**
+ * Sens d'apparition disponibles.
+ *
+ * Volontairement limités au vertical et à l'opacité : un décalage horizontal
+ * élargit la zone défilable du document et provoque un défilement latéral sur
+ * téléphone. C'est aussi ce qui rend le défilement plus calme — l'œil suit un
+ * seul axe, celui de la lecture.
+ */
+type Variant = "up" | "fade" | "zoom";
+
+/** État de départ de chaque variante. */
+const hidden: Record<Variant, string> = {
+  up: "translate-y-12 opacity-0",
+  fade: "opacity-0",
+  zoom: "scale-[0.96] opacity-0",
+};
 
 interface RevealProps {
   children: ReactNode;
-  /** Décalage en millisecondes, pour orchestrer une entrée en cascade. */
+  /** Décalage en millisecondes. Utiliser des multiples de STAGGER. */
   delay?: number;
-  /** Sens de l'apparition. Discret par défaut. */
   variant?: Variant;
   as?: ElementType;
   className?: string;
 }
 
-const hidden: Record<Variant, string> = {
-  up: "translate-y-10 opacity-0",
-  left: "-translate-x-12 opacity-0",
-  right: "translate-x-12 opacity-0",
-  zoom: "scale-[0.95] opacity-0",
-  fade: "opacity-0",
-};
+/**
+ * Intervalle standard entre deux éléments d'une même série.
+ * Une seule valeur pour tout le site : les cascades ont partout le même
+ * rythme, ce qui donne l'impression d'une page unique plutôt que d'une
+ * succession d'effets.
+ */
+export const STAGGER = 200;
 
 /**
  * Fait apparaître son contenu à l'entrée dans l'écran.
+ *
  * L'attribut `data-reveal` sert de repère au repli <noscript> défini dans
  * index.html : sans JavaScript, le contenu s'affiche directement.
  */
@@ -42,7 +57,8 @@ export function Reveal({
       data-reveal=""
       style={{ transitionDelay: `${delay}ms` }}
       className={cn(
-        "transition-[opacity,transform] duration-[1100ms] ease-(--ease-out-soft) will-change-[opacity,transform] motion-reduce:transition-none",
+        "transition-[opacity,transform] duration-700 ease-out will-change-[opacity,transform]",
+        "motion-reduce:translate-none motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none",
         inView ? "translate-none scale-100 opacity-100" : hidden[variant],
         className,
       )}
