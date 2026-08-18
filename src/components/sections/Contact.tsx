@@ -1,7 +1,13 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { site } from "@/content/site";
 import { services } from "@/content/offerings";
-import { submitRequest, type SubmitOutcome } from "@/lib/submitRequest";
+import {
+  submitRequest,
+  useFormStart,
+  type SubmitOutcome,
+} from "@/lib/submitRequest";
+import { EVENT_SUBJECT, eventFields } from "@/content/forms";
+import { Field } from "@/components/ui/Field";
 import { fieldClass, labelClass, limits } from "@/components/ui/formStyles";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Reveal, STAGGER } from "@/components/ui/Reveal";
@@ -47,6 +53,7 @@ export function Contact({
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
+  const startedAt = useFormStart();
   const confirmationRef = useRef<HTMLDivElement>(null);
   const ids = useId();
 
@@ -76,6 +83,15 @@ export function Contact({
     setStatus("sending");
     setError("");
 
+    // Les questions événementielles ne sont envoyées que si elles étaient
+    // affichées, c'est-à-dire si la demande concerne un événement.
+    const details: Record<string, string> = {};
+    if (subject === EVENT_SUBJECT) {
+      for (const field of eventFields) {
+        details[field.label] = String(data.get(field.name) ?? "");
+      }
+    }
+
     try {
       const result = await submitRequest({
         name: String(data.get("name") ?? ""),
@@ -84,6 +100,8 @@ export function Contact({
         subject: String(data.get("subject") ?? ""),
         date: String(data.get("date") ?? ""),
         message: String(data.get("message") ?? ""),
+        details,
+        startedAt,
       });
       setOutcome(result);
       setStatus("done");
@@ -244,14 +262,12 @@ export function Contact({
                   </label>
 
                   <label htmlFor={`${ids}-phone`} className={labelClass}>
-                    Téléphone{" "}
-                    <span className="lowercase tracking-normal">
-                      (facultatif)
-                    </span>
+                    Téléphone
                     <input
                       id={`${ids}-phone`}
                       name="phone"
                       type="tel"
+                      required
                       autoComplete="tel"
                       inputMode="tel"
                       placeholder="514 000 0000"
@@ -261,14 +277,12 @@ export function Contact({
                   </label>
 
                   <label htmlFor={`${ids}-date`} className={labelClass}>
-                    Date souhaitée{" "}
-                    <span className="lowercase tracking-normal">
-                      (facultatif)
-                    </span>
+                    Date souhaitée
                     <input
                       id={`${ids}-date`}
                       name="date"
                       type="date"
+                      required
                       className={fieldClass}
                     />
                   </label>
@@ -301,6 +315,20 @@ export function Contact({
                       ))}
                     </div>
                   </fieldset>
+
+                  {/* Questions ouvertes uniquement pour une demande
+                      événementielle : elles permettent de chiffrer un devis
+                      dès le premier échange. */}
+                  {subject === EVENT_SUBJECT ? (
+                    <fieldset className="col-span-full grid animate-[panel_450ms_var(--ease-out-soft)_both] gap-5 rounded-xl border border-forest/20 bg-cream/50 p-5 sm:grid-cols-2 sm:p-6">
+                      <legend className="px-2 font-display text-base text-forest">
+                        Votre événement
+                      </legend>
+                      {eventFields.map((field) => (
+                        <Field key={field.name} field={field} />
+                      ))}
+                    </fieldset>
+                  ) : null}
 
                   <label
                     htmlFor={`${ids}-message`}

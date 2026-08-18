@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { footerLinks, navigation, site } from "@/content/site";
 import { SocialLinks } from "@/components/ui/SocialLinks";
+import { submitRequest, useFormStart } from "@/lib/submitRequest";
 import { Reveal, STAGGER } from "@/components/ui/Reveal";
 
 /**
@@ -16,14 +17,44 @@ interface FooterProps {
   onQuickWrite: (email: string) => void;
 }
 
+/** États du mini-formulaire de rappel. */
+type QuickStatus = "idle" | "sending" | "sent" | "handoff" | "error";
+
 export function Footer({ onQuickWrite }: FooterProps) {
   const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<QuickStatus>("idle");
+  const startedAt = useFormStart();
   const year = new Date().getFullYear();
 
-  function submit(event: React.FormEvent<HTMLFormElement>) {
+  /**
+   * Demande de rappel.
+   *
+   * L'adresse part immédiatement vers la boîte de Precious : la personne n'a
+   * rien d'autre à faire. Si le service d'envoi n'est pas joignable, on la
+   * conduit au formulaire complet plus haut plutôt que de perdre sa saisie.
+   */
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    onQuickWrite(email.trim());
-    setEmail("");
+    const address = email.trim();
+    setStatus("sending");
+
+    try {
+      const result = await submitRequest({
+        name: "Demande de rappel",
+        email: address,
+        phone: "",
+        subject: "Rappel demandé",
+        date: "",
+        message:
+          "Cette personne a laissé son adresse dans le pied de page du site pour être recontactée.",
+        startedAt,
+      });
+      setStatus(result === "sent" ? "sent" : "handoff");
+      setEmail("");
+    } catch {
+      setStatus("error");
+      onQuickWrite(address);
+    }
   }
 
   return (
@@ -98,8 +129,9 @@ export function Footer({ onQuickWrite }: FooterProps) {
               />
               <button
                 type="submit"
-                aria-label="Poursuivre vers le formulaire de contact"
-                className="grid size-9 shrink-0 place-items-center rounded-full transition-colors hover:bg-paper/15"
+                disabled={status === "sending"}
+                aria-label="Envoyer ma demande de rappel"
+                className="grid size-9 shrink-0 place-items-center rounded-full transition-colors hover:bg-paper/15 disabled:opacity-50"
               >
                 <svg
                   viewBox="0 0 16 16"
@@ -118,6 +150,20 @@ export function Footer({ onQuickWrite }: FooterProps) {
                 </svg>
               </button>
             </div>
+
+            {/* Retour d'état sous le champ : on ne laisse jamais la personne
+                dans le doute sur ce qui s'est passé. */}
+            <p
+              aria-live="polite"
+              className="mt-3 min-h-5 text-sm text-paper/70"
+            >
+              {status === "sending" && "Envoi en cours…"}
+              {status === "sent" && "Merci, nous vous recontactons bientôt."}
+              {status === "handoff" &&
+                "Votre messagerie s'est ouverte : il ne reste qu'à envoyer."}
+              {status === "error" &&
+                "L'envoi a échoué — utilisez le formulaire ci-dessus."}
+            </p>
           </form>
         </div>
       </div>

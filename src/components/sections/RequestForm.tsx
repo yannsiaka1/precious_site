@@ -1,7 +1,12 @@
 import { useEffect, useId, useRef, useState } from "react";
 import type { Service } from "@/content/types";
 import { site } from "@/content/site";
-import { submitRequest, type SubmitOutcome } from "@/lib/submitRequest";
+import {
+  submitRequest,
+  useFormStart,
+  type SubmitOutcome,
+} from "@/lib/submitRequest";
+import { Field } from "@/components/ui/Field";
 import { fieldClass, labelClass, limits } from "@/components/ui/formStyles";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
@@ -25,6 +30,7 @@ export function RequestForm({ service, onClose }: RequestFormProps) {
   const [error, setError] = useState("");
   const headingRef = useRef<HTMLParagraphElement>(null);
   const ids = useId();
+  const startedAt = useFormStart();
 
   // À l'ouverture comme après l'envoi, on place le focus : au clavier, on sait
   // que le panneau a changé.
@@ -56,6 +62,7 @@ export function RequestForm({ service, onClose }: RequestFormProps) {
         date: String(data.get("date") ?? ""),
         message: String(data.get("message") ?? ""),
         details,
+        startedAt,
       });
       setOutcome(result);
       setStatus("done");
@@ -179,12 +186,12 @@ export function RequestForm({ service, onClose }: RequestFormProps) {
           htmlFor={`${ids}-phone`}
           className={cn(labelClass, "sm:col-span-2")}
         >
-          Téléphone{" "}
-          <span className="lowercase tracking-normal">(facultatif)</span>
+          Téléphone
           <input
             id={`${ids}-phone`}
             name="phone"
             type="tel"
+            required
             autoComplete="tel"
             inputMode="tel"
             placeholder="514 000 0000"
@@ -193,26 +200,10 @@ export function RequestForm({ service, onClose }: RequestFormProps) {
           />
         </label>
 
+        {/* Champs propres au service (quantité, date, nombre d'invités…),
+            décrits dans content/offerings.ts. */}
         {service.fields.map((field) => (
-          <label
-            key={field.name}
-            htmlFor={`${ids}-${field.name}`}
-            className={cn(labelClass, !field.half && "sm:col-span-2")}
-          >
-            {field.label}
-            <input
-              id={`${ids}-${field.name}`}
-              name={field.name}
-              type={field.type}
-              required={field.required}
-              placeholder={field.placeholder}
-              inputMode={field.type === "number" ? "numeric" : undefined}
-              min={field.type === "number" ? 1 : undefined}
-              max={field.type === "number" ? 2000 : undefined}
-              maxLength={field.type === "text" ? 120 : undefined}
-              className={fieldClass}
-            />
-          </label>
+          <Field key={field.name} field={field} />
         ))}
 
         <label

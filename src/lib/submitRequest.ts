@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { site } from "@/content/site";
 
 export interface RequestPayload {
@@ -7,23 +8,28 @@ export interface RequestPayload {
   subject: string;
   date: string;
   message: string;
-  /** Champs propres à un service (quantité, nombre d'invités…). */
+  /** Champs propres à un service ou à un type de demande. */
   details?: Record<string, string>;
+  /** Horodatage d'ouverture du formulaire, contrôlé côté serveur. */
+  startedAt?: number;
 }
 
 /**
- * Point d'envoi du formulaire, défini dans un fichier `.env` :
- *   VITE_CONTACT_ENDPOINT=https://…
- * Tant qu'il est vide, on bascule sur le client de messagerie du visiteur.
+ * Point d'envoi. Par défaut la fonction serverless du site, sur le même
+ * domaine — l'adresse de destination et la clé du service d'envoi restent
+ * donc côté serveur, jamais dans le JavaScript envoyé au navigateur.
+ *
+ * `VITE_CONTACT_ENDPOINT` permet de pointer ailleurs (Formspree, n8n, une API
+ * maison) sans toucher au code.
  */
-const ENDPOINT = import.meta.env["VITE_CONTACT_ENDPOINT"] ?? "";
+const ENDPOINT = import.meta.env["VITE_CONTACT_ENDPOINT"] || "/api/contact";
 
 export type SubmitOutcome = "sent" | "handoff";
 
 /**
  * Retire les caractères de contrôle et les chevrons, et borne la longueur.
- * Le navigateur valide déjà les champs, mais rien n'empêche de forger une
- * requête : on ne fait jamais confiance à ce qui sort du formulaire.
+ * Le navigateur valide déjà les champs et le serveur revalide tout : ce
+ * nettoyage évite simplement d'envoyer n'importe quoi sur le réseau.
  */
 export function clean(value: string, max = 1500): string {
   return (
@@ -36,61 +42,105 @@ export function clean(value: string, max = 1500): string {
   );
 }
 
-function buildMailto(payload: RequestPayload): string {
-  const subject = `Demande Precious — ${clean(payload.subject, 80)}`;
+/** Prépare une charge utile propre, commune aux deux voies d'envoi. */
+function normalise(payload: RequestPayload) {
+  return {
+    name: clean(payload.name, 80),
+    email: clean(payload.email, 120),
+    phone: clean(payload.phone, 25),
+    subject: clean(payload.subject, 80),
+    date: clean(payload.date, 10),
+    message: clean(payload.message),
+    details: Object.fromEntries(
+      Object.entries(payload.details ?? {})
+        .filter(([, value]) => value)
+        .map(([label, value]) => [clean(label, 40), clean(value, 160)]),
+    ),
+    startedAt: payload.startedAt ?? 0,
+  };
+}
+
+/** Repli : ouvre la messagerie du visiteur avec la demande pré-remplie. */
+function openMailClient(payload: ReturnType<typeof normalise>) {
   const body = [
-    `Nom : ${clean(payload.name, 80)}`,
-    `Courriel : ${clean(payload.email, 120)}`,
-    payload.phone && `Téléphone : ${clean(payload.phone, 25)}`,
-    payload.date && `Date souhaitée : ${clean(payload.date, 10)}`,
-    `Besoin : ${clean(payload.subject, 80)}`,
-    ...Object.entries(payload.details ?? {}).map(
-      ([label, value]) => value && `${clean(label, 40)} : ${clean(value, 120)}`,
+    `Nom : ${payload.name}`,
+    `Courriel : ${payload.email}`,
+    payload.phone && `Téléphone : ${payload.phone}`,
+    payload.date && `Date souhaitée : ${payload.date}`,
+    `Besoin : ${payload.subject}`,
+    ...Object.entries(payload.details).map(
+      ([label, value]) => `${label} : ${value}`,
     ),
     "",
-    clean(payload.message),
+    payload.message,
   ]
     .filter(Boolean)
     .join("\n");
 
-  return `mailto:${site.contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href =
+    `mailto:${site.contact.email}` +
+    `?subject=${encodeURIComponent(`Demande Precious — ${payload.subject}`)}` +
+    `&body=${encodeURIComponent(body)}`;
 }
 
 /**
  * Envoie la demande.
- * - `sent` : reçue par le serveur, plus rien à faire pour le visiteur.
- * - `handoff` : le client de messagerie a été ouvert, l'envoi reste à confirmer.
+ *
+ * - `sent` : le serveur a accepté et expédié le courriel, plus rien à faire.
+ * - `handoff` : aucun service d'envoi n'est configuré, on a ouvert la
+ *   messagerie du visiteur ; l'envoi reste à confirmer de sa main.
+ *
+ * Toute autre erreur est relancée pour que le formulaire l'affiche.
  */
 export async function submitRequest(
   payload: RequestPayload,
 ): Promise<SubmitOutcome> {
-  if (!ENDPOINT) {
-    window.location.href = buildMailto(payload);
+  const body = normalise(payload);
+
+  let response: Response;
+  try {
+    response = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+  } catch {
+    // Hors ligne ou serveur injoignable : on ne perd pas la saisie.
+    openMailClient(body);
     return "handoff";
   }
 
-  const response = await fetch(ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({
-      name: clean(payload.name, 80),
-      email: clean(payload.email, 120),
-      phone: clean(payload.phone, 25),
-      subject: clean(payload.subject, 80),
-      date: clean(payload.date, 10),
-      message: clean(payload.message),
-      details: Object.fromEntries(
-        Object.entries(payload.details ?? {}).map(([label, value]) => [
-          clean(label, 40),
-          clean(value, 120),
-        ]),
-      ),
-    }),
-  });
+  // 404 en développement local (la fonction n'est servie que par Vercel),
+  // 501 tant que la clé du service d'envoi n'est pas renseignée.
+  if (response.status === 404 || response.status === 501) {
+    openMailClient(body);
+    return "handoff";
+  }
 
   if (!response.ok) {
-    throw new Error(`Envoi refusé (${response.status})`);
+    const detail = (await response.json().catch(() => null)) as {
+      error?: string;
+    } | null;
+    throw new Error(
+      detail?.error ??
+        (response.status === 429
+          ? "Trop de demandes envoyées coup sur coup. Réessayez dans un instant."
+          : "L'envoi n'a pas abouti."),
+    );
   }
 
   return "sent";
+}
+
+/**
+ * Horodate l'ouverture du formulaire.
+ * Le serveur refuse les envois trop rapides : un humain met plusieurs
+ * secondes à remplir un formulaire, un robot non.
+ */
+export function useFormStart(): number {
+  const startedAt = useRef(Date.now());
+  return startedAt.current;
 }

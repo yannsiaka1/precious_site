@@ -16,15 +16,18 @@ export interface GalleryImage {
   caption?: string;
 }
 
-/** Champ d'un formulaire de commande, propre à un service. */
+/** Champ d'un formulaire, propre à un service ou à un type de demande. */
 export interface RequestField {
   name: string;
   label: string;
-  type: "text" | "email" | "tel" | "date" | "number";
+  type: "text" | "email" | "tel" | "date" | "number" | "time" | "select";
   placeholder?: string;
+  /** Par défaut un champ est obligatoire ; passer `false` pour l'ouvrir. */
   required?: boolean;
   /** Occupe une demi-largeur sur grand écran. */
   half?: boolean;
+  /** Choix proposés lorsque `type` vaut "select". */
+  options?: string[];
 }
 
 export interface Service {

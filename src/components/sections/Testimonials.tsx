@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { testimonials } from "@/content/offerings";
 import { site } from "@/content/site";
-import { submitRequest } from "@/lib/submitRequest";
+import { submitRequest, useFormStart } from "@/lib/submitRequest";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
 import { fieldClass, labelClass, limits } from "@/components/ui/formStyles";
@@ -27,7 +27,9 @@ function ShareForm({ onClose }: { onClose: () => void }) {
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">(
     "idle",
   );
+  const [outcome, setOutcome] = useState<"sent" | "handoff">("sent");
   const ids = useId();
+  const startedAt = useFormStart();
   const firstField = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ function ShareForm({ onClose }: { onClose: () => void }) {
 
     setStatus("sending");
     try {
-      await submitRequest({
+      const result = await submitRequest({
         name: String(data.get("name") ?? ""),
         email: String(data.get("email") ?? ""),
         phone: "",
@@ -49,7 +51,9 @@ function ShareForm({ onClose }: { onClose: () => void }) {
         date: "",
         message: String(data.get("message") ?? ""),
         details: { Occasion: String(data.get("occasion") ?? "") },
+        startedAt,
       });
+      setOutcome(result);
       setStatus("done");
     } catch {
       setStatus("error");
@@ -63,8 +67,9 @@ function ShareForm({ onClose }: { onClose: () => void }) {
           Merci pour votre avis.
         </p>
         <p className="mt-3 text-ink/70">
-          Il nous parvient directement ; nous le publierons après vous en avoir
-          reparlé.
+          {outcome === "sent"
+            ? "Il nous est parvenu. Nous le publierons après vous en avoir reparlé."
+            : "Votre messagerie s'est ouverte avec l'avis pré-rempli : il ne reste qu'à l'envoyer."}
         </p>
         <Button variant="red" className="mt-7" onClick={onClose}>
           Fermer
@@ -101,12 +106,12 @@ function ShareForm({ onClose }: { onClose: () => void }) {
       </label>
 
       <label htmlFor={`${ids}-occasion`} className={labelClass}>
-        L'occasion{" "}
-        <span className="lowercase tracking-normal">(facultatif)</span>
+        L'occasion
         <input
           id={`${ids}-occasion`}
           name="occasion"
           type="text"
+          required
           placeholder="Mariage, commande, formation…"
           className={fieldClass}
           {...limits.text}

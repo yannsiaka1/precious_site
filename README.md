@@ -57,16 +57,77 @@ De même, aucune couleur en dur dans le JSX : tout vient de `@theme`.
    l'accord des personnes citées.
 8. **Domaine** — remplacer `https://precious-jus.com/` dans `index.html`,
    `public/robots.txt` et `public/sitemap.xml` par le domaine réel.
-4. **Formulaire** — par défaut il ouvre la messagerie du visiteur. Pour un envoi
-   serveur, créer un `.env` :
-
-   ```
-   VITE_CONTACT_ENDPOINT=https://…
-   ```
-
-   L'endpoint reçoit un POST JSON (`name`, `email`, `phone`, `subject`, `date`,
-   `message`). Le reste du code n'a pas à changer.
+4. **Formulaires** — voir la section « Recevoir les demandes » ci-dessous.
 5. **Images** — celles de `public/assets` sont encore recadrées depuis les
    maquettes Figma. À remplacer par les photos et visuels détourés d'origine.
 6. **Mentions légales et politique de confidentialité** — le formulaire collecte
    des données personnelles ; au Québec, la loi 25 encadre cette collecte.
+
+
+## Recevoir les demandes par courriel
+
+Les quatre formulaires du site (les trois commandes, le contact, l'avis et le
+champ de rappel du pied de page) envoient tous vers la même fonction
+serverless : `api/contact.ts`, servie par Vercel à l'adresse `/api/contact`.
+
+La clé du service d'envoi et l'adresse de destination vivent côté serveur.
+Elles ne sont jamais présentes dans le JavaScript envoyé au navigateur — c'est
+la raison d'être de cette fonction plutôt qu'un appel direct depuis la page.
+
+### Mise en service (environ 10 minutes)
+
+1. Créer un compte sur [resend.com](https://resend.com) **avec l'adresse
+   `Preciousck384@gmail.com`**. Sans domaine vérifié, Resend n'autorise l'envoi
+   que vers l'adresse du titulaire du compte : c'est justement celle qui doit
+   recevoir les demandes.
+2. Générer une clé d'API (*API Keys → Create*).
+3. Dans Vercel, *Settings → Environment Variables*, ajouter :
+
+   | Nom | Valeur |
+   | --- | --- |
+   | `RESEND_API_KEY` | la clé générée |
+   | `CONTACT_TO` | `Preciousck384@gmail.com` |
+   | `CONTACT_FROM` | `Precious <onboarding@resend.dev>` |
+
+4. Redéployer. Les demandes arrivent alors dans la boîte de réception, et
+   **répondre au courriel répond directement au client** (`reply_to`).
+
+Le jour où le domaine sera en place, le vérifier dans Resend et remplacer
+`CONTACT_FROM` par une adresse du domaine (`site@precious-jus.com`). L'envoi
+devient alors possible vers n'importe quelle adresse et passe mieux les filtres
+anti-pourriel.
+
+### Tant que la clé n'est pas renseignée
+
+La fonction répond 501 et le site bascule automatiquement sur la messagerie du
+visiteur, avec la demande pré-remplie. Aucune saisie n'est perdue, et le
+message de confirmation le dit honnêtement : « prêt à partir », pas « envoyé ».
+
+### En développement local
+
+`npm run dev` ne sert pas les fonctions serverless : les formulaires
+retomberont donc sur la messagerie. Pour les tester en conditions réelles :
+
+```bash
+npm i -g vercel
+vercel dev
+```
+
+### Autre service d'envoi
+
+Un `.env` avec `VITE_CONTACT_ENDPOINT=https://…` détourne les formulaires vers
+n'importe quelle autre destination (Formspree, n8n, une API maison) sans
+toucher au code. La fonction `api/contact.ts` est alors inutilisée.
+
+### Ce que la fonction contrôle
+
+- méthode POST uniquement ;
+- champ piège invisible (`website`) : réponse 200 sans envoi, l'automate ne
+  sait pas qu'il a été repéré ;
+- délai de remplissage entre 1,5 s et 6 h ;
+- 5 envois maximum par adresse IP sur 10 minutes (limite en mémoire, donc
+  propre à chaque instance : une gêne, pas une garantie) ;
+- longueurs bornées, caractères de contrôle et chevrons retirés ;
+- format de l'adresse courriel, nom d'au moins 2 caractères, message d'au
+  moins 5 caractères ;
+- échappement HTML de toutes les valeurs insérées dans le courriel.
