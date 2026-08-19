@@ -134,8 +134,14 @@ function diagnose(status: number, detail: string): string {
       "n'est pas en place."
     );
   }
+  if (text.includes("sender") && text.includes("not valid")) {
+    return (
+      "L'adresse d'expédition n'est pas validée chez Brevo. Ajoutez-la dans " +
+      "Senders & IP puis cliquez le lien de confirmation reçu par courriel."
+    );
+  }
   if (status === 401 || status === 403) {
-    return "Clé RESEND_API_KEY absente, incorrecte ou révoquée.";
+    return "Clé d'API absente, incorrecte ou révoquée.";
   }
   if (status === 422) {
     return "Resend a rejeté un champ du courriel (from, to ou reply_to mal formé).";
@@ -152,8 +158,9 @@ export default async function handler(request: Request): Promise<Response> {
   }
 
   const apiKey = process.env["RESEND_API_KEY"];
-  if (!apiKey) {
-    // Le site retombera sur la messagerie du visiteur.
+  if (!apiKey && !process.env["BREVO_API_KEY"]) {
+    // Aucun service configuré : le site retombera sur la messagerie du
+    // visiteur, sans rien perdre de sa saisie.
     return json({ error: "Service d'envoi non configuré." }, 501);
   }
 
@@ -272,28 +279,77 @@ export default async function handler(request: Request): Promise<Response> {
       <p style="margin:0;padding:14px 16px;background:#f7f2e7;border-radius:8px;white-space:pre-wrap">${escapeHtml(payload.message)}</p>
     </div>`;
 
+  /*
+   * Choix du service d'envoi.
+   *
+   * Brevo l'emporte s'il est configuré : il n'exige qu'une adresse
+   * d'expéditeur vérifiée, là où Resend réclame un domaine vérifié pour
+   * écrire ailleurs qu'au titulaire du compte.
+   */
+  const brevoKey = process.env["BREVO_API_KEY"];
+  const from =
+    process.env["CONTACT_FROM"] ?? "Precious <onboarding@resend.dev>";
+  const to = process.env["CONTACT_TO"] ?? "Preciousck384@gmail.com";
+
+  /** Sépare « Nom <adresse> » en ses deux parties. */
+  function splitAddress(value: string): { name: string; email: string } {
+    const match = value.match(/^\s*(.*?)\s*<([^>]+)>\s*$/);
+    if (match) return { name: match[1] ?? "Precious", email: match[2]! };
+    return { name: "Precious", email: value.trim() };
+  }
+
+  const sender = splitAddress(from);
+
+  /*
+   * Destinataire ramené en minuscules.
+   *
+   * Les services d'envoi comparent l'adressee caractère par caractère pour
+   * vérifier leurs restrictions (Resend n'autorise l'écriture qu'au titulaire
+   * du compte tant qu'aucun domaine n'est vérifié). Une simple majuscule dans
+   * la variable suffit à faire échouer ce contrôle, alors que la livraison,
+   * elle, ignore la casse.
+   */
+  const recipient = splitAddress(to.toLowerCase());
+
   let response: Response;
   try {
-    response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: process.env["CONTACT_FROM"] ?? "Precious <onboarding@resend.dev>",
-        to: [process.env["CONTACT_TO"] ?? "Preciousck384@gmail.com"],
-        // Répondre au courriel répond directement au client.
-        reply_to: payload.email,
-        subject: `Precious — ${payload.subject} — ${payload.name}`,
-        text,
-        html,
-      }),
-    });
+    response = brevoKey
+      ? await fetch("https://api.brevo.com/v3/smtp/email", {
+          method: "POST",
+          headers: {
+            "api-key": brevoKey,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            sender: { name: sender.name, email: sender.email },
+            to: [{ email: recipient.email }],
+            replyTo: { email: payload.email, name: payload.name },
+            subject: `Precious — ${payload.subject} — ${payload.name}`,
+            textContent: text,
+            htmlContent: html,
+          }),
+        })
+      : await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from,
+            to: [recipient.email],
+            // Répondre au courriel répond directement au client.
+            reply_to: payload.email,
+            subject: `Precious — ${payload.subject} — ${payload.name}`,
+            text,
+            html,
+          }),
+        });
   } catch (cause) {
     // Service d'envoi injoignable : on le dit clairement plutôt que de
     // laisser croire que la demande est partie.
-    console.error("Service d'envoi injoignable :", cause);
+    console.error("[contact] Service d'envoi injoignable :", cause);
     return json(
       { error: "Le service d'envoi est momentanément indisponible." },
       503,

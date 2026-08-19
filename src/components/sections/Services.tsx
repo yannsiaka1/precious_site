@@ -131,7 +131,11 @@ export function Services({ activeId, onActiveChange }: ServicesProps) {
           className="mt-10 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]"
         >
           <Reveal variant="up">
-            <ImagePairCarousel images={active.gallery} resetKey={active.id} />
+            <ImagePairCarousel
+              images={active.gallery}
+              resetKey={active.id}
+              parPage={active.galleryLayout === "unique" ? 1 : 2}
+            />
           </Reveal>
 
           {/* Le panneau de droite bascule entre présentation et formulaire.

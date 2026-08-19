@@ -19,24 +19,28 @@ export const services: Service[] = [
       alt: "Bouteilles de jus Precious au gingembre, aux fruits rouges et à la mangue",
       focus: "50% 49%",
     },
+    // Visuels produit composés au format 2:3, taillés pour l'emplacement.
+    galleryLayout: "unique",
     gallery: [
       {
-        src: "/assets/galerie/jus-4.webp",
-        alt: "Jus de gingembre Precious servi au verre",
-        caption: "Le gingembre, notre signature",
+        src: "/assets/galerie/jus-gingembre.webp",
+        alt: "Jus de gingembre Precious servi au verre, citron et gingembre frais",
+        caption: "Jus de gingembre — notre signature",
       },
       {
-        src: "/assets/galerie/jus-2.webp",
-        alt: "Caisse de bouteilles de jus Precious",
+        src: "/assets/galerie/jus-hibiscus.webp",
+        alt: "Bouteille Precious Tango, jus de fleurs d'hibiscus et gingembre",
+        caption: "Tango — hibiscus & gingembre",
       },
       {
-        src: "/assets/galerie/jus-1.webp",
-        alt: "Jus de fruits rouges et pomme Precious",
+        src: "/assets/galerie/jus-vert.webp",
+        alt: "Bouteille Precious Détox, jus vert aux épinards, concombre et céleri",
+        caption: "Détox — le jus vert",
       },
       {
-        src: "/assets/galerie/jus-3.webp",
-        alt: "Jus de mangue et passiflore Precious",
-        caption: "Pressés, jamais dilués",
+        src: "/assets/galerie/jus-gingembre-classique.webp",
+        alt: "Bouteille de jus de gingembre Precious au format classique",
+        caption: "Format classique, 474 ml",
       },
     ],
     formIntro:

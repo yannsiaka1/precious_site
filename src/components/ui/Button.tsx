@@ -1,7 +1,8 @@
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-type Variant = "red" | "forest" | "onDark" | "onLight";
+type Variant =
+  "red" | "forest" | "onDark" | "onLight" | "redFilled" | "forestFilled";
 type Size = "md" | "lg";
 
 /**
@@ -11,6 +12,15 @@ type Size = "md" | "lg";
  */
 const variants: Record<Variant, string> = {
   red: "border-ink/45 text-ink hover:border-brand-red hover:bg-brand-red hover:text-paper",
+  /*
+   * Variantes pleines de la section d'ouverture : l'état coloré est permanent,
+   * le survol l'inverse en fond clair. Elles ne servent qu'au hero, les autres
+   * appels à l'action du site gardent le rectangle sobre.
+   */
+  redFilled:
+    "border-brand-red bg-brand-red text-paper hover:bg-paper hover:text-brand-red",
+  forestFilled:
+    "border-forest-deep bg-forest-deep text-mango hover:bg-paper hover:text-forest-deep",
   forest:
     "border-ink/45 text-ink hover:border-forest-deep hover:bg-forest-deep hover:text-mango",
   onDark:

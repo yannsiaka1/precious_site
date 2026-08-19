@@ -74,7 +74,38 @@ La clé du service d'envoi et l'adresse de destination vivent côté serveur.
 Elles ne sont jamais présentes dans le JavaScript envoyé au navigateur — c'est
 la raison d'être de cette fonction plutôt qu'un appel direct depuis la page.
 
-### Mise en service (environ 10 minutes)
+### Choisir le service d'envoi
+
+Deux services sont pris en charge. La fonction utilise **Brevo** si
+`BREVO_API_KEY` est défini, sinon **Resend**.
+
+| | Resend | Brevo |
+| --- | --- | --- |
+| Écrire à n'importe quelle adresse | domaine à vérifier | **adresse d'expéditeur à valider** |
+| Sans domaine | uniquement vers le titulaire du compte | vers qui l'on veut |
+| Gratuit | 100 courriels/jour | 300 courriels/jour |
+
+**Sans domaine, Brevo est le choix pratique** : on valide une simple adresse
+d'expéditeur (un Gmail suffit) et l'envoi devient possible vers n'importe quel
+destinataire.
+
+#### Brevo
+
+1. Compte sur [brevo.com](https://www.brevo.com).
+2. *Senders, Domains & Dedicated IPs → Senders → Add a sender* : ajouter
+   `Preciousck384@gmail.com` et cliquer le lien de confirmation reçu.
+3. *SMTP & API → API Keys* : créer une clé.
+4. Variables Vercel :
+
+   | Nom | Valeur |
+   | --- | --- |
+   | `BREVO_API_KEY` | la clé créée |
+   | `CONTACT_FROM` | `Precious <Preciousck384@gmail.com>` |
+   | `CONTACT_TO` | `Preciousck384@gmail.com` |
+
+5. Redéployer.
+
+#### Resend (mise en service d'origine, environ 10 minutes)
 
 1. Créer un compte sur [resend.com](https://resend.com) **avec l'adresse
    `Preciousck384@gmail.com`**. Sans domaine vérifié, Resend n'autorise l'envoi
@@ -86,8 +117,13 @@ la raison d'être de cette fonction plutôt qu'un appel direct depuis la page.
    | Nom | Valeur |
    | --- | --- |
    | `RESEND_API_KEY` | la clé générée |
-   | `CONTACT_TO` | `Preciousck384@gmail.com` |
+   | `CONTACT_TO` | `preciousck384@gmail.com` — **en minuscules**, exactement l'adresse d'inscription du compte Resend |
    | `CONTACT_FROM` | `Precious <onboarding@resend.dev>` |
+
+   ⚠️ Tant qu'aucun domaine n'est vérifié, Resend compare `CONTACT_TO` à
+   l'adresse du compte **caractère par caractère** : une majuscule suffit à
+   faire refuser l'envoi. La fonction ramène désormais l'adresse en minuscules
+   par précaution.
 
 4. Redéployer. Les demandes arrivent alors dans la boîte de réception, et
    **répondre au courriel répond directement au client** (`reply_to`).
@@ -112,6 +148,27 @@ retomberont donc sur la messagerie. Pour les tester en conditions réelles :
 npm i -g vercel
 vercel dev
 ```
+
+### Envoyer sans domaine vérifié : Brevo
+
+Resend n'accepte d'écrire qu'au titulaire du compte tant qu'aucun domaine
+n'est vérifié. Pour envoyer vers n'importe quelle adresse sans domaine, la
+fonction sait aussi passer par [Brevo](https://www.brevo.com) :
+
+1. Créer un compte, puis *Senders & IP* → ajouter l'adresse d'expédition et
+   cliquer le lien de confirmation reçu par courriel.
+2. Générer une clé d'API.
+3. Ajouter dans Vercel :
+
+   | Nom | Valeur |
+   | --- | --- |
+   | `BREVO_API_KEY` | la clé générée |
+   | `CONTACT_FROM` | `Precious <adresse-validee@exemple.com>` |
+   | `CONTACT_TO` | l'adresse qui reçoit |
+
+Si `BREVO_API_KEY` est présente, elle prend le pas sur Resend. Aucun autre
+changement n'est nécessaire : validation, mise en forme et réponse sont
+identiques.
 
 ### Autre service d'envoi
 

@@ -4,8 +4,14 @@ import { cn } from "@/lib/cn";
 
 interface ImagePairCarouselProps {
   images: GalleryImage[];
-  /** Repart de la première paire quand l'univers change. */
+  /** Repart du premier visuel quand l'univers change. */
   resetKey: string;
+  /**
+   * Nombre de visuels affichés à la fois.
+   * 2 pour les photos larges empilées, 1 pour les visuels produit verticaux
+   * qui occupent seuls toute la hauteur de la colonne.
+   */
+  parPage?: 1 | 2;
 }
 
 const DELAY = 3200;
@@ -24,8 +30,8 @@ function Slide({ image, visible }: { image: GalleryImage; visible: boolean }) {
         alt={image.alt}
         loading="lazy"
         decoding="async"
-        width={820}
-        height={615}
+        width={1024}
+        height={1536}
         sizes="(max-width: 1023px) 100vw, 45vw"
         className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover/slide:scale-[1.04]"
       />
@@ -54,10 +60,11 @@ function Slide({ image, visible }: { image: GalleryImage; visible: boolean }) {
 export function ImagePairCarousel({
   images,
   resetKey,
+  parPage = 2,
 }: ImagePairCarouselProps) {
   const [page, setPage] = useState(0);
   const [paused, setPaused] = useState(false);
-  const pages = Math.max(1, Math.ceil(images.length / 2));
+  const pages = Math.max(1, Math.ceil(images.length / parPage));
 
   useEffect(() => setPage(0), [resetKey]);
 
@@ -82,16 +89,21 @@ export function ImagePairCarousel({
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
     >
-      {[0, 1].map((slot) => (
+      {Array.from({ length: parPage }, (_, slot) => (
         <div
           key={slot}
-          className="group/slide relative aspect-4/3 w-full overflow-hidden rounded-sm bg-cream"
+          className={cn(
+            "group/slide relative w-full overflow-hidden rounded-sm bg-cream",
+            // 2:3 en visuel unique : le format exact de l'emplacement, calé
+            // sur la hauteur du panneau de droite.
+            parPage === 1 ? "aspect-2/3" : "aspect-4/3",
+          )}
         >
           {images.map((image, index) => (
             <Slide
               key={image.src}
               image={image}
-              visible={index === (page * 2 + slot) % images.length}
+              visible={index === (page * parPage + slot) % images.length}
             />
           ))}
         </div>
@@ -104,7 +116,11 @@ export function ImagePairCarousel({
               key={index}
               type="button"
               onClick={() => setPage(index)}
-              aria-label={`Voir les visuels ${index * 2 + 1} et ${index * 2 + 2}`}
+              aria-label={
+                parPage === 1
+                  ? `Voir le visuel ${index + 1}`
+                  : `Voir les visuels ${index * 2 + 1} et ${index * 2 + 2}`
+              }
               aria-current={index === page ? "true" : undefined}
               className={cn(
                 "h-1.5 rounded-full transition-all duration-300 ease-(--ease-out-soft)",

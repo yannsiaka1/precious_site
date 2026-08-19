@@ -43,6 +43,12 @@ export interface Service {
   media: Media;
   /** Visuels qui défilent à gauche quand cet univers est ouvert. */
   gallery: GalleryImage[];
+  /**
+   * Disposition de ces visuels.
+   * - "paire"  : deux photos empilées qui tournent ensemble (photos larges)
+   * - "unique" : un seul visuel plein cadre (visuels produit verticaux)
+   */
+  galleryLayout?: "paire" | "unique";
   /** Champs supplémentaires du formulaire de commande. */
   fields: RequestField[];
   /** Phrase d'accroche du formulaire. */

@@ -80,13 +80,13 @@ export function Hero() {
             delay={STAGGER * 3}
             className="mt-12 flex flex-wrap items-start gap-4 sm:gap-5"
           >
-            <Button as="a" href="#creations" variant="red" size="lg">
+            <Button as="a" href="#creations" variant="redFilled" size="lg">
               Découvrir nos créations
             </Button>
             <Button
               as="a"
               href="#academie"
-              variant="forest"
+              variant="forestFilled"
               size="lg"
               className="sm:translate-y-4"
             >
