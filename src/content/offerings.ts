@@ -259,7 +259,7 @@ export const savoirFaire: Array<{
     pillarDetail: "Formation et guide (ebook)",
     title: "Préparation des boissons naturelles",
     description:
-      "Devenez expert en mixologie naturelle et en entrepreneuriat avec nos formations immersives.",
+      "Devenez expert en preparation de cocktails et moktails et en entrepreneuriat avec nos formations immersives.",
     image: "/assets/savoir-formation.webp",
     alt: "Atelier de formation Precious autour d'un plan de travail garni de fruits",
     target: "academie",
@@ -278,7 +278,7 @@ export const savoirFaire: Array<{
   },
   {
     pillar: "Célébrer",
-    pillarDetail: "Cocktails et service événementiel",
+    pillarDetail: "Cocktails, moktails et service événementiel",
     title: "Préparation des cocktails de fruits",
     description:
       "La santé et le bien-être : des boissons saines, aux saveurs variées et surtout bonnes pour le corps.",
