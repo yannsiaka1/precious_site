@@ -119,6 +119,29 @@ Un `.env` avec `VITE_CONTACT_ENDPOINT=https://…` détourne les formulaires ver
 n'importe quelle autre destination (Formspree, n8n, une API maison) sans
 toucher au code. La fonction `api/contact.ts` est alors inutilisée.
 
+### Diagnostiquer un refus du service d'envoi
+
+Message « Le service d'envoi a refusé la demande » : la demande est valide et
+a bien atteint Resend, c'est Resend qui refuse. La cause exacte se lit dans
+**Vercel → le projet → Logs**, filtre `/api/contact` :
+
+```
+[contact] Resend a refusé l'envoi — HTTP 403 — {"message":"..."}
+[contact] Cause probable : ...
+```
+
+Pour la voir directement dans la réponse pendant la mise en service, ajouter
+`DEBUG_CONTACT=1` aux variables Vercel puis redéployer. **À retirer une fois
+le circuit établi** : ces détails ne regardent pas les visiteurs.
+
+Les trois causes courantes :
+
+| Message de Resend | Correctif |
+| --- | --- |
+| *You can only send testing emails to your own email address* | `CONTACT_TO` doit être exactement l'adresse d'inscription du compte Resend |
+| *The … domain is not verified* | remettre `CONTACT_FROM` sur `Precious <onboarding@resend.dev>` |
+| *API key is invalid* | régénérer la clé, la recoller sans espace, cocher l'environnement Production |
+
 ### Ce que la fonction contrôle
 
 - méthode POST uniquement ;

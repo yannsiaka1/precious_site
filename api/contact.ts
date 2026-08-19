@@ -112,6 +112,40 @@ function escapeHtml(value: string): string {
     .replace(/"/g, "&quot;");
 }
 
+/**
+ * Traduit un refus du service d'envoi en cause probable.
+ * Les trois premiers cas couvrent la quasi-totalité des échecs rencontrés à
+ * la mise en service.
+ */
+function diagnose(status: number, detail: string): string {
+  const text = detail.toLowerCase();
+
+  if (text.includes("testing emails") || text.includes("own email address")) {
+    return (
+      "Tant qu'aucun domaine n'est vérifié, Resend n'accepte d'envoyer que " +
+      "vers l'adresse du titulaire du compte. CONTACT_TO doit correspondre " +
+      "exactement à l'adresse d'inscription du compte Resend."
+    );
+  }
+  if (text.includes("not verified") || text.includes("domain")) {
+    return (
+      "Le domaine de l'adresse d'expédition n'est pas vérifié dans Resend. " +
+      "Garder CONTACT_FROM sur onboarding@resend.dev tant que le domaine " +
+      "n'est pas en place."
+    );
+  }
+  if (status === 401 || status === 403) {
+    return "Clé RESEND_API_KEY absente, incorrecte ou révoquée.";
+  }
+  if (status === 422) {
+    return "Resend a rejeté un champ du courriel (from, to ou reply_to mal formé).";
+  }
+  if (status === 429) {
+    return "Quota d'envoi Resend atteint.";
+  }
+  return `Refus non identifié du service d'envoi (HTTP ${status}).`;
+}
+
 export default async function handler(request: Request): Promise<Response> {
   if (request.method !== "POST") {
     return json({ error: "Méthode non autorisée." }, 405);
@@ -268,11 +302,36 @@ export default async function handler(request: Request): Promise<Response> {
 
   if (!response.ok) {
     const detail = await response.text();
-    console.error("Envoi refusé par Resend :", response.status, detail);
+    const cause = diagnose(response.status, detail);
+
+    /*
+     * Journal détaillé, lisible dans Vercel → Logs, filtre /api/contact.
+     * C'est ici que se lit la vraie cause d'un refus.
+     */
+    console.error(
+      `[contact] Resend a refusé l'envoi — HTTP ${response.status} — ${detail}`,
+    );
+    console.error(`[contact] Cause probable : ${cause}`);
+
+    /*
+     * Un refus de Resend vient presque toujours de la configuration, pas de
+     * la personne qui remplit le formulaire : on lui montre un message neutre
+     * et on garde le diagnostic pour l'exploitant.
+     *
+     * `DEBUG_CONTACT=1` dans les variables Vercel ajoute le motif exact à la
+     * réponse — pratique pendant la mise en service, à retirer ensuite.
+     */
     return json(
       {
         error:
-          "Le service d'envoi a refusé la demande. Réessayez dans un instant.",
+          "Le service d'envoi a refusé la demande. Écrivez-nous directement en attendant.",
+        ...(process.env["DEBUG_CONTACT"] === "1"
+          ? {
+              diagnostic: cause,
+              providerStatus: response.status,
+              providerDetail: detail,
+            }
+          : {}),
       },
       502,
     );
