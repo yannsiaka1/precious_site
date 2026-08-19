@@ -10,8 +10,10 @@ export interface RequestPayload {
   message: string;
   /** Champs propres à un service ou à un type de demande. */
   details?: Record<string, string>;
-  /** Horodatage d'ouverture du formulaire, contrôlé côté serveur. */
+  /** Horodatage d'ouverture du formulaire, fourni par `useFormStart`. */
   startedAt?: number;
+  /** Valeur du champ piège. Vide chez un humain, remplie par un automate. */
+  website?: string;
 }
 
 /**
@@ -56,7 +58,13 @@ function normalise(payload: RequestPayload) {
         .filter(([, value]) => value)
         .map(([label, value]) => [clean(label, 40), clean(value, 160)]),
     ),
-    startedAt: payload.startedAt ?? 0,
+    /*
+     * Durée de remplissage, calculée ici et non sur le serveur : les deux
+     * horloges n'ont aucune raison d'être synchronisées, et un écart de
+     * quelques secondes suffirait à rejeter une saisie parfaitement normale.
+     */
+    elapsedMs: payload.startedAt ? Date.now() - payload.startedAt : 0,
+    website: payload.website ?? "",
   };
 }
 

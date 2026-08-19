@@ -124,9 +124,14 @@ toucher au code. La fonction `api/contact.ts` est alors inutilisée.
 - méthode POST uniquement ;
 - champ piège invisible (`website`) : réponse 200 sans envoi, l'automate ne
   sait pas qu'il a été repéré ;
-- délai de remplissage entre 1,5 s et 6 h ;
-- 5 envois maximum par adresse IP sur 10 minutes (limite en mémoire, donc
-  propre à chaque instance : une gêne, pas une garantie) ;
+- délai de remplissage entre 1,5 s et 12 h — **mesuré par le navigateur** et
+  transmis, jamais calculé en comparant l'heure du client à celle du serveur :
+  les deux horloges n'ont aucune raison d'être synchronisées ;
+- 12 envois maximum par adresse IP sur 10 minutes, comptés uniquement pour les
+  demandes valides — une erreur de saisie ne consomme pas le quota. Limite en
+  mémoire, donc propre à chaque instance : une gêne, pas une garantie. La marge
+  est large car les opérateurs mobiles partagent une même adresse IP entre de
+  nombreux abonnés ;
 - longueurs bornées, caractères de contrôle et chevrons retirés ;
 - format de l'adresse courriel, nom d'au moins 2 caractères, message d'au
   moins 5 caractères ;

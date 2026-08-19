@@ -98,6 +98,7 @@ export function Contact({
         email: String(data.get("email") ?? ""),
         phone: String(data.get("phone") ?? ""),
         subject: String(data.get("subject") ?? ""),
+        website: String(data.get("website") ?? ""),
         date: String(data.get("date") ?? ""),
         message: String(data.get("message") ?? ""),
         details,

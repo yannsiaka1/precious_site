@@ -25,7 +25,6 @@ interface Payload {
   date: string;
   message: string;
   details: Record<string, string>;
-  startedAt: number;
 }
 
 /** Bornes de longueur, identiques à celles annoncées au navigateur. */
@@ -38,13 +37,21 @@ const LIMITS: Record<string, number> = {
   message: 1500,
 };
 
-/** Délai minimal de remplissage : en deçà, c'est un automate. */
+/**
+ * Délai minimal de remplissage, mesuré par le navigateur puis transmis.
+ * En deçà, la saisie n'a pas pu être humaine.
+ */
 const MIN_FILL_MS = 1500;
-/** Au-delà, le formulaire est resté ouvert trop longtemps. */
-const MAX_FILL_MS = 6 * 60 * 60 * 1000;
+/** Au-delà, la page est restée ouverte si longtemps qu'on préfère la recharger. */
+const MAX_FILL_MS = 12 * 60 * 60 * 1000;
 
-/** Nombre d'envois tolérés par adresse IP sur la fenêtre. */
-const RATE_LIMIT = 5;
+/**
+ * Nombre d'envois tolérés par adresse IP sur la fenêtre.
+ *
+ * Volontairement large : les opérateurs mobiles partagent une même adresse IP
+ * entre des milliers d'abonnés. Une limite serrée bloquerait de vrais clients.
+ */
+const RATE_LIMIT = 12;
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 
 /**
@@ -57,6 +64,12 @@ const RATE_WINDOW_MS = 10 * 60 * 1000;
  */
 const hits = new Map<string, number[]>();
 
+/**
+ * Enregistre une tentative et indique si le quota est dépassé.
+ *
+ * Appelé seulement une fois la demande validée : une erreur de saisie ne doit
+ * pas consommer le quota de la personne qui corrige et renvoie.
+ */
 function rateLimited(ip: string): boolean {
   const now = Date.now();
   const recent = (hits.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
@@ -110,18 +123,6 @@ export default async function handler(request: Request): Promise<Response> {
     return json({ error: "Service d'envoi non configuré." }, 501);
   }
 
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "inconnue";
-  if (rateLimited(ip)) {
-    return json(
-      {
-        error:
-          "Trop de demandes envoyées coup sur coup. Réessayez dans quelques minutes.",
-      },
-      429,
-    );
-  }
-
   let raw: Record<string, unknown>;
   try {
     raw = (await request.json()) as Record<string, unknown>;
@@ -135,11 +136,25 @@ export default async function handler(request: Request): Promise<Response> {
     return json({ ok: true }, 200);
   }
 
-  const startedAt = Number(raw["startedAt"]) || 0;
-  const elapsed = Date.now() - startedAt;
-  if (!startedAt || elapsed < MIN_FILL_MS || elapsed > MAX_FILL_MS) {
+  /*
+   * Durée de remplissage mesurée par le navigateur puis transmise.
+   * On ne compare jamais l'heure du client à celle du serveur : rien ne
+   * garantit qu'elles soient synchronisées, et quelques secondes d'écart
+   * suffiraient à rejeter une saisie parfaitement normale.
+   */
+  const elapsed = Number(raw["elapsedMs"]) || 0;
+  if (elapsed < MIN_FILL_MS) {
     return json(
-      { error: "Formulaire expiré. Rechargez la page et réessayez." },
+      { error: "Envoi trop rapide. Réessayez dans un instant." },
+      400,
+    );
+  }
+  if (elapsed > MAX_FILL_MS) {
+    return json(
+      {
+        error:
+          "La page est ouverte depuis longtemps. Rechargez-la puis réessayez.",
+      },
       400,
     );
   }
@@ -152,7 +167,6 @@ export default async function handler(request: Request): Promise<Response> {
     date: clean(raw["date"], LIMITS["date"]!),
     message: clean(raw["message"], LIMITS["message"]!),
     details: {},
-    startedAt,
   };
 
   const details = raw["details"];
@@ -174,6 +188,20 @@ export default async function handler(request: Request): Promise<Response> {
   }
   if (payload.message.length < 5) {
     return json({ error: "Merci de préciser votre demande." }, 400);
+  }
+
+  // Quota compté ici seulement : la demande est complète et valide, c'est un
+  // vrai envoi.
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "inconnue";
+  if (rateLimited(ip)) {
+    return json(
+      {
+        error:
+          "Trop de demandes envoyées coup sur coup. Réessayez dans quelques minutes.",
+      },
+      429,
+    );
   }
 
   const lines: Array<[string, string]> = [

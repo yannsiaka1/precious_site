@@ -28,6 +28,7 @@ function ShareForm({ onClose }: { onClose: () => void }) {
     "idle",
   );
   const [outcome, setOutcome] = useState<"sent" | "handoff">("sent");
+  const [error, setError] = useState("");
   const ids = useId();
   const startedAt = useFormStart();
   const firstField = useRef<HTMLInputElement>(null);
@@ -48,6 +49,7 @@ function ShareForm({ onClose }: { onClose: () => void }) {
         email: String(data.get("email") ?? ""),
         phone: "",
         subject: "Témoignage",
+        website: String(data.get("website") ?? ""),
         date: "",
         message: String(data.get("message") ?? ""),
         details: { Occasion: String(data.get("occasion") ?? "") },
@@ -55,7 +57,14 @@ function ShareForm({ onClose }: { onClose: () => void }) {
       });
       setOutcome(result);
       setStatus("done");
-    } catch {
+    } catch (cause) {
+      // On remonte le motif exact renvoyé par le serveur : sans lui, la
+      // personne ne sait pas quoi corriger.
+      setError(
+        cause instanceof Error && cause.message
+          ? cause.message
+          : "L'envoi n'a pas abouti.",
+      );
       setStatus("error");
     }
   }
@@ -158,7 +167,7 @@ function ShareForm({ onClose }: { onClose: () => void }) {
 
       {status === "error" ? (
         <p role="alert" className="text-sm text-[#a12d1c] sm:col-span-2">
-          L'envoi n'a pas abouti. Écrivez-nous à{" "}
+          {error} Vous pouvez aussi écrire à{" "}
           <a href={`mailto:${site.contact.email}`} className="underline">
             {site.contact.email}
           </a>
