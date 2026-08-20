@@ -88,13 +88,13 @@ export function Maison() {
             alt={chapter.alt}
             loading="lazy"
             decoding="async"
-            width={640}
-            height={854}
+            width={900}
+            height={1200}
             sizes="(max-width: 1023px) 100vw, 33vw"
             className={cn(
               "w-full object-cover shadow-(--shadow-soft)",
               chapter.imageStyle === "portrait"
-                ? "aspect-[483/814] max-h-[24rem] object-top sm:max-h-[34rem]"
+                ? "aspect-3/4 max-h-[24rem] object-center sm:max-h-[34rem]"
                 : "aspect-4/3",
             )}
           />

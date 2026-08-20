@@ -1,52 +1,107 @@
-import { ebook, formation } from "@/content/offerings";
+import { ebook, formations, inscription } from "@/content/offerings";
+import type { Formation } from "@/content/types";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { EbookCover } from "@/components/ui/EbookCover";
-import { Reveal, STAGGER } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
+import { Reveal, STAGGER } from "@/components/ui/Reveal";
 
 /**
- * Section « L'académie Precious » — la formation et l'ebook.
+ * Section « L'académie Precious ».
  *
- * Deux cartes de hauteur identique alimentées par `formation` et `ebook`
- * (content/offerings.ts). Tant que l'URL Payhip d'une offre est vide, son
- * bouton renvoie au formulaire de contact plutôt que nulle part.
+ * Colonne de gauche : les deux offres de formation (présentiel et en ligne),
+ * chacune avec son contenu, son tarif et son lien de paiement Payhip.
+ * Colonne de droite : le guide, dont le style ne change pas — il garde sa
+ * hauteur naturelle et reste calé en haut plutôt que de s'étirer sur toute la
+ * colonne voisine, devenue bien plus longue.
  */
 
-/**
- * Appel à l'action d'une offre.
- * Tant que le lien Payhip n'est pas renseigné, on renvoie vers le formulaire
- * de contact plutôt que d'afficher un bouton qui ne mène nulle part.
- */
-function OfferAction({
-  label,
-  url,
-  tone,
-}: {
-  label: string;
-  url: string;
-  tone: "light" | "dark";
-}) {
-  const variant = tone === "dark" ? "onDark" : "red";
-
-  if (!url) {
-    return (
-      <Button as="a" href="#contact" variant={variant} size="lg">
-        {label}
-      </Button>
-    );
-  }
-
+/** Coche des listes « ce que comprend la formation ». */
+function Coche() {
   return (
-    <Button
-      as="a"
-      href={url}
-      target="_blank"
-      rel="noreferrer noopener"
-      variant={variant}
-      size="lg"
+    <svg
+      viewBox="0 0 16 16"
+      width="15"
+      height="15"
+      fill="none"
+      aria-hidden="true"
+      className="mt-1.5 shrink-0 text-lime"
     >
-      {label}
-    </Button>
+      <path
+        d="M3 8.5l3.2 3.2L13 5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function CarteFormation({
+  formation,
+  delai,
+}: {
+  formation: Formation;
+  delai: number;
+}) {
+  return (
+    <Reveal delay={delai} className="flex">
+      <article className="flex flex-col bg-linear-135 from-forest via-[#2d7e35] to-[#7aa729] p-8 transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_18px_44px_rgba(0,0,0,0.28)] sm:p-12">
+        <div className="flex flex-wrap justify-between gap-4 font-ui text-xs font-bold tracking-[0.16em] text-lime uppercase">
+          <span>{formation.badge}</span>
+          <span>{formation.format}</span>
+        </div>
+
+        <h3 className="mt-7 max-w-[24ch] text-[clamp(1.45rem,2vw,1.95rem)]">
+          {formation.title}
+        </h3>
+        <p className="mt-5 max-w-prose text-paper/85">{formation.intro}</p>
+
+        <p className="mt-8 font-ui text-xs font-bold tracking-[0.16em] text-lime uppercase">
+          Ce que vous apprenez
+        </p>
+        <ul className="mt-4 grid gap-2.5">
+          {formation.programme.map((item) => (
+            <li key={item} className="flex gap-3 text-paper/90">
+              <Coche />
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        <p className="mt-8 font-ui text-xs font-bold tracking-[0.16em] text-lime uppercase">
+          Ce qui est compris
+        </p>
+        <ul className="mt-4 grid gap-2.5">
+          {formation.includes.map((item) => (
+            <li key={item} className="flex gap-3 text-paper/90">
+              <Coche />
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-auto pt-9">
+          <p className="font-display text-[clamp(1.8rem,2.4vw,2.4rem)] text-paper">
+            {formation.price}
+          </p>
+          <p className="mt-2 max-w-prose text-sm text-paper/70">
+            {formation.priceNote}
+          </p>
+
+          <Button
+            as="a"
+            href={formation.url}
+            target="_blank"
+            rel="noreferrer noopener"
+            variant="onDark"
+            className="mt-7"
+          >
+            {formation.cta}
+          </Button>
+        </div>
+      </article>
+    </Reveal>
   );
 }
 
@@ -64,51 +119,37 @@ export function Academy() {
         />
 
         <div className="mt-28 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-          <Reveal className="flex">
-            <article className="flex flex-col bg-linear-135 from-forest via-[#2d7e35] to-[#7aa729] p-8 transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_18px_44px_rgba(0,0,0,0.28)] sm:p-12 lg:p-14">
-              <div className="flex flex-wrap justify-between gap-4 font-ui text-xs font-bold tracking-[0.16em] text-lime uppercase">
-                <span>{formation.badge}</span>
-                <span>{formation.format}</span>
+          <div className="grid gap-6">
+            {/* Déroulé de l'inscription, avant les offres : on comprend
+                comment les choses se passent avant de regarder les prix. */}
+            <Reveal>
+              <div className="border border-lime/30 p-8 sm:p-10">
+                <p className="font-ui text-xs font-bold tracking-[0.16em] text-lime uppercase">
+                  Comment se déroule l'inscription
+                </p>
+                <ol className="mt-5 grid gap-4">
+                  {inscription.map((etape, index) => (
+                    <li key={etape} className="flex gap-4 text-paper/85">
+                      <span className="font-display text-lg text-mango">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      {etape}
+                    </li>
+                  ))}
+                </ol>
               </div>
+            </Reveal>
 
-              <h3 className="mt-8 max-w-[20ch] text-[clamp(1.6rem,2.3vw,2.2rem)]">
-                {formation.title}
-              </h3>
-              <p className="mt-5 max-w-prose text-paper/85">
-                {formation.intro}
-              </p>
+            {formations.map((formation, index) => (
+              <CarteFormation
+                key={formation.id}
+                formation={formation}
+                delai={(index + 1) * STAGGER}
+              />
+            ))}
+          </div>
 
-              <ul className="mt-9 grid gap-6 sm:grid-cols-2">
-                {formation.modules.map((module, position) => (
-                  <Reveal
-                    as="li"
-                    key={module.title}
-                    delay={position * STAGGER}
-                    className="border-l border-lime/50 pl-4"
-                  >
-                    <p className="font-display text-lg">{module.title}</p>
-                    <p className="mt-1.5 text-paper/75">{module.detail}</p>
-                  </Reveal>
-                ))}
-              </ul>
-
-              <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-2 font-ui text-xs font-bold tracking-[0.12em] text-paper/60 uppercase">
-                {formation.practical.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-
-              <div className="mt-auto pt-10">
-                <OfferAction
-                  label={formation.cta}
-                  url={formation.url}
-                  tone="dark"
-                />
-              </div>
-            </article>
-          </Reveal>
-
-          <Reveal delay={STAGGER} className="flex">
+          <Reveal delay={STAGGER} className="flex self-start">
             <article className="flex flex-col bg-cream p-8 text-ink transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_18px_44px_rgba(0,0,0,0.22)] sm:p-12 lg:p-14">
               <div className="flex flex-wrap justify-between gap-4 font-ui text-xs font-bold tracking-[0.16em] text-forest uppercase">
                 <span>{ebook.badge}</span>
@@ -130,7 +171,6 @@ export function Academy() {
                     as="li"
                     key={item}
                     delay={position * STAGGER}
-                    variant="up"
                     className="flex gap-3"
                   >
                     <span
@@ -142,8 +182,12 @@ export function Academy() {
                 ))}
               </ul>
 
+              {/* Le guide n'est pas encore en vente : on renvoie au formulaire
+                  de contact pour être prévenu, plutôt qu'à un panier vide. */}
               <div className="mt-auto pt-10">
-                <OfferAction label={ebook.cta} url={ebook.url} tone="light" />
+                <Button as="a" href="#contact" variant="red">
+                  Être prévenu de sa sortie
+                </Button>
               </div>
             </article>
           </Reveal>

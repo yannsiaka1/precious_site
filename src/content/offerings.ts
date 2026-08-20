@@ -1,3 +1,4 @@
+import { eventFields } from "./forms";
 import type { Ebook, Formation, Service, ServiceId } from "./types";
 
 export const services: Service[] = [
@@ -163,74 +164,107 @@ export const services: Service[] = [
     ],
     formIntro:
       "Racontez-nous votre événement : nous vous proposons une carte et un devis.",
+    // Mêmes questions que le formulaire de bas de page : une demande
+    // d'événement doit être chiffrable quel que soit l'endroit d'où elle part.
     fields: [
       { name: "date", label: "Date de l'événement", type: "date", half: true },
-      {
-        name: "invites",
-        label: "Nombre d'invités",
-        type: "number",
-        placeholder: "50",
-        half: true,
-      },
-      {
-        name: "lieu",
-        label: "Lieu ou quartier",
-        type: "text",
-        placeholder: "Montréal, Laval…",
-      },
+      ...eventFields,
     ],
   },
 ];
 
-export const formation: Formation = {
-  badge: "Formation",
-  format: "En ligne ou en présentiel · Montréal",
-  title: "Apprenez le métier, pas seulement les recettes.",
-  intro:
-    "Precious transmet ce qu'elle pratique depuis des années : composer, présenter et servir des boissons naturelles qui font parler d'elles. Chaque module se termine par une mise en pratique, sur vos produits et vos contraintes.",
-  modules: [
-    {
-      title: "Cocktails événementiels",
-      detail:
-        "Composer une carte sans alcool, doser, colorer, dresser un bar et assurer le service le jour J.",
-    },
-    {
-      title: "Boissons naturelles",
-      detail:
-        "Extraction, équilibre des saveurs, conservation et formats : des jus qui tiennent en bouche et dans le temps.",
-    },
-    {
-      title: "Donuts gourmands",
-      detail:
-        "Pâte, cuisson, glaçages et finitions, avec les alternatives plus légères qui font la signature Precious.",
-    },
-    {
-      title: "Lancer votre activité",
-      detail:
-        "Coût de revient, prix de vente, matériel, hygiène et premiers clients : de quoi passer de la passion au commerce.",
-    },
-  ],
-  practical: [
-    "Groupes réduits, rythme adapté à votre niveau",
-    "Supports PDF et recettes à conserver",
-    "Attestation de participation",
-    "Accompagnement après la formation",
-  ],
-  cta: "S'inscrire à la formation",
-  url: "", // ← URL Payhip de la formation
-};
+/**
+ * Les deux offres de formation.
+ *
+ * Le texte reprend les mots que les gens tapent réellement dans un moteur de
+ * recherche — formation cocktails et mocktails, jus naturels, événementiel,
+ * Montréal, en ligne, présentiel — sans jamais forcer la phrase : une
+ * formulation lisible convertit mieux qu'une accumulation de mots-clés.
+ */
+export const formations: Formation[] = [
+  {
+    id: "presentiel",
+    badge: "En présentiel",
+    format: "Montréal · Groupes réduits",
+    title: "Formation jus, cocktails & mocktails — en présentiel",
+    intro:
+      "Une formation immersive à Montréal, où l'on apprend en faisant. Vous repartez capable de créer des cocktails et des mocktails qui ne ressemblent à aucun autre, de monter un bar complet, de tenir une prestation du premier échange jusqu'au démontage — et de faire connaître votre travail une fois rentré chez vous.",
+    programme: [
+      "Créer des cocktails et des mocktails originaux : équilibre des saveurs, textures, couleurs, garnitures",
+      "Composer une carte qui respecte le thème, les couleurs et l'ambiance demandés par un client",
+      "Choisir et gérer son matériel : quantités, montage, entretien, transport",
+      "Préparer et organiser une prestation événementielle, du devis au démontage",
+      "Créer sa présence en ligne : photographier ses créations, publier, décrocher ses premiers clients",
+      "Les secrets et les rouages du métier — ceux qui ne s'apprennent qu'auprès de quelqu'un qui les pratique",
+    ],
+    includes: [
+      "La formation complète en présentiel, à Montréal",
+      "Exercices pratiques et accompagnement en direct",
+      "Le livre Precious inclus",
+      "1 mois de suivi personnalisé après la formation",
+      "1 stage pratique sur une vraie prestation avec l'équipe, selon les disponibilités",
+    ],
+    price: "2 000 $ CAD",
+    priceNote:
+      "Paiement unique. Inscription confirmée dès validation du paiement. Les stages pratiques sont proposés selon les prestations, événements et places disponibles.",
+    cta: "S'inscrire à la formation présentielle — 2 000 $",
+    url: "https://payhip.com/order?link=reUX6&pricing_plan=18B15gV2BZ",
+  },
+  {
+    id: "en-ligne",
+    badge: "En ligne",
+    format: "À distance · Sessions en visioconférence",
+    title: "Formation jus, cocktails & mocktails — en ligne",
+    intro:
+      "Le savoir-faire Precious, où que vous soyez. Même programme de création, même exigence : vous apprenez à composer, présenter et vendre des cocktails et des mocktails originaux, avec un accompagnement qui ne s'arrête pas à la fin de la session.",
+    programme: [
+      "Créer des cocktails et des mocktails originaux : équilibre des saveurs, textures, couleurs",
+      "Composer une carte qui respecte le thème et les couleurs d'un événement",
+      "Choisir et gérer son matériel : quantités, montage, entretien",
+      "Préparer et organiser une prestation, du devis au jour J",
+      "Créer sa présence en ligne et trouver ses premiers clients",
+      "Les secrets et les rouages du métier, expliqués sans détour",
+    ],
+    includes: [
+      "L'accès à la formation Precious en ligne",
+      "Le livre Precious inclus",
+      "1 mois de suivi personnalisé après la formation",
+      "1 stage pratique sur une vraie prestation ou un événement, selon les disponibilités",
+    ],
+    price: "1 500 $ CAD",
+    priceNote:
+      "Paiement unique. Inscription confirmée dès validation du paiement. Les stages pratiques sont proposés selon les prestations, événements et places disponibles.",
+    cta: "S'inscrire à la formation en ligne — 1 500 $",
+    url: "https://payhip.com/order?link=X3taT&pricing_plan=V6B73gDJBr",
+  },
+];
+
+/**
+ * Déroulé de l'inscription, commun aux deux offres.
+ *
+ * Placé avant les offres : on sait comment les choses se passent avant de
+ * regarder les prix, ce qui lève l'hésitation au moment de cliquer.
+ */
+export const inscription = [
+  "Vous complétez vos informations et réglez le paiement sécurisé.",
+  "Votre inscription est confirmée immédiatement après validation du paiement.",
+  "Vous ouvrez votre espace participant — par le lien affiché après le paiement ou par le courriel reçu — en vous connectant avec l'adresse et le mot de passe choisis au moment du paiement.",
+  "L'équipe Precious vous écrit sous 24 heures : date, horaire, lieu exact ou lien de visioconférence, et toutes les informations pratiques.",
+];
 
 export const ebook: Ebook = {
   badge: "Ebook",
   format: "Format numérique · Téléchargement immédiat",
   title: "Le guide Precious",
   intro:
-    "Les bases, les associations et les tours de main de la maison, réunis dans un guide illustré à garder sous la main quand l'envie de créer arrive.",
+    "Le livre que reçoivent nos participants, disponible seul. On y trouve la méthode de la maison : comment une recette se construit, pourquoi certaines associations fonctionnent et d'autres non, et les gestes qui font la différence entre une boisson correcte et une boisson dont on se souvient.",
   highlights: [
-    "Recettes illustrées, étape par étape",
-    "Les accords de saveurs qui fonctionnent",
-    "Le matériel utile — et celui dont on peut se passer",
-    "À lire sur téléphone, tablette ou ordinateur",
+    "Des recettes de jus, de cocktails et de mocktails, expliquées étape par étape",
+    "La logique des accords de saveurs : sucre, acidité, amertume, épices",
+    "Composer une carte cohérente autour d'un thème et de ses couleurs",
+    "Dresser, garnir et photographier ses créations pour qu'elles donnent envie",
+    "Le matériel vraiment utile — et celui dont on peut se passer au début",
+    "Conservation, quantités et préparation à l'avance",
   ],
   cover: {
     kicker: "Le guide",
@@ -238,14 +272,9 @@ export const ebook: Ebook = {
     footer: "Boissons naturelles & créativité",
   },
   cta: "Payer l'ebook",
-  url: "", // ← URL Payhip de l'ebook
+  url: "", // ← lien Payhip du guide, une fois le produit en ligne
 };
 
-/**
- * Section « Notre savoir-faire ».
- * Chaque carte renvoie vers l'univers correspondant plus bas dans la page,
- * onglet déjà sélectionné.
- */
 export const savoirFaire: Array<{
   pillar: string;
   pillarDetail: string;
@@ -308,7 +337,7 @@ export const maison = [
       "Aujourd'hui, ces trois univers avancent ensemble avec la même ambition : des produits et des expériences sincères, accessibles et créatives.",
     ],
     image: "/assets/maison-portrait.webp",
-    alt: "La fondatrice de Precious dans les locaux de la maison",
+    alt: "Coupes de cocktail mangue et fruits rouges dressées par Precious",
     imageStyle: "portrait" as const,
   },
   {

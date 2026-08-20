@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/Button";
+import { HeroCarousel } from "@/components/ui/HeroCarousel";
 import { Reveal, STAGGER } from "@/components/ui/Reveal";
 import { useParallax } from "@/hooks/useParallax";
 
@@ -88,7 +89,9 @@ export function Hero() {
               href="#academie"
               variant="forestFilled"
               size="lg"
-              className="sm:translate-y-4"
+              // Décalage en marge et non en `translate` : le `translate` du
+              // survol l'écrasait, ce qui faisait sauter le bouton.
+              className="sm:mt-4"
             >
               Explorer les formations
             </Button>
@@ -101,15 +104,15 @@ export function Hero() {
           className="will-change-transform"
         >
           <Reveal variant="zoom" delay={STAGGER}>
-            <img
-              src="/assets/hero-bouteilles.webp"
-              alt="Six bouteilles de jus de gingembre Precious alignées"
-              width={781}
-              height={429}
-              fetchPriority="high"
-              decoding="async"
-              sizes="(max-width: 1023px) 92vw, 48vw"
-              className="w-full origin-center scale-y-[1.07] object-contain drop-shadow-[0_26px_46px_rgba(90,80,20,0.22)]"
+            <HeroCarousel
+              visuels={[
+                {
+                  src: "/assets/hero-bouteilles.webp",
+                  alt: "Bouteilles de jus Precious alignées : gingembre, jus vert détox et Tango hibiscus",
+                },
+                { src: "/assets/hero-bouteilles-2.webp", alt: "" },
+                { src: "/assets/hero-bouteilles-3.webp", alt: "" },
+              ]}
             />
 
             <ul className="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 font-ui text-xs font-bold tracking-[0.14em] text-ink/60 uppercase">

@@ -56,16 +56,23 @@ export interface Service {
 }
 
 export interface Formation {
+  id: "presentiel" | "en-ligne";
+  /** Étiquette courte : « En présentiel », « En ligne ». */
   badge: string;
+  /** Précision de format affichée à côté du badge. */
   format: string;
   title: string;
   intro: string;
-  /** Ce qu'on apprend, un bloc par thème. */
-  modules: { title: string; detail: string }[];
-  /** Informations pratiques, en une ligne chacune. */
-  practical: string[];
+  /** Ce que l'on apprend : le programme, un thème par ligne. */
+  programme: string[];
+  /** Ce qui est compris dans le prix, un élément par ligne. */
+  includes: string[];
+  /** Tarif affiché, devise comprise. */
+  price: string;
+  /** Mention sous le tarif (paiement unique, conditions). */
+  priceNote: string;
   cta: string;
-  /** URL Payhip. Chaîne vide = offre annoncée mais pas encore achetable. */
+  /** Lien de paiement Payhip. */
   url: string;
 }
 

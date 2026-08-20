@@ -138,9 +138,12 @@ export function Contact({
 
             <div className="mt-7 grid gap-4 text-[clamp(1.02rem,1.2vw,1.15rem)] leading-[1.55] text-ink/80">
               <p className="max-w-[38ch]">
-                Un anniversaire, un mariage, une réception d'entreprise, une
-                commande de jus pour la semaine ou une boîte de donuts à offrir
-                : dites-nous l'occasion, le nombre de personnes et la date.
+                Un mariage, un gala, un événement corporatif, un baby shower,
+                une réception privée, un anniversaire — ou simplement une
+                commande de jus pour la semaine et une boîte de donuts à offrir.
+              </p>
+              <p className="max-w-[38ch]">
+                Dites-nous l'occasion, le nombre de personnes et la date.
               </p>
               <p className="max-w-[38ch]">
                 Nous revenons vers vous avec une proposition claire — carte,
