@@ -7,7 +7,7 @@ import { Reveal, STAGGER } from "@/components/ui/Reveal";
 /**
  * Pied de page.
  *
- * Quatre colonnes : identité, navigation, coordonnées, prise de contact.
+ * Quatre colonnes : identité, navigation, coordonnées, prise de contact
  * rapide. Le champ courriel ne crée pas d'inscription à une infolettre : il
  * reporte l'adresse saisie dans le formulaire de contact, plus haut.
  */
