@@ -178,38 +178,38 @@ function accuseReception(payload: Payload): {
     "Nous revenons vers vous très bientôt avec les prochaines étapes.";
 
   if (sujet.includes("témoignage")) {
-    titre = "Merci pour votre avis 💎";
+    titre = "Merci pour votre avis";
     objet = "Merci pour votre avis — Precious";
     corps =
       "Merci d'avoir pris le temps de partager votre expérience. Votre retour nous touche, et il nourrit tout ce que nous faisons.";
     suite =
       "Nous le lisons attentivement. S'il doit paraître sur notre site, nous vous en reparlerons avant.";
   } else if (sujet.includes("rappel")) {
-    titre = "Bienvenue chez Precious 💎";
+    titre = "Bienvenue chez Precious";
     objet = "Votre demande est bien reçue — Precious";
     corps =
       "Merci pour votre confiance. Votre demande de rappel a bien été reçue et sera traitée avec soin, passion et excellence.";
   } else if (sujet.includes("événement") || sujet.includes("cocktail")) {
-    titre = "Bienvenue chez Precious 💎";
+    titre = "Bienvenue chez Precious";
     objet = "Votre demande de devis est bien reçue — Precious";
     corps =
       "Merci pour votre confiance. Votre demande de devis a bien été reçue et sera étudiée avec soin, passion et excellence.";
     suite =
       "Nous revenons vers vous très bientôt avec une proposition : carte, quantités, déroulé et prix.";
   } else if (sujet.includes("formation") || sujet.includes("guide")) {
-    titre = "Bienvenue chez Precious 💎";
+    titre = "Bienvenue chez Precious";
     objet = "Votre demande est bien reçue — Precious";
     corps =
       "Merci pour votre confiance. Votre demande a bien été reçue et sera traitée avec soin, passion et excellence.";
   } else if (sujet.includes("jus") || sujet.includes("donut")) {
-    titre = "Bienvenue chez Precious 💎";
+    titre = "Bienvenue chez Precious";
     objet = "Votre commande est bien reçue — Precious";
     corps =
       "Merci pour votre confiance. Votre commande a bien été reçue et sera traitée avec soin, passion et excellence.";
   } else {
     // « Autre demande » et tout sujet non prévu : formulation neutre, qui ne
     // parle ni de commande ni de devis.
-    titre = "Bienvenue chez Precious 💎";
+    titre = "Bienvenue chez Precious";
     objet = "Votre message est bien reçu — Precious";
     corps =
       "Merci pour votre confiance. Votre message a bien été reçu et sera traité avec soin, passion et excellence.";
