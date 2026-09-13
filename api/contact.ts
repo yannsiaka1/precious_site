@@ -155,10 +155,13 @@ function diagnose(status: number, detail: string): string {
 /**
  * Texte de l'accusé de réception, selon la nature de la demande.
  *
- * Chaque cas dit trois choses : ce qui a été reçu, ce qui va se passer, et
- * comment nous joindre en attendant. Aucun délai chiffré n'est promis — une
- * promesse non tenue fait plus de mal qu'une formulation prudente. Pour
- * annoncer « sous 24 heures », il suffit de remplacer la phrase de `suite`.
+ * Toutes les variantes suivent le même modèle : une salutation de marque, la
+ * confirmation de ce qui a été reçu, l'annonce de la suite, et la signature
+ * « Chaque expérience est précieuse ». Seule la phrase centrale change, pour
+ * qu'un accusé de commande ne parle pas comme un remerciement d'avis.
+ *
+ * Aucun délai chiffré n'est promis : « très bientôt » n'engage pas comme
+ * « sous 24 heures », qu'il faudrait tenir à chaque fois.
  */
 function accuseReception(payload: Payload): {
   subject: string;
@@ -169,36 +172,53 @@ function accuseReception(payload: Payload): {
   const sujet = payload.subject.toLowerCase();
 
   let titre: string;
-  let intro: string;
-  let suite: string;
+  let objet: string;
+  let corps: string;
+  let suite =
+    "Nous revenons vers vous très bientôt avec les prochaines étapes.";
 
   if (sujet.includes("témoignage")) {
-    titre = "Merci pour votre avis";
-    intro = "Votre retour nous est bien parvenu, et il nous fait plaisir.";
+    titre = "Merci pour votre avis 💎";
+    objet = "Merci pour votre avis — Precious";
+    corps =
+      "Merci d'avoir pris le temps de partager votre expérience. Votre retour nous touche, et il nourrit tout ce que nous faisons.";
     suite =
       "Nous le lisons attentivement. S'il doit paraître sur notre site, nous vous en reparlerons avant.";
   } else if (sujet.includes("rappel")) {
-    titre = "Nous avons bien noté votre demande";
-    intro = "Votre adresse nous est bien parvenue.";
-    suite = "Nous revenons vers vous pour parler de votre projet.";
+    titre = "Bienvenue chez Precious 💎";
+    objet = "Votre demande est bien reçue — Precious";
+    corps =
+      "Merci pour votre confiance. Votre demande de rappel a bien été reçue et sera traitée avec soin, passion et excellence.";
   } else if (sujet.includes("événement") || sujet.includes("cocktail")) {
-    titre = "Votre demande de devis est bien reçue";
-    intro = "Merci d'avoir pensé à Precious pour votre événement.";
+    titre = "Bienvenue chez Precious 💎";
+    objet = "Votre demande de devis est bien reçue — Precious";
+    corps =
+      "Merci pour votre confiance. Votre demande de devis a bien été reçue et sera étudiée avec soin, passion et excellence.";
     suite =
-      "Nous étudions votre demande et revenons vers vous avec une proposition : carte, quantités, déroulé et prix, sans engagement de votre part.";
+      "Nous revenons vers vous très bientôt avec une proposition : carte, quantités, déroulé et prix.";
   } else if (sujet.includes("formation") || sujet.includes("guide")) {
-    titre = "Votre demande est bien reçue";
-    intro = "Merci de l'intérêt que vous portez à nos formations.";
-    suite = "Nous revenons vers vous avec toutes les informations utiles.";
+    titre = "Bienvenue chez Precious 💎";
+    objet = "Votre demande est bien reçue — Precious";
+    corps =
+      "Merci pour votre confiance. Votre demande a bien été reçue et sera traitée avec soin, passion et excellence.";
+  } else if (sujet.includes("jus") || sujet.includes("donut")) {
+    titre = "Bienvenue chez Precious 💎";
+    objet = "Votre commande est bien reçue — Precious";
+    corps =
+      "Merci pour votre confiance. Votre commande a bien été reçue et sera traitée avec soin, passion et excellence.";
   } else {
-    titre = "Votre commande est bien reçue";
-    intro = "Merci pour votre commande.";
-    suite =
-      "Nous revenons vers vous pour confirmer les quantités, le délai et le prix.";
+    // « Autre demande » et tout sujet non prévu : formulation neutre, qui ne
+    // parle ni de commande ni de devis.
+    titre = "Bienvenue chez Precious 💎";
+    objet = "Votre message est bien reçu — Precious";
+    corps =
+      "Merci pour votre confiance. Votre message a bien été reçu et sera traité avec soin, passion et excellence.";
   }
 
-  // Récapitulatif : la personne retrouve ce qu'elle a écrit, ce qui évite
-  // les envois en double quand on doute d'avoir bien validé.
+  const signature = "Precious — Chaque expérience est précieuse";
+
+  // Récapitulatif discret : la personne retrouve ce qu'elle a écrit, ce qui
+  // évite les envois en double quand on doute d'avoir bien validé.
   const recap: Array<[string, string]> = [
     ["Nature de la demande", payload.subject],
     ["Téléphone", payload.phone],
@@ -207,48 +227,59 @@ function accuseReception(payload: Payload): {
   ].filter(([, valeur]) => valeur) as Array<[string, string]>;
 
   const text = [
+    titre,
+    "",
     prenom ? `Bonjour ${prenom},` : "Bonjour,",
     "",
-    intro,
+    corps,
+    "",
     suite,
     "",
+    signature,
+    "precious-jus.com · Montréal",
+    "",
+    "—",
     "Récapitulatif de votre demande :",
     ...recap.map(([label, valeur]) => `  ${label} : ${valeur}`),
     "",
     "Votre message :",
     payload.message,
-    "",
-    "À bientôt,",
-    "L'équipe Precious",
-    "Montréal · precious-jus.com",
   ].join("\n");
 
   const html = `
-    <div style="font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:#17321f;line-height:1.6;max-width:560px">
-      <h2 style="margin:0 0 6px;font-size:19px;color:#0d5429">${escapeHtml(titre)}</h2>
-      <p style="margin:0 0 18px">${prenom ? `Bonjour ${escapeHtml(prenom)},` : "Bonjour,"}</p>
-      <p style="margin:0 0 10px">${escapeHtml(intro)}</p>
-      <p style="margin:0 0 22px">${escapeHtml(suite)}</p>
-      <p style="margin:0 0 8px;color:#5d6b60;font-size:13px">Récapitulatif de votre demande</p>
-      <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px">
-        ${recap
-          .map(
-            ([label, valeur]) => `<tr>
-              <td style="padding:5px 18px 5px 0;color:#5d6b60;white-space:nowrap">${escapeHtml(label)}</td>
-              <td style="padding:5px 0"><strong>${escapeHtml(valeur)}</strong></td>
-            </tr>`,
-          )
-          .join("")}
-      </table>
-      <p style="margin:20px 0 6px;color:#5d6b60;font-size:13px">Votre message</p>
-      <p style="margin:0;padding:14px 16px;background:#f7f2e7;border-radius:8px;white-space:pre-wrap">${escapeHtml(payload.message)}</p>
-      <p style="margin:26px 0 0;padding-top:16px;border-top:1px solid #e4ded0;color:#5d6b60;font-size:13px">
-        L'équipe Precious · Montréal<br />
-        <a href="https://precious-jus.com/" style="color:#0d5429">precious-jus.com</a>
+    <div style="font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:#17321f;line-height:1.65;max-width:540px">
+      <h1 style="margin:0 0 22px;font-size:21px;font-weight:600;color:#0d5429">${escapeHtml(titre)}</h1>
+      <p style="margin:0 0 16px">${prenom ? `Bonjour ${escapeHtml(prenom)},` : "Bonjour,"}</p>
+      <p style="margin:0 0 16px">${escapeHtml(corps)}</p>
+      <p style="margin:0 0 28px">${escapeHtml(suite)}</p>
+      <p style="margin:0 0 4px;font-size:15px;color:#0d5429"><em>${escapeHtml(signature)}</em></p>
+      <p style="margin:0 0 30px;font-size:13px;color:#5d6b60">
+        <a href="https://precious-jus.com/" style="color:#5d6b60">precious-jus.com</a> · Montréal
       </p>
+      <div style="padding-top:18px;border-top:1px solid #e4ded0">
+        <p style="margin:0 0 10px;color:#5d6b60;font-size:12px;letter-spacing:.06em;text-transform:uppercase">Récapitulatif de votre demande</p>
+        <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px">
+          ${recap
+            .map(
+              ([label, valeur]) => `<tr>
+                <td style="padding:4px 18px 4px 0;color:#5d6b60;white-space:nowrap">${escapeHtml(label)}</td>
+                <td style="padding:4px 0"><strong>${escapeHtml(valeur)}</strong></td>
+              </tr>`,
+            )
+            .join("")}
+        </table>
+        <p style="margin:16px 0 6px;color:#5d6b60;font-size:12px;letter-spacing:.06em;text-transform:uppercase">Votre message</p>
+        <p style="margin:0;padding:12px 14px;background:#f7f2e7;border-radius:8px;white-space:pre-wrap;font-size:14px">${escapeHtml(payload.message)}</p>
+      </div>
     </div>`;
 
-  return { subject: `${titre} — Precious`, text, html };
+  /*
+   * L'objet reste sans émoji : le domaine vient d'être authentifié et sa
+   * réputation se construit. Un émoji en objet est parfois pénalisé par les
+   * filtres pendant cette période — il figure dans le corps du message, où
+   * il ne coûte rien.
+   */
+  return { subject: objet, text, html };
 }
 
 export default async function handler(request: Request): Promise<Response> {

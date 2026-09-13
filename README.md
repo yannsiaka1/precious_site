@@ -192,8 +192,19 @@ Deux points de conception :
   d'expédition. Une réponse du client arrive donc à destination même si
   `contact@precious-jus.com` ne reçoit rien.
 
-Aucun délai chiffré n'est promis. Pour annoncer « sous 24 heures », modifier la
-phrase `suite` dans `accuseReception()` (api/contact.ts).
+Le ton suit la voix de la marque : « Bienvenue chez Precious 💎 », puis
+« traitée avec soin, passion et excellence », et la signature « Precious —
+Chaque expérience est précieuse ». Seule la phrase centrale change d'un cas à
+l'autre, pour qu'un accusé de commande ne parle pas comme un remerciement
+d'avis.
+
+Aucun délai chiffré n'est promis : « très bientôt » n'engage pas comme
+« sous 24 heures », qu'il faudrait tenir à chaque fois. Pour s'y engager,
+modifier la phrase `suite` dans `accuseReception()` (api/contact.ts).
+
+L'objet du courriel reste sans émoji tant que la réputation du domaine se
+construit : certains filtres le pénalisent. L'émoji figure dans le corps du
+message, où il ne coûte rien.
 
 ### Diagnostiquer un refus du service d'envoi
 
