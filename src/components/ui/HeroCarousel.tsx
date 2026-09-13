@@ -20,6 +20,20 @@ const DUREE = 4800;
 export function HeroCarousel({ visuels }: { visuels: Visuel[] }) {
   const [index, setIndex] = useState(0);
 
+  /*
+   * Seul le premier visuel est posé dans la page au départ. Les suivants
+   * n'apparaissent qu'une fois affichés au moins une fois : `loading="lazy"`
+   * ne suffisait pas, puisqu'ils occupent la même zone visible et que le
+   * navigateur les téléchargeait donc immédiatement. Cela retire environ
+   * 125 Ko du chargement initial.
+   */
+  const [charges, setCharges] = useState(() => new Set([0]));
+  useEffect(() => {
+    setCharges((precedents) =>
+      precedents.has(index) ? precedents : new Set(precedents).add(index),
+    );
+  }, [index]);
+
   useEffect(() => {
     if (visuels.length < 2) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -35,6 +49,7 @@ export function HeroCarousel({ visuels }: { visuels: Visuel[] }) {
     <div className="relative w-full" style={{ aspectRatio: "781 / 429" }}>
       {visuels.map((visuel, position) => {
         const visible = position === index;
+        if (!charges.has(position)) return null;
         return (
           <img
             key={visuel.src}

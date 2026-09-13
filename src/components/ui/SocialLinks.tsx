@@ -11,9 +11,11 @@ const paths: Record<string, string> = {
 };
 
 /**
- * Icônes des réseaux sociaux. Tant qu'un lien n'est pas renseigné dans
- * `site.social`, l'icône reste affichée mais inactive : on voit la place
- * qu'elle occupe sans proposer un lien mort.
+ * Icônes des réseaux sociaux.
+ *
+ * Seuls les réseaux réellement en ligne figurent dans `site.social` : une
+ * icône grisée et inactive se lit comme un lien cassé, ce qui abîme la
+ * confiance plus que l'absence de l'icône.
  */
 export function SocialLinks({ className }: { className?: string }) {
   return (
@@ -34,27 +36,16 @@ export function SocialLinks({ className }: { className?: string }) {
 
         return (
           <li key={network.label}>
-            {network.href ? (
-              <a
-                href={network.href}
-                target="_blank"
-                rel="noreferrer noopener"
-                aria-label={network.label}
-                // Zone tactile de 44 px : l'icône reste à 20 px.
-                className="grid h-11 w-11 place-items-center transition-[color,transform] duration-200 hover:-translate-y-0.5 hover:text-brand-red"
-              >
-                {icon}
-              </a>
-            ) : (
-              <span
-                title={`${network.label} — lien à venir`}
-                aria-label={`${network.label} — lien à venir`}
-                role="img"
-                className="grid h-11 w-11 place-items-center opacity-35"
-              >
-                {icon}
-              </span>
-            )}
+            <a
+              href={network.href}
+              target="_blank"
+              rel="noreferrer noopener"
+              aria-label={network.label}
+              // Zone tactile de 44 px : l'icône reste à 20 px.
+              className="grid h-11 w-11 place-items-center transition-[color,transform] duration-200 hover:-translate-y-0.5 hover:text-brand-red"
+            >
+              {icon}
+            </a>
           </li>
         );
       })}

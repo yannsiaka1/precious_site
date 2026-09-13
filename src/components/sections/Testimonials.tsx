@@ -231,6 +231,26 @@ export function Testimonials() {
           <p className="text-eyebrow text-center text-gold-ink">
             Ce qu'ils disent
           </p>
+          <p className="mt-2 text-center text-sm text-ink/70">
+            Avis laissés par nos clients et partenaires sur notre page Facebook.
+          </p>
+
+          {/* Références vérifiables : le HCBE-Canada présente Precious comme
+              partenaire boissons officiel sur son propre site. On y renvoie,
+              plutôt que d'affirmer sans preuve. */}
+          <p className="mx-auto mt-4 max-w-[62ch] text-center text-sm text-ink/70">
+            Partenaire boissons officiel de la{" "}
+            <a
+              href="https://hcbe-canada.ca/communaute/evenements/"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-block py-2 text-forest underline decoration-1 underline-offset-4 hover:text-brand-red"
+            >
+              Fête nationale du Bénin 2026
+            </a>{" "}
+            (HCBE-Canada). Partenaire du Réseau des Femmes en Action et de BAI —
+            Bienvenue à l'immigrant.
+          </p>
 
           <figure
             key={current.author}
@@ -250,7 +270,7 @@ export function Testimonials() {
               <span className="block font-display text-lg tracking-wide text-forest">
                 {current.author}
               </span>
-              <span className="mt-1 block text-ink/60">{current.role}</span>
+              <span className="mt-1 block text-ink/75">{current.role}</span>
             </figcaption>
           </figure>
 

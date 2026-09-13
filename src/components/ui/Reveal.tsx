@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import type { ElementType, ReactNode } from "react";
 import { useInView } from "@/hooks/useInView";
 import { cn } from "@/lib/cn";
@@ -51,13 +52,27 @@ export function Reveal({
 }: RevealProps) {
   const { ref, inView } = useInView<HTMLDivElement>();
 
+  /*
+   * `will-change` prévient le navigateur qu'un élément va bouger, ce qui lui
+   * réserve de la mémoire graphique. Le laisser en place après l'animation
+   * mobilise cette mémoire pour rien — sur un téléphone modeste, multiplié par
+   * quarante éléments, cela se sent. On le retire une fois l'entrée terminée.
+   */
+  const [anime, setAnime] = useState(false);
+  useEffect(() => {
+    if (!inView) return;
+    const fin = window.setTimeout(() => setAnime(true), 700 + delay + 100);
+    return () => window.clearTimeout(fin);
+  }, [inView, delay]);
+
   return (
     <Tag
       ref={ref}
       data-reveal=""
       style={{ transitionDelay: `${delay}ms` }}
       className={cn(
-        "transition-[opacity,transform] duration-700 ease-out will-change-[opacity,transform]",
+        "transition-[opacity,transform] duration-700 ease-out",
+        anime ? "will-change-auto" : "will-change-[opacity,transform]",
         "motion-reduce:translate-none motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none",
         inView ? "translate-none scale-100 opacity-100" : hidden[variant],
         className,

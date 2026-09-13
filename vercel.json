@@ -5,7 +5,7 @@
   "cleanUrls": true,
   "headers": [
     {
-      "source": "/assets/(.*)",
+      "source": "/assets/(.*).(js|css)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -23,8 +23,25 @@
       ]
     },
     {
+      "source": "/assets/(.*).(webp|jpg|jpeg|png|svg|avif)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, must-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
         {
           "key": "X-Content-Type-Options",
           "value": "nosniff"

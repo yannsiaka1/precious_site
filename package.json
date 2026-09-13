@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite-react-ssg build",
+    "build": "tsc -b && vite-react-ssg build && node scripts/externaliser-scripts.mjs",
     "preview": "vite preview",
-    "preview:file": "PREVIEW=1 npm run build && node scripts/make-preview.mjs",
+    "preview:file": "PREVIEW=1 tsc -b && PREVIEW=1 vite-react-ssg build && node scripts/make-preview.mjs",
     "lint": "eslint ."
   },
   "dependencies": {

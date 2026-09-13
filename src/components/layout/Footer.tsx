@@ -62,7 +62,7 @@ export function Footer({ onQuickWrite }: FooterProps) {
       <div className="mx-auto grid w-full max-w-[82rem] gap-12 md:grid-cols-2 lg:grid-cols-[1.3fr_repeat(3,1fr)]">
         <Reveal>
           <p className="font-display text-3xl tracking-wide">{site.name}</p>
-          <p className="mt-5 max-w-72 text-paper/75">{site.promise}</p>
+          <p className="mt-5 max-w-72 text-paper/85">{site.promise}</p>
           <SocialLinks className="mt-7" />
         </Reveal>
 
@@ -73,7 +73,7 @@ export function Footer({ onQuickWrite }: FooterProps) {
               <li key={link.label}>
                 <a
                   href={link.href}
-                  className="inline-block py-2 text-paper/80 hover:text-paper"
+                  className="inline-block py-2 text-paper/90 hover:text-paper"
                 >
                   {link.label}
                 </a>
@@ -84,7 +84,7 @@ export function Footer({ onQuickWrite }: FooterProps) {
 
         <div>
           <p className="text-eyebrow font-bold text-mango">La maison</p>
-          <ul className="mt-3 grid gap-0.5 text-paper/80">
+          <ul className="mt-3 grid gap-0.5 text-paper/90">
             <li>
               <a
                 href={`mailto:${site.contact.email}`}
@@ -110,7 +110,7 @@ export function Footer({ onQuickWrite }: FooterProps) {
           <p className="text-eyebrow font-bold text-mango">
             Un projet en tête ?
           </p>
-          <p className="mt-5 text-paper/75">
+          <p className="mt-5 text-paper/85">
             Laissez votre adresse : nous reprenons contact avec vous pour en
             parler.
           </p>
@@ -119,7 +119,7 @@ export function Footer({ onQuickWrite }: FooterProps) {
             <label htmlFor="footer-email" className="sr-only">
               Votre adresse courriel
             </label>
-            <div className="flex items-center gap-3 border-b border-paper/40 focus-within:border-paper">
+            <div className="flex items-center gap-3 border-b border-paper/55 focus-within:border-paper">
               <input
                 id="footer-email"
                 type="email"
@@ -128,7 +128,7 @@ export function Footer({ onQuickWrite }: FooterProps) {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="vous@exemple.com"
-                className="min-w-0 flex-1 bg-transparent py-2.5 text-paper outline-none placeholder:text-paper/45"
+                className="min-w-0 flex-1 bg-transparent py-2.5 text-paper outline-none placeholder:text-paper/80"
               />
               <button
                 type="submit"
@@ -158,7 +158,7 @@ export function Footer({ onQuickWrite }: FooterProps) {
                 dans le doute sur ce qui s'est passé. */}
             <p
               aria-live="polite"
-              className="mt-3 min-h-5 text-sm text-paper/70"
+              className="mt-3 min-h-5 text-sm text-paper/85"
             >
               {status === "sending" && "Envoi en cours…"}
               {status === "sent" && "Merci, nous vous recontactons bientôt."}
@@ -171,7 +171,7 @@ export function Footer({ onQuickWrite }: FooterProps) {
         </div>
       </div>
 
-      <div className="mx-auto mt-16 flex w-full max-w-[82rem] flex-wrap items-center justify-between gap-4 border-t border-paper/20 pt-6 text-sm text-paper/55">
+      <div className="mx-auto mt-16 flex w-full max-w-[82rem] flex-wrap items-center justify-between gap-4 border-t border-paper/20 pt-6 text-sm text-paper/80">
         <p>
           © {year} {site.name}. Tous droits réservés.
         </p>

@@ -1,5 +1,5 @@
 import { eventFields } from "./forms";
-import type { Ebook, Formation, Service, ServiceId } from "./types";
+import type { Ebook, Formation, Question, Service, ServiceId } from "./types";
 
 export const services: Service[] = [
   {
@@ -171,10 +171,12 @@ export const formations: Formation[] = [
     id: "presentiel",
     badge: "En présentiel",
     format: "Montréal · Groupes réduits",
+    duree: "Une journée de 8 h, de 9 h à 17 h",
     title: "Formation jus, cocktails & mocktails — en présentiel",
     intro:
       "Une formation immersive à Montréal, où l'on apprend en faisant. Vous repartez capable de créer des cocktails et des mocktails qui ne ressemblent à aucun autre, de monter un bar complet, de tenir une prestation du premier échange jusqu'au démontage — et de faire connaître votre travail une fois rentré chez vous.",
     programme: [
+      "Préparer les boissons de A à Z : choix des ingrédients, composition, dosage, conservation et stockage",
       "Créer des cocktails et des mocktails originaux : équilibre des saveurs, textures, couleurs, garnitures",
       "Composer une carte qui respecte le thème, les couleurs et l'ambiance demandés par un client",
       "Choisir et gérer son matériel : quantités, montage, entretien, transport",
@@ -187,7 +189,7 @@ export const formations: Formation[] = [
       "Exercices pratiques et accompagnement en direct",
       "Le livre Precious inclus",
       "1 mois de suivi personnalisé après la formation",
-      "1 stage pratique sur une vraie prestation avec l'équipe, selon les disponibilités",
+      "1 stage pratique sur un événement officiel de Precious, selon les disponibilités",
     ],
     price: "2 000 $ CAD",
     priceNote:
@@ -199,10 +201,12 @@ export const formations: Formation[] = [
     id: "en-ligne",
     badge: "En ligne",
     format: "À distance · Sessions en visioconférence",
+    duree: "3 séances de 2 h 30, en visioconférence",
     title: "Formation jus, cocktails & mocktails — en ligne",
     intro:
       "Le savoir-faire Precious, où que vous soyez. Même programme de création, même exigence : vous apprenez à composer, présenter et vendre des cocktails et des mocktails originaux, avec un accompagnement qui ne s'arrête pas à la fin de la session.",
     programme: [
+      "Préparer les boissons de A à Z : choix des ingrédients, composition, dosage, conservation et stockage",
       "Créer des cocktails et des mocktails originaux : équilibre des saveurs, textures, couleurs",
       "Composer une carte qui respecte le thème et les couleurs d'un événement",
       "Choisir et gérer son matériel : quantités, montage, entretien",
@@ -214,7 +218,7 @@ export const formations: Formation[] = [
       "L'accès à la formation Precious en ligne",
       "Le livre Precious inclus",
       "1 mois de suivi personnalisé après la formation",
-      "1 stage pratique sur une vraie prestation ou un événement, selon les disponibilités",
+      "1 stage pratique sur un événement officiel de Precious, selon les disponibilités",
     ],
     price: "1 500 $ CAD",
     priceNote:
@@ -409,6 +413,48 @@ export const testimonials = [
     quote: "Une cliente très satisfaite. Merci beaucoup !",
     author: "Christmène B.",
     role: "Avis Facebook",
+  },
+];
+
+/**
+ * Questions fréquentes sur les formations.
+ *
+ * Elles répondent aux objections réelles d'une personne sur le point de
+ * verser 1 500 ou 2 000 $ : durée, contenu, déroulé du stage, suivi. Réponses
+ * volontairement courtes — elles s'affichent en accordéon dans la colonne de
+ * droite, sous le guide.
+ */
+export const questionsFormation: Question[] = [
+  {
+    question: "Combien de temps dure la formation ?",
+    reponse:
+      "En présentiel : une journée complète de 8 heures, de 9 h à 17 h. En ligne : trois séances de 2 h 30 en visioconférence. Les dates sont fixées avec le formateur.",
+  },
+  {
+    question:
+      "Apprend-on aussi à préparer les jus, ou seulement les cocktails ?",
+    reponse:
+      "Les deux. La préparation des boissons est enseignée de bout en bout : choix des ingrédients, composition, dosage, conservation et stockage.",
+  },
+  {
+    question: "En quoi consiste le stage pratique ?",
+    reponse:
+      "Une participation à un événement officiel de Precious. Vous suivez toute la chaîne : préparation, logistique, mise en place, service — et la façon dont la facturation s'établit selon la taille de l'événement.",
+  },
+  {
+    question: "Quand ont lieu les séances ?",
+    reponse:
+      "Le formateur vous écrit sous 24 heures après l'inscription pour fixer la date, l'horaire et le lieu — ou votre lien de visioconférence.",
+  },
+  {
+    question: "Que comprend le mois de suivi ?",
+    reponse:
+      "Un accompagnement par courriel, sans limite de questions, pendant le mois qui suit la formation.",
+  },
+  {
+    question: "Comment se passe le paiement ?",
+    reponse:
+      "Paiement unique et sécurisé. Votre inscription est confirmée dès la validation, et vous ouvrez aussitôt votre espace participant.",
   },
 ];
 

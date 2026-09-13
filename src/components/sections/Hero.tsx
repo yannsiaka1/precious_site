@@ -52,7 +52,7 @@ export function Hero() {
                 <span className="text-[clamp(2.4rem,4.5vw,4.2rem)]">
                   Nature
                 </span>{" "}
-                dans
+                dans{" "}
               </span>
               <span className="mt-1 block text-[clamp(2.4rem,4.5vw,4.2rem)] leading-[1.15] tracking-[0.01em] uppercase">
                 chaque goutte.
@@ -116,11 +116,11 @@ export function Hero() {
             />
 
             <ul className="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 font-ui text-xs font-bold tracking-[0.14em] text-ink/60 uppercase">
-              <li>100 % naturel</li>
+              <li>100 % bio</li>
               <li>Sans alcool</li>
               <li>Sans arôme artificiel</li>
               <li>Sur commande</li>
-              <li>En magasin</li>
+              <li>Dans nos points de vente</li>
             </ul>
           </Reveal>
         </div>

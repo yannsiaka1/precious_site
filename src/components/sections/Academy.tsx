@@ -1,4 +1,9 @@
-import { ebook, formations, inscription } from "@/content/offerings";
+import {
+  ebook,
+  formations,
+  inscription,
+  questionsFormation,
+} from "@/content/offerings";
 import type { Formation } from "@/content/types";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { EbookCover } from "@/components/ui/EbookCover";
@@ -82,10 +87,13 @@ function CarteFormation({
         </ul>
 
         <div className="mt-auto pt-9">
-          <p className="font-display text-[clamp(1.8rem,2.4vw,2.4rem)] text-paper">
+          <p className="font-ui text-xs font-bold tracking-[0.16em] text-lime uppercase">
+            {formation.duree}
+          </p>
+          <p className="mt-2 font-display text-[clamp(1.8rem,2.4vw,2.4rem)] text-paper">
             {formation.price}
           </p>
-          <p className="mt-2 max-w-prose text-sm text-paper/70">
+          <p className="mt-2 max-w-prose text-sm text-paper/85">
             {formation.priceNote}
           </p>
 
@@ -149,48 +157,95 @@ export function Academy() {
             ))}
           </div>
 
-          <Reveal delay={STAGGER} className="flex self-start">
-            <article className="flex flex-col bg-cream p-8 text-ink transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_18px_44px_rgba(0,0,0,0.22)] sm:p-12 lg:p-14">
-              <div className="flex flex-wrap justify-between gap-4 font-ui text-xs font-bold tracking-[0.16em] text-forest uppercase">
-                <span>{ebook.badge}</span>
-                <span>{ebook.format}</span>
-              </div>
+          {/* Colonne de droite : le guide, puis les questions fréquentes
+              juste en dessous. Calée en haut, elle ne s'étire pas sur la
+              hauteur de la colonne des offres. */}
+          <div className="grid gap-6 self-start">
+            <Reveal delay={STAGGER} className="flex">
+              <article className="flex flex-col bg-cream p-8 text-ink transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_18px_44px_rgba(0,0,0,0.22)] sm:p-12 lg:p-14">
+                <div className="flex flex-wrap justify-between gap-4 font-ui text-xs font-bold tracking-[0.16em] text-forest uppercase">
+                  <span>{ebook.badge}</span>
+                  <span>{ebook.format}</span>
+                </div>
 
-              <div className="mt-10">
-                <EbookCover cover={ebook.cover} />
-              </div>
+                <div className="mt-10">
+                  <EbookCover cover={ebook.cover} />
+                </div>
 
-              <h3 className="mt-10 text-[clamp(1.6rem,2.3vw,2.2rem)] text-forest">
-                {ebook.title}
-              </h3>
-              <p className="mt-5 text-ink/75">{ebook.intro}</p>
+                <h3 className="mt-10 text-[clamp(1.6rem,2.3vw,2.2rem)] text-forest">
+                  {ebook.title}
+                </h3>
+                <p className="mt-5 text-ink/75">{ebook.intro}</p>
 
-              <ul className="mt-7 grid gap-3">
-                {ebook.highlights.map((item, position) => (
-                  <Reveal
-                    as="li"
-                    key={item}
-                    delay={position * STAGGER}
-                    className="flex gap-3"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="mt-2.5 block size-1.5 shrink-0 rounded-full bg-mango"
-                    />
-                    {item}
-                  </Reveal>
-                ))}
-              </ul>
+                <ul className="mt-7 grid gap-3">
+                  {ebook.highlights.map((item, position) => (
+                    <Reveal
+                      as="li"
+                      key={item}
+                      delay={position * STAGGER}
+                      className="flex gap-3"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="mt-2.5 block size-1.5 shrink-0 rounded-full bg-mango"
+                      />
+                      {item}
+                    </Reveal>
+                  ))}
+                </ul>
 
-              {/* Le guide n'est pas encore en vente : on renvoie au formulaire
+                {/* Le guide n'est pas encore en vente : on renvoie au formulaire
                   de contact pour être prévenu, plutôt qu'à un panier vide. */}
-              <div className="mt-auto pt-10">
-                <Button as="a" href="#contact" variant="red">
-                  Être prévenu de sa sortie
-                </Button>
+                <div className="mt-auto pt-10">
+                  <Button as="a" href="#contact" variant="red">
+                    Être prévenu de sa sortie
+                  </Button>
+                </div>
+              </article>
+            </Reveal>
+
+            {/* Questions fréquentes, en accordéon natif : <details> se replie
+              tout seul, fonctionne sans JavaScript et reste accessible au
+              clavier. La colonne de droite était vide sous le guide. */}
+            <Reveal delay={STAGGER * 2}>
+              <div className="border border-lime/30 p-6 sm:p-8">
+                <p className="font-ui text-xs font-bold tracking-[0.16em] text-lime uppercase">
+                  Questions fréquentes
+                </p>
+                <div className="mt-4 grid">
+                  {questionsFormation.map((item) => (
+                    <details
+                      key={item.question}
+                      className="group border-b border-paper/15 last:border-0"
+                    >
+                      <summary className="flex cursor-pointer items-start justify-between gap-4 py-3.5 font-display text-base text-paper marker:content-none [&::-webkit-details-marker]:hidden">
+                        {item.question}
+                        <span
+                          aria-hidden="true"
+                          className="mt-1 shrink-0 text-mango transition-transform duration-300 group-open:rotate-45"
+                        >
+                          <svg
+                            viewBox="0 0 14 14"
+                            width="14"
+                            height="14"
+                            fill="none"
+                          >
+                            <path
+                              d="M7 1v12M1 7h12"
+                              stroke="currentColor"
+                              strokeWidth="1.6"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </span>
+                      </summary>
+                      <p className="pb-4 text-paper/85">{item.reponse}</p>
+                    </details>
+                  ))}
+                </div>
               </div>
-            </article>
-          </Reveal>
+            </Reveal>
+          </div>
         </div>
       </div>
     </section>

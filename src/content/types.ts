@@ -57,6 +57,8 @@ export interface Formation {
   programme: string[];
   /** Ce qui est compris dans le prix, un élément par ligne. */
   includes: string[];
+  /** Format et durée, affichés près du tarif. */
+  duree: string;
   /** Tarif affiché, devise comprise. */
   price: string;
   /** Mention sous le tarif (paiement unique, conditions). */
@@ -64,6 +66,12 @@ export interface Formation {
   cta: string;
   /** Lien de paiement Payhip. */
   url: string;
+}
+
+/** Question courante affichée en accordéon sous les offres. */
+export interface Question {
+  question: string;
+  reponse: string;
 }
 
 export interface Ebook {

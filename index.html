@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0d5429" />
 
-    <title>
-      Precious — Jus naturels, cocktails sans alcool et donuts à Montréal
-    </title>
+    <title>Precious | Jus naturels et cocktails sans alcool à Montréal</title>
     <meta
       name="description"
-      content="Jus naturels pressés, cocktails et mocktails sans alcool pour mariages, galas et événements corporatifs à Montréal, donuts artisanaux, et formations en présentiel ou en ligne. Bar à jus Precious, service événementiel sur mesure."
+      content="Jus 100 % bio pressés, cocktails et mocktails sans alcool, donuts artisanaux et formations à Montréal. Commandes et événements sur mesure."
     />
     <link rel="canonical" href="https://precious-jus.com/" />
 
@@ -24,7 +22,7 @@
     />
     <meta
       property="og:description"
-      content="Bar à jus, cocktails et mocktails sans alcool pour vos événements à Montréal. Jus naturels pressés, donuts artisanaux et formations professionnelles."
+      content="Jus 100 % bio, cocktails et mocktails sans alcool pour vos événements à Montréal, donuts artisanaux et formations professionnelles."
     />
     <meta property="og:url" content="https://precious-jus.com/" />
     <meta property="og:image" content="https://precious-jus.com/assets/og-precious.jpg" />
@@ -57,27 +55,47 @@
       aucun avis n'est balisé : Google ignore les avis qu'un site publie sur
       lui-même, et les inventer exposerait la marque.
     -->
+    <!--
+      Données structurées.
+
+      L'entité principale est une Organization et non un établissement avec
+      adresse : l'atelier de production n'accueille pas le public, et Google
+      n'attend une adresse de rue que pour un lieu où l'on se rend. Les
+      détaillants qui vendent les jus figurent en revanche avec leur adresse
+      complète — ce sont bien des lieux où l'on se rend.
+
+      Les deux formations sont décrites comme des cours avec tarif, durée et
+      mode. Aucune note ni aucun avis n'est balisé : Google ignore les avis
+      qu'un site publie sur lui-même.
+    -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@graph": [
           {
-            "@type": "FoodEstablishment",
+            "@type": "Organization",
             "@id": "https://precious-jus.com/#entreprise",
             "name": "Precious",
             "alternateName": "Precious Jus",
-            "description": "Jus naturels pressés, cocktails et mocktails sans alcool sur mesure pour événements, donuts artisanaux et formations professionnelles, à Montréal.",
+            "description": "Jus 100 % bio pressés, cocktails et mocktails sans alcool sur mesure pour événements, donuts artisanaux et formations professionnelles, à Montréal.",
             "url": "https://precious-jus.com/",
             "image": "https://precious-jus.com/assets/og-precious.jpg",
             "logo": "https://precious-jus.com/assets/logo.webp",
             "email": "preciousck384@gmail.com",
             "telephone": "+1-514-977-2775",
-            "servesCuisine": ["Jus naturels", "Cocktails sans alcool", "Donuts"],
-            "priceRange": "$$",
             "areaServed": [
-              { "@type": "City", "name": "Montréal" },
-              { "@type": "City", "name": "Laval" },
-              { "@type": "City", "name": "Longueuil" }
+              {
+                "@type": "City",
+                "name": "Montréal"
+              },
+              {
+                "@type": "City",
+                "name": "Laval"
+              },
+              {
+                "@type": "City",
+                "name": "Longueuil"
+              }
             ],
             "address": {
               "@type": "PostalAddress",
@@ -97,15 +115,111 @@
               },
               {
                 "@type": "Offer",
-                "name": "Jus naturels pressés",
-                "description": "Jus de gingembre, jus vert détox, hibiscus et gingembre, en formats individuels ou événementiels."
+                "name": "Jus 100 % bio pressés",
+                "description": "Jus de gingembre, jus vert détox, hibiscus et gingembre, préparés à partir d'ingrédients biologiques, en formats individuels ou événementiels. Disponibles chez sept détaillants de Montréal, Laval et des environs, ou sur commande.",
+                "availableAtOrFrom": [
+                  {
+                    "@type": "Place",
+                    "name": "Marché Ghanacan",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "streetAddress": "549 av. Ogilvy",
+                      "addressLocality": "Montréal",
+                      "addressRegion": "QC",
+                      "postalCode": "H3N 1M9",
+                      "addressCountry": "CA"
+                    }
+                  },
+                  {
+                    "@type": "Place",
+                    "name": "Maison Gloria",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "streetAddress": "2640 rue Bélanger",
+                      "addressLocality": "Montréal",
+                      "addressRegion": "QC",
+                      "postalCode": "H1Y 1A6",
+                      "addressCountry": "CA"
+                    }
+                  },
+                  {
+                    "@type": "Place",
+                    "name": "Le Petit Sénégalais",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "streetAddress": "5176 ch. Queen-Mary",
+                      "addressLocality": "Montréal",
+                      "addressRegion": "QC",
+                      "postalCode": "H3W 3E7",
+                      "addressCountry": "CA"
+                    }
+                  },
+                  {
+                    "@type": "Place",
+                    "name": "Marché Rio",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "streetAddress": "6247 boul. Léger",
+                      "addressLocality": "Montréal-Nord",
+                      "addressRegion": "QC",
+                      "postalCode": "H1G 6K8",
+                      "addressCountry": "CA"
+                    }
+                  },
+                  {
+                    "@type": "Place",
+                    "name": "G.B. La Référence",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "streetAddress": "5852 rue Bélanger",
+                      "addressLocality": "Saint-Léonard",
+                      "addressRegion": "QC",
+                      "postalCode": "H1T 1G6",
+                      "addressCountry": "CA"
+                    }
+                  },
+                  {
+                    "@type": "Place",
+                    "name": "Marché Victoria",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "streetAddress": "577 boul. Saint-Martin O.",
+                      "addressLocality": "Laval",
+                      "addressRegion": "QC",
+                      "postalCode": "H7M 3G6",
+                      "addressCountry": "CA"
+                    }
+                  },
+                  {
+                    "@type": "Place",
+                    "name": "Local 108",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "streetAddress": "3075 ch. d'Oka, local 108",
+                      "addressLocality": "Sainte-Marthe-sur-le-Lac",
+                      "addressRegion": "QC",
+                      "postalCode": "J0N 1P0",
+                      "addressCountry": "CA"
+                    }
+                  }
+                ]
               },
               {
                 "@type": "Offer",
                 "name": "Donuts artisanaux",
                 "description": "Boîtes assorties de donuts faits maison, personnalisables selon l'occasion."
               }
-            ]
+            ],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "customer service",
+              "email": "preciousck384@gmail.com",
+              "telephone": "+1-514-977-2775",
+              "availableLanguage": [
+                "fr",
+                "en"
+              ]
+            }
           },
           {
             "@type": "Course",
@@ -114,7 +228,9 @@
             "description": "Formation immersive à Montréal : création de cocktails et mocktails originaux, composition d'une carte selon un thème, gestion du matériel, organisation d'une prestation événementielle et création de sa présence en ligne.",
             "url": "https://precious-jus.com/#academie",
             "inLanguage": "fr-CA",
-            "provider": { "@id": "https://precious-jus.com/#entreprise" },
+            "provider": {
+              "@id": "https://precious-jus.com/#entreprise"
+            },
             "offers": {
               "@type": "Offer",
               "price": "2000",
@@ -125,6 +241,7 @@
             "hasCourseInstance": {
               "@type": "CourseInstance",
               "courseMode": "Onsite",
+              "courseWorkload": "PT8H",
               "location": {
                 "@type": "Place",
                 "address": {
@@ -143,7 +260,9 @@
             "description": "Formation à distance en création de cocktails et mocktails sans alcool : équilibre des saveurs, composition d'une carte selon un thème, gestion du matériel, organisation d'une prestation et présence en ligne.",
             "url": "https://precious-jus.com/#academie",
             "inLanguage": "fr-CA",
-            "provider": { "@id": "https://precious-jus.com/#entreprise" },
+            "provider": {
+              "@id": "https://precious-jus.com/#entreprise"
+            },
             "offers": {
               "@type": "Offer",
               "price": "1500",
@@ -153,7 +272,8 @@
             },
             "hasCourseInstance": {
               "@type": "CourseInstance",
-              "courseMode": "Online"
+              "courseMode": "Online",
+              "courseWorkload": "PT7H30M"
             }
           }
         ]

@@ -19,8 +19,12 @@
   --color-lime: #ddea86;
   --color-cream: #f7f2e7;
   --color-brand-red: #c8120c;
-  /* Doré des surtitres, relevé sur la maquette. */
-  --color-gold-ink: #a16e00;
+  /*
+   * Doré des surtitres. Assombri par rapport au relevé de maquette (#a16e00,
+   * 3,96:1 sur crème) pour franchir le seuil de contraste AA de 4,5:1 exigé
+   * pour du petit texte. La teinte reste celle de la marque.
+   */
+  --color-gold-ink: #8a5e00;
   --color-leaf: #166905;
   --color-paper: #fffdf8;
   /* Fonds relevés sur la maquette « section_3 ». */
@@ -53,7 +57,12 @@
    ------------------------------------------------------------------ */
 @layer base {
   html {
-    scroll-behavior: smooth;
+    /*
+     * Le défilement doux du navigateur n'a pas de durée réglable : sur une
+     * page de plus de dix mille pixels, un saut d'une extrémité à l'autre
+     * prenait près de trois secondes. La navigation est désormais pilotée
+     * par `lib/defiler.ts`, qui plafonne la durée à 600 ms.
+     */
     scroll-padding-top: 6rem;
     -webkit-text-size-adjust: 100%;
 

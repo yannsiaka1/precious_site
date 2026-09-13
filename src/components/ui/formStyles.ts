@@ -5,7 +5,7 @@
  */
 export const fieldClass = [
   "w-full rounded-lg border border-ink/15 bg-paper/70 px-4 py-3",
-  "text-[1.02rem] text-ink outline-none placeholder:text-ink/30",
+  "text-[1.02rem] text-ink outline-none placeholder:text-ink/70",
   "transition-[border-color,box-shadow,background-color] duration-200",
   "hover:border-ink/30",
   "focus:border-forest focus:bg-paper focus:shadow-[0_0_0_3px_rgba(13,84,41,0.12)]",
@@ -15,7 +15,7 @@ export const fieldClass = [
 ].join(" ");
 
 export const labelClass =
-  "grid gap-2 font-ui text-[0.7rem] font-bold tracking-[0.14em] text-ink/55 uppercase";
+  "grid gap-2 font-ui text-[0.7rem] font-bold tracking-[0.14em] text-ink/70 uppercase";
 
 /** Contraintes de saisie communes, pour ne recevoir que des données propres. */
 export const limits = {

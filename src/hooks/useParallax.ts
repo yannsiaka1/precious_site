@@ -15,6 +15,8 @@ export function useParallax<T extends HTMLElement>(strength = 24) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let frame = 0;
+    let visible = true;
+
     function update() {
       frame = 0;
       const node = ref.current;
@@ -26,13 +28,31 @@ export function useParallax<T extends HTMLElement>(strength = 24) {
     }
 
     function onScroll() {
-      if (!frame) frame = window.requestAnimationFrame(update);
+      // Hors écran, aucun calcul : inutile de recalculer une position que
+      // personne ne voit, et cela déclencherait un rendu React à chaque image.
+      if (!visible || frame) return;
+      frame = window.requestAnimationFrame(update);
     }
+
+    /*
+     * L'observateur coupe le calcul dès que le hero quitte l'écran, et le
+     * reprend s'il y revient. Sur une page de plus de dix mille pixels, c'est
+     * la quasi-totalité du défilement qui cesse de solliciter le processeur.
+     */
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry?.isIntersecting ?? false;
+        if (visible) onScroll();
+      },
+      { rootMargin: "100px" },
+    );
+    observer.observe(element);
 
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
+      observer.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (frame) window.cancelAnimationFrame(frame);

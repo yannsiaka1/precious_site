@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ServiceId } from "@/content/types";
+import { defilerVers, installerDefilementAncres } from "@/lib/defiler";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
@@ -16,27 +17,27 @@ export default function App() {
   const [activeService, setActiveService] = useState<ServiceId>("jus");
   const [prefillEmail, setPrefillEmail] = useState("");
 
+  // Tous les liens d'ancre de la page passent par un défilement de durée
+  // bornée, posé une seule fois ici.
+  useEffect(() => installerDefilementAncres(), []);
+
   /**
    * Amène le visiteur à la destination d'une carte « savoir-faire » :
    * l'académie, ou l'univers correspondant avec le bon onglet déjà ouvert.
    */
   function goTo(target: ServiceId | "academie") {
     if (target === "academie") {
-      document
-        .getElementById("academie")
-        ?.scrollIntoView({ behavior: "smooth" });
+      defilerVers("academie");
       return;
     }
     setActiveService(target);
-    document
-      .getElementById("creations")
-      ?.scrollIntoView({ behavior: "smooth" });
+    defilerVers("creations");
   }
 
   /** Adresse saisie en pied de page : on la reporte dans le formulaire. */
   function quickWrite(email: string) {
     setPrefillEmail(email);
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+    defilerVers("contact");
   }
 
   return (

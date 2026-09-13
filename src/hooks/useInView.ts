@@ -49,7 +49,19 @@ export function useInView<T extends HTMLElement>({
     );
 
     observer.observe(element);
-    return () => observer.disconnect();
+
+    /*
+     * Filet de sécurité. Le repli <noscript> ne couvre que le cas où le
+     * JavaScript est désactivé ; si le script échoue à se charger ou si
+     * l'observateur ne se déclenche jamais, le contenu resterait invisible.
+     * Au bout de trois secondes, on affiche tout.
+     */
+    const secours = window.setTimeout(() => setInView(true), 3000);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(secours);
+    };
   }, [rootMargin, threshold, once]);
 
   return { ref, inView } as const;

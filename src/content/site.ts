@@ -20,14 +20,45 @@ export const site = {
     area: "Montréal et environs",
     availability: "Sur commande et sur rendez-vous",
   },
-  /** Une entrée sans lien reste affichée, mais grisée et inactive. */
+  /**
+   * Détaillants où trouver les jus. Noms et adresses fournis par Precious ;
+   * le point de Sainte-Marthe-sur-le-Lac attend son enseigne.
+   */
+  pointsDeVente: [
+    { nom: "Marché Ghanacan", adresse: "549 av. Ogilvy", ville: "Montréal" },
+    { nom: "Maison Gloria", adresse: "2640 rue Bélanger", ville: "Montréal" },
+    {
+      nom: "Le Petit Sénégalais",
+      adresse: "5176 ch. Queen-Mary",
+      ville: "Montréal",
+    },
+    { nom: "Marché Rio", adresse: "6247 boul. Léger", ville: "Montréal-Nord" },
+    {
+      nom: "G.B. La Référence",
+      adresse: "5852 rue Bélanger",
+      ville: "Saint-Léonard",
+    },
+    {
+      nom: "Marché Victoria",
+      adresse: "577 boul. Saint-Martin O.",
+      ville: "Laval",
+    },
+    {
+      nom: "Local 108",
+      adresse: "3075 ch. d'Oka",
+      ville: "Sainte-Marthe-sur-le-Lac",
+    },
+  ],
+
+  /** Seuls les réseaux réellement en ligne figurent ici. */
   social: [
     { label: "Facebook", href: "https://www.facebook.com/share/1BwKsN7ovA/" },
     {
       label: "TikTok",
       href: "https://www.tiktok.com/@precious100bio?_r=1&_t=ZS-98yAVVCb4hZ",
     },
-    { label: "Instagram", href: "" },
+    // Instagram sera réintroduit quand la page existera : une icône grisée
+    // se lit comme un lien cassé.
   ],
 } as const;
 

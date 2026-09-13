@@ -43,11 +43,21 @@ interface ContactProps {
   prefillEmail: string;
 }
 
+/**
+ * Sujets pour lesquels une date et un téléphone sont réellement nécessaires.
+ * Pour une simple question, les exiger ferait abandonner le formulaire.
+ */
+const SUJETS_DETAILLES = new Set([
+  ...services.map((service) => service.title),
+  "Formation",
+]);
+
 export function Contact({
   subject,
   onSubjectChange,
   prefillEmail,
 }: ContactProps) {
+  const detaille = SUJETS_DETAILLES.has(subject);
   const [status, setStatus] = useState<Status>("idle");
   const [outcome, setOutcome] = useState<SubmitOutcome>("sent");
   const [email, setEmail] = useState("");
@@ -168,10 +178,34 @@ export function Contact({
                   {site.contact.phone}
                 </a>
               </li>
-              <li className="font-ui text-xs font-bold tracking-[0.14em] text-ink/55 uppercase">
+              <li className="font-ui text-xs font-bold tracking-[0.14em] text-ink/70 uppercase">
                 {site.contact.area} · {site.contact.availability}
               </li>
             </ul>
+
+            {/* Détaillants : du contenu local que Google lit comme tel —
+                sept adresses réelles, chacune reliée à la marque. */}
+            <div className="mt-10">
+              <p className="font-ui text-xs font-bold tracking-[0.14em] text-ink/70 uppercase">
+                Où trouver nos jus
+              </p>
+              <ul className="mt-4 grid gap-2.5 text-[0.98rem] text-ink/80">
+                {site.pointsDeVente.map((point) => (
+                  <li
+                    key={point.adresse}
+                    className="flex flex-col sm:flex-row sm:gap-2"
+                  >
+                    <span className="font-medium text-ink">{point.nom}</span>
+                    <span className="text-ink/65">
+                      {point.adresse}, {point.ville}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-3 text-sm text-ink/65">
+                Et sur commande, partout à Montréal et dans les environs.
+              </p>
+            </div>
           </Reveal>
 
           <Reveal delay={STAGGER}>
@@ -267,11 +301,17 @@ export function Contact({
 
                   <label htmlFor={`${ids}-phone`} className={labelClass}>
                     Téléphone
+                    {!detaille && (
+                      <span className="lowercase tracking-normal">
+                        {" "}
+                        (facultatif)
+                      </span>
+                    )}
                     <input
                       id={`${ids}-phone`}
                       name="phone"
                       type="tel"
-                      required
+                      required={detaille}
                       autoComplete="tel"
                       inputMode="tel"
                       placeholder="514 000 0000"
@@ -282,11 +322,17 @@ export function Contact({
 
                   <label htmlFor={`${ids}-date`} className={labelClass}>
                     Date souhaitée
+                    {!detaille && (
+                      <span className="lowercase tracking-normal">
+                        {" "}
+                        (facultatif)
+                      </span>
+                    )}
                     <input
                       id={`${ids}-date`}
                       name="date"
                       type="date"
-                      required
+                      required={detaille}
                       className={fieldClass}
                     />
                   </label>
