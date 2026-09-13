@@ -176,6 +176,25 @@ Un `.env` avec `VITE_CONTACT_ENDPOINT=https://…` détourne les formulaires ver
 n'importe quelle autre destination (Formspree, n8n, une API maison) sans
 toucher au code. La fonction `api/contact.ts` est alors inutilisée.
 
+### Accusés de réception
+
+Chaque envoi déclenche deux courriels : la notification à Precious, puis un
+accusé de réception à la personne qui a rempli le formulaire. Le texte s'adapte
+à la nature de la demande — commande, devis événementiel, formation, avis,
+rappel — et reprend un récapitulatif de la saisie.
+
+Deux points de conception :
+
+- **L'accusé ne peut pas faire échouer la demande.** Il part après la
+  notification ; si le service le refuse, l'échec est journalisé et la réponse
+  reste un succès. L'essentiel — la demande arrivée chez Precious — est fait.
+- **`replyTo` pointe vers la boîte de Precious**, pas vers l'adresse
+  d'expédition. Une réponse du client arrive donc à destination même si
+  `contact@precious-jus.com` ne reçoit rien.
+
+Aucun délai chiffré n'est promis. Pour annoncer « sous 24 heures », modifier la
+phrase `suite` dans `accuseReception()` (api/contact.ts).
+
 ### Diagnostiquer un refus du service d'envoi
 
 Message « Le service d'envoi a refusé la demande » : la demande est valide et

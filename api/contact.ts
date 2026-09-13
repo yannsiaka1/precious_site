@@ -152,6 +152,105 @@ function diagnose(status: number, detail: string): string {
   return `Refus non identifié du service d'envoi (HTTP ${status}).`;
 }
 
+/**
+ * Texte de l'accusé de réception, selon la nature de la demande.
+ *
+ * Chaque cas dit trois choses : ce qui a été reçu, ce qui va se passer, et
+ * comment nous joindre en attendant. Aucun délai chiffré n'est promis — une
+ * promesse non tenue fait plus de mal qu'une formulation prudente. Pour
+ * annoncer « sous 24 heures », il suffit de remplacer la phrase de `suite`.
+ */
+function accuseReception(payload: Payload): {
+  subject: string;
+  text: string;
+  html: string;
+} {
+  const prenom = payload.name.split(/\s+/)[0] ?? "";
+  const sujet = payload.subject.toLowerCase();
+
+  let titre: string;
+  let intro: string;
+  let suite: string;
+
+  if (sujet.includes("témoignage")) {
+    titre = "Merci pour votre avis";
+    intro = "Votre retour nous est bien parvenu, et il nous fait plaisir.";
+    suite =
+      "Nous le lisons attentivement. S'il doit paraître sur notre site, nous vous en reparlerons avant.";
+  } else if (sujet.includes("rappel")) {
+    titre = "Nous avons bien noté votre demande";
+    intro = "Votre adresse nous est bien parvenue.";
+    suite = "Nous revenons vers vous pour parler de votre projet.";
+  } else if (sujet.includes("événement") || sujet.includes("cocktail")) {
+    titre = "Votre demande de devis est bien reçue";
+    intro = "Merci d'avoir pensé à Precious pour votre événement.";
+    suite =
+      "Nous étudions votre demande et revenons vers vous avec une proposition : carte, quantités, déroulé et prix, sans engagement de votre part.";
+  } else if (sujet.includes("formation") || sujet.includes("guide")) {
+    titre = "Votre demande est bien reçue";
+    intro = "Merci de l'intérêt que vous portez à nos formations.";
+    suite = "Nous revenons vers vous avec toutes les informations utiles.";
+  } else {
+    titre = "Votre commande est bien reçue";
+    intro = "Merci pour votre commande.";
+    suite =
+      "Nous revenons vers vous pour confirmer les quantités, le délai et le prix.";
+  }
+
+  // Récapitulatif : la personne retrouve ce qu'elle a écrit, ce qui évite
+  // les envois en double quand on doute d'avoir bien validé.
+  const recap: Array<[string, string]> = [
+    ["Nature de la demande", payload.subject],
+    ["Téléphone", payload.phone],
+    ["Date souhaitée", payload.date],
+    ...Object.entries(payload.details),
+  ].filter(([, valeur]) => valeur) as Array<[string, string]>;
+
+  const text = [
+    prenom ? `Bonjour ${prenom},` : "Bonjour,",
+    "",
+    intro,
+    suite,
+    "",
+    "Récapitulatif de votre demande :",
+    ...recap.map(([label, valeur]) => `  ${label} : ${valeur}`),
+    "",
+    "Votre message :",
+    payload.message,
+    "",
+    "À bientôt,",
+    "L'équipe Precious",
+    "Montréal · precious-jus.com",
+  ].join("\n");
+
+  const html = `
+    <div style="font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:#17321f;line-height:1.6;max-width:560px">
+      <h2 style="margin:0 0 6px;font-size:19px;color:#0d5429">${escapeHtml(titre)}</h2>
+      <p style="margin:0 0 18px">${prenom ? `Bonjour ${escapeHtml(prenom)},` : "Bonjour,"}</p>
+      <p style="margin:0 0 10px">${escapeHtml(intro)}</p>
+      <p style="margin:0 0 22px">${escapeHtml(suite)}</p>
+      <p style="margin:0 0 8px;color:#5d6b60;font-size:13px">Récapitulatif de votre demande</p>
+      <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px">
+        ${recap
+          .map(
+            ([label, valeur]) => `<tr>
+              <td style="padding:5px 18px 5px 0;color:#5d6b60;white-space:nowrap">${escapeHtml(label)}</td>
+              <td style="padding:5px 0"><strong>${escapeHtml(valeur)}</strong></td>
+            </tr>`,
+          )
+          .join("")}
+      </table>
+      <p style="margin:20px 0 6px;color:#5d6b60;font-size:13px">Votre message</p>
+      <p style="margin:0;padding:14px 16px;background:#f7f2e7;border-radius:8px;white-space:pre-wrap">${escapeHtml(payload.message)}</p>
+      <p style="margin:26px 0 0;padding-top:16px;border-top:1px solid #e4ded0;color:#5d6b60;font-size:13px">
+        L'équipe Precious · Montréal<br />
+        <a href="https://precious-jus.com/" style="color:#0d5429">precious-jus.com</a>
+      </p>
+    </div>`;
+
+  return { subject: `${titre} — Precious`, text, html };
+}
+
 export default async function handler(request: Request): Promise<Response> {
   if (request.method !== "POST") {
     return json({ error: "Méthode non autorisée." }, 405);
@@ -311,10 +410,20 @@ export default async function handler(request: Request): Promise<Response> {
    */
   const recipient = splitAddress(to.toLowerCase());
 
-  let response: Response;
-  try {
-    response = brevoKey
-      ? await fetch("https://api.brevo.com/v3/smtp/email", {
+  /**
+   * Expédie un courriel par le service configuré.
+   * Une seule fonction pour les deux messages : la notification adressée à
+   * Precious et l'accusé de réception adressé à la personne.
+   */
+  async function envoyer(message: {
+    to: string;
+    replyTo: string;
+    subject: string;
+    text: string;
+    html: string;
+  }): Promise<Response> {
+    return brevoKey
+      ? fetch("https://api.brevo.com/v3/smtp/email", {
           method: "POST",
           headers: {
             "api-key": brevoKey,
@@ -323,14 +432,14 @@ export default async function handler(request: Request): Promise<Response> {
           },
           body: JSON.stringify({
             sender: { name: sender.name, email: sender.email },
-            to: [{ email: recipient.email }],
-            replyTo: { email: payload.email, name: payload.name },
-            subject: `Precious — ${payload.subject} — ${payload.name}`,
-            textContent: text,
-            htmlContent: html,
+            to: [{ email: message.to }],
+            replyTo: { email: message.replyTo },
+            subject: message.subject,
+            textContent: message.text,
+            htmlContent: message.html,
           }),
         })
-      : await fetch("https://api.resend.com/emails", {
+      : fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${apiKey}`,
@@ -338,14 +447,25 @@ export default async function handler(request: Request): Promise<Response> {
           },
           body: JSON.stringify({
             from,
-            to: [recipient.email],
-            // Répondre au courriel répond directement au client.
-            reply_to: payload.email,
-            subject: `Precious — ${payload.subject} — ${payload.name}`,
-            text,
-            html,
+            to: [message.to],
+            reply_to: message.replyTo,
+            subject: message.subject,
+            text: message.text,
+            html: message.html,
           }),
         });
+  }
+
+  let response: Response;
+  try {
+    // Notification à Precious. Répondre au courriel répond au client.
+    response = await envoyer({
+      to: recipient.email,
+      replyTo: payload.email,
+      subject: `Precious — ${payload.subject} — ${payload.name}`,
+      text,
+      html,
+    });
   } catch (cause) {
     // Service d'envoi injoignable : on le dit clairement plutôt que de
     // laisser croire que la demande est partie.
@@ -391,6 +511,34 @@ export default async function handler(request: Request): Promise<Response> {
       },
       502,
     );
+  }
+
+  /*
+   * Accusé de réception adressé à la personne.
+   *
+   * Envoyé après la notification, et volontairement sans incidence sur la
+   * réponse : si celui-ci échoue, la demande est déjà chez Precious, donc
+   * l'essentiel est fait. On enregistre l'échec et on continue.
+   *
+   * `replyTo` pointe vers la boîte de Precious : une réponse du client
+   * arrive donc chez elle même si l'adresse d'expédition ne reçoit rien.
+   */
+  try {
+    const accuse = accuseReception(payload);
+    const suite = await envoyer({
+      to: payload.email,
+      replyTo: recipient.email,
+      subject: accuse.subject,
+      text: accuse.text,
+      html: accuse.html,
+    });
+    if (!suite.ok) {
+      console.error(
+        `[contact] Accusé de réception refusé — HTTP ${suite.status} — ${await suite.text()}`,
+      );
+    }
+  } catch (cause) {
+    console.error("[contact] Accusé de réception non envoyé :", cause);
   }
 
   return json({ ok: true }, 200);
