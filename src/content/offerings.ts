@@ -15,11 +15,6 @@ export const services: Service[] = [
       "Recettes fruitées, épicées, sans sucre ajouté",
     ],
     action: "Commander des jus",
-    media: {
-      src: "/assets/services-jus.webp",
-      alt: "Bouteilles de jus Precious au gingembre, aux fruits rouges et à la mangue",
-      focus: "50% 49%",
-    },
     // Visuels produit composés au format 2:3, taillés pour l'emplacement.
     galleryLayout: "unique",
     gallery: [
@@ -70,11 +65,6 @@ export const services: Service[] = [
       "Glaçages et garnitures personnalisables",
     ],
     action: "Commander des donuts",
-    media: {
-      src: "/assets/services-donuts.webp",
-      alt: "Assortiment de donuts glacés au chocolat, à la fraise et au sucre",
-      focus: "50% 39%",
-    },
     gallery: [
       {
         src: "/assets/galerie/donuts-1.webp",
@@ -116,11 +106,6 @@ export const services: Service[] = [
       "Mariages, anniversaires, événements d'entreprise",
     ],
     action: "Demander un devis",
-    media: {
-      src: "/assets/services-evenements.webp",
-      alt: "Table de cocktails sans alcool dressée lors d'un événement Precious",
-      focus: "50% 40%",
-    },
     gallery: [
       {
         src: "/assets/galerie/cocktails-7.webp",
@@ -292,7 +277,7 @@ export const savoirFaire: Array<{
     pillarDetail: "Formation et guide (ebook)",
     title: "Préparation des boissons naturelles",
     description:
-      "Devenez expert en preparation de cocktails et moktails et en entrepreneuriat avec nos formations immersives.",
+      "Devenez expert en préparation de cocktails et mocktails, et en entrepreneuriat, grâce à nos formations immersives.",
     image: "/assets/savoir-formation.webp",
     alt: "Atelier de formation Precious autour d'un plan de travail garni de fruits",
     target: "academie",
@@ -311,7 +296,7 @@ export const savoirFaire: Array<{
   },
   {
     pillar: "Célébrer",
-    pillarDetail: "Cocktails, moktails et service événementiel",
+    pillarDetail: "Cocktails, mocktails et service événementiel",
     title: "Préparation des cocktails de fruits",
     description:
       "La santé et le bien-être : des boissons saines, aux saveurs variées et surtout bonnes pour le corps.",
@@ -370,35 +355,60 @@ export const maison = [
 
 /**
  * Témoignages.
- * ⚠️ PLACEHOLDERS — ces avis sont écrits pour donner le ton, ils ne
- * proviennent pas de clients identifiés. Ils doivent être remplacés par de
- * vrais témoignages, avec l'accord des personnes citées, avant que le site
- * ne serve à autre chose qu'une démonstration.
+ *
+ * Avis authentiques, recueillis sur la page Facebook de Precious. Seule la
+ * typographie a été reprise — apostrophes, accents, ponctuation. Les mots
+ * sont ceux des personnes qui les ont écrits.
+ *
+ * Les particuliers sont identifiés par leur prénom et l'initiale de leur nom :
+ * un commentaire public sur un réseau social n'équivaut pas à une
+ * autorisation de figurer sur un site commercial. Les organismes sont nommés
+ * en entier, puisqu'ils s'expriment au nom de leur structure.
  */
 export const testimonials = [
   {
-    quote:
-      "En plus d'être délicieux, ils ont respecté le thème de la soirée jusque dans les couleurs des verres. Ma fête organisée à la dernière minute est devenue un vrai événement.",
-    author: "Chloé N.",
-    role: "Anniversaire · Montréal",
+    quote: "C'était vraiment bon. Du jus 100 % naturel. Bravo.",
+    author: "Reine F.",
+    role: "Avis Facebook",
   },
   {
     quote:
-      "Nous avons fait appel à Precious pour le mariage de ma sœur. Le bar à jus n'a pas désempli de la soirée, et plusieurs invités ont demandé les coordonnées avant de partir.",
-    author: "Arlette Mbarga",
-    role: "Mariage · Laval",
+      "Un très beau travail. Le goût et la quantité étaient au rendez-vous. Bravo.",
+    author: "Fatou D.",
+    role: "Avis Facebook",
   },
   {
     quote:
-      "Le jus de gingembre est exactement celui que je cherchais depuis mon arrivée ici : franc, bien relevé, sans sucre inutile. J'en commande maintenant toutes les semaines.",
-    author: "Serge Fotso",
-    role: "Client fidèle",
+      "Avec Precious 100 % bio, votre événement prend une image extraordinaire.",
+    author: "Joël Z.",
+    role: "Avis Facebook",
   },
   {
     quote:
-      "J'ai suivi la formation sur les cocktails naturels pour lancer mon service traiteur. Les explications étaient claires et surtout applicables dès le lendemain.",
-    author: "Nadège Ekwalla",
-    role: "Formation cocktails",
+      "Merci pour votre professionnalisme. Hâte à la prochaine collaboration.",
+    author: "Réseau des Femmes en Action",
+    role: "Organisme partenaire",
+  },
+  {
+    quote: "Merci infiniment pour l'excellent service.",
+    author: "BAI — Bienvenue à l'immigrant",
+    role: "Organisme partenaire",
+  },
+  {
+    quote:
+      "Ce fut un grand plaisir de collaborer avec toi, tu es vraiment professionnelle ! Et la qualité des produits est extraordinaire.",
+    author: "Anastasie N.",
+    role: "Avis Facebook",
+  },
+  {
+    quote: "Des jus santé et goûteux.",
+    author: "Edith M.",
+    role: "Avis Facebook",
+  },
+  {
+    quote: "Une cliente très satisfaite. Merci beaucoup !",
+    author: "Christmène B.",
+    role: "Avis Facebook",
   },
 ];
 

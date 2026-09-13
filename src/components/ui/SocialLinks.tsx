@@ -17,7 +17,7 @@ const paths: Record<string, string> = {
  */
 export function SocialLinks({ className }: { className?: string }) {
   return (
-    <ul className={cn("flex items-center gap-4", className)}>
+    <ul className={cn("-mx-2 flex items-center", className)}>
       {site.social.map((network) => {
         const path = paths[network.label];
         const icon = (
@@ -40,7 +40,8 @@ export function SocialLinks({ className }: { className?: string }) {
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label={network.label}
-                className="block transition-[color,transform] duration-200 hover:-translate-y-0.5 hover:text-brand-red"
+                // Zone tactile de 44 px : l'icône reste à 20 px.
+                className="grid h-11 w-11 place-items-center transition-[color,transform] duration-200 hover:-translate-y-0.5 hover:text-brand-red"
               >
                 {icon}
               </a>
@@ -49,7 +50,7 @@ export function SocialLinks({ className }: { className?: string }) {
                 title={`${network.label} — lien à venir`}
                 aria-label={`${network.label} — lien à venir`}
                 role="img"
-                className="block opacity-35"
+                className="grid h-11 w-11 place-items-center opacity-35"
               >
                 {icon}
               </span>

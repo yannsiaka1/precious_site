@@ -68,10 +68,13 @@ export function Footer({ onQuickWrite }: FooterProps) {
 
         <Reveal as="nav" delay={STAGGER} aria-label="Pied de page">
           <p className="text-eyebrow font-bold text-mango">Exploration</p>
-          <ul className="mt-5 grid gap-3.5">
+          <ul className="mt-3 grid gap-0.5">
             {[...navigation, ...footerLinks].map((link) => (
               <li key={link.label}>
-                <a href={link.href} className="text-paper/80 hover:text-paper">
+                <a
+                  href={link.href}
+                  className="inline-block py-2 text-paper/80 hover:text-paper"
+                >
                   {link.label}
                 </a>
               </li>
@@ -81,11 +84,11 @@ export function Footer({ onQuickWrite }: FooterProps) {
 
         <div>
           <p className="text-eyebrow font-bold text-mango">La maison</p>
-          <ul className="mt-5 grid gap-3.5 text-paper/80">
+          <ul className="mt-3 grid gap-0.5 text-paper/80">
             <li>
               <a
                 href={`mailto:${site.contact.email}`}
-                className="hover:text-paper"
+                className="inline-block py-2 hover:text-paper"
               >
                 {site.contact.email}
               </a>
@@ -93,7 +96,7 @@ export function Footer({ onQuickWrite }: FooterProps) {
             <li>
               <a
                 href={`tel:${site.contact.phone.replace(/[^+\d]/g, "")}`}
-                className="hover:text-paper"
+                className="inline-block py-2 hover:text-paper"
               >
                 {site.contact.phone}
               </a>
@@ -131,7 +134,7 @@ export function Footer({ onQuickWrite }: FooterProps) {
                 type="submit"
                 disabled={status === "sending"}
                 aria-label="Envoyer ma demande de rappel"
-                className="grid size-9 shrink-0 place-items-center rounded-full transition-colors hover:bg-paper/15 disabled:opacity-50"
+                className="grid size-11 shrink-0 place-items-center rounded-full transition-colors hover:bg-paper/15 disabled:opacity-50"
               >
                 <svg
                   viewBox="0 0 16 16"

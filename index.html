@@ -6,11 +6,11 @@
     <meta name="theme-color" content="#0d5429" />
 
     <title>
-      Precious — Jus naturels, donuts et cocktails événementiels à Montréal
+      Precious — Jus naturels, cocktails sans alcool et donuts à Montréal
     </title>
     <meta
       name="description"
-      content="Precious presse des jus naturels, façonne des donuts artisanaux et compose des cocktails sans alcool sur mesure pour vos événements à Montréal. Formations et guide disponibles."
+      content="Jus naturels pressés, cocktails et mocktails sans alcool pour mariages, galas et événements corporatifs à Montréal, donuts artisanaux, et formations en présentiel ou en ligne. Bar à jus Precious, service événementiel sur mesure."
     />
     <link rel="canonical" href="https://precious-jus.com/" />
 
@@ -24,7 +24,7 @@
     />
     <meta
       property="og:description"
-      content="Jus pressés, donuts artisanaux et cocktails sans alcool sur mesure, à Montréal. Formations et guide pour apprendre le savoir-faire."
+      content="Bar à jus, cocktails et mocktails sans alcool pour vos événements à Montréal. Jus naturels pressés, donuts artisanaux et formations professionnelles."
     />
     <meta property="og:url" content="https://precious-jus.com/" />
     <meta property="og:image" content="https://precious-jus.com/assets/og-precious.jpg" />
@@ -45,28 +45,117 @@
       avec ses coordonnées et ses réseaux, plutôt qu'un simple lien bleu.
       À compléter avec l'adresse exacte le jour où elle est arrêtée.
     -->
+    <!--
+      Données structurées.
+
+      Deux blocs : l'établissement lui-même, et les deux formations décrites
+      comme des cours avec leur tarif. Google peut ainsi afficher les
+      coordonnées du commerce et faire ressortir les formations sur des
+      recherches de type « formation cocktails Montréal ».
+
+      Rien n'est déclaré ici qui ne figure pas sur la page. Aucune note ni
+      aucun avis n'est balisé : Google ignore les avis qu'un site publie sur
+      lui-même, et les inventer exposerait la marque.
+    -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "FoodEstablishment",
-        "name": "Precious",
-        "description": "Jus naturels, donuts artisanaux et cocktails sans alcool sur mesure pour vos événements, à Montréal. Formations et guide.",
-        "url": "https://precious-jus.com/",
-        "image": "https://precious-jus.com/assets/og-precious.jpg",
-        "email": "Preciousck384@gmail.com",
-        "telephone": "+1-514-977-2775",
-        "servesCuisine": "Boissons naturelles, donuts",
-        "priceRange": "$$",
-        "areaServed": { "@type": "City", "name": "Montréal" },
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Montréal",
-          "addressRegion": "QC",
-          "addressCountry": "CA"
-        },
-        "sameAs": [
-          "https://www.facebook.com/share/1BwKsN7ovA/",
-          "https://www.tiktok.com/@precious100bio"
+        "@graph": [
+          {
+            "@type": "FoodEstablishment",
+            "@id": "https://precious-jus.com/#entreprise",
+            "name": "Precious",
+            "alternateName": "Precious Jus",
+            "description": "Jus naturels pressés, cocktails et mocktails sans alcool sur mesure pour événements, donuts artisanaux et formations professionnelles, à Montréal.",
+            "url": "https://precious-jus.com/",
+            "image": "https://precious-jus.com/assets/og-precious.jpg",
+            "logo": "https://precious-jus.com/assets/logo.webp",
+            "email": "preciousck384@gmail.com",
+            "telephone": "+1-514-977-2775",
+            "servesCuisine": ["Jus naturels", "Cocktails sans alcool", "Donuts"],
+            "priceRange": "$$",
+            "areaServed": [
+              { "@type": "City", "name": "Montréal" },
+              { "@type": "City", "name": "Laval" },
+              { "@type": "City", "name": "Longueuil" }
+            ],
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Montréal",
+              "addressRegion": "QC",
+              "addressCountry": "CA"
+            },
+            "sameAs": [
+              "https://www.facebook.com/share/1BwKsN7ovA/",
+              "https://www.tiktok.com/@precious100bio"
+            ],
+            "makesOffer": [
+              {
+                "@type": "Offer",
+                "name": "Service de bar à jus et cocktails événementiels",
+                "description": "Carte de cocktails et mocktails sans alcool composée sur mesure, service et mise en scène sur place pour mariages, galas, événements corporatifs, baby showers et réceptions privées."
+              },
+              {
+                "@type": "Offer",
+                "name": "Jus naturels pressés",
+                "description": "Jus de gingembre, jus vert détox, hibiscus et gingembre, en formats individuels ou événementiels."
+              },
+              {
+                "@type": "Offer",
+                "name": "Donuts artisanaux",
+                "description": "Boîtes assorties de donuts faits maison, personnalisables selon l'occasion."
+              }
+            ]
+          },
+          {
+            "@type": "Course",
+            "@id": "https://precious-jus.com/#formation-presentiel",
+            "name": "Formation jus, cocktails et mocktails — en présentiel",
+            "description": "Formation immersive à Montréal : création de cocktails et mocktails originaux, composition d'une carte selon un thème, gestion du matériel, organisation d'une prestation événementielle et création de sa présence en ligne.",
+            "url": "https://precious-jus.com/#academie",
+            "inLanguage": "fr-CA",
+            "provider": { "@id": "https://precious-jus.com/#entreprise" },
+            "offers": {
+              "@type": "Offer",
+              "price": "2000",
+              "priceCurrency": "CAD",
+              "category": "Paid",
+              "url": "https://precious-jus.com/#academie"
+            },
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "Onsite",
+              "location": {
+                "@type": "Place",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "Montréal",
+                  "addressRegion": "QC",
+                  "addressCountry": "CA"
+                }
+              }
+            }
+          },
+          {
+            "@type": "Course",
+            "@id": "https://precious-jus.com/#formation-en-ligne",
+            "name": "Formation jus, cocktails et mocktails — en ligne",
+            "description": "Formation à distance en création de cocktails et mocktails sans alcool : équilibre des saveurs, composition d'une carte selon un thème, gestion du matériel, organisation d'une prestation et présence en ligne.",
+            "url": "https://precious-jus.com/#academie",
+            "inLanguage": "fr-CA",
+            "provider": { "@id": "https://precious-jus.com/#entreprise" },
+            "offers": {
+              "@type": "Offer",
+              "price": "1500",
+              "priceCurrency": "CAD",
+              "category": "Paid",
+              "url": "https://precious-jus.com/#academie"
+            },
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "Online"
+            }
+          }
         ]
       }
     </script>

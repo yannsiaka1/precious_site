@@ -16,7 +16,6 @@ export const site = {
     "Jus naturels, donuts artisanaux et cocktails sans alcool sur mesure, à Montréal.",
   contact: {
     email: "Preciousck384@gmail.com",
-    /** ⚠️ Relevé sur les affiches « Bar à jus » de vos photos — à confirmer. */
     phone: "+1 514 977-2775",
     area: "Montréal et environs",
     availability: "Sur commande et sur rendez-vous",

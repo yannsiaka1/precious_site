@@ -254,7 +254,8 @@ export function Testimonials() {
             </figcaption>
           </figure>
 
-          <div className="mt-10 flex justify-center gap-3">
+          {/* Zone tactile de 44 px autour de chaque pastille. */}
+          <div className="mt-10 flex justify-center">
             {testimonials.map((item, position) => (
               <button
                 key={item.author}
@@ -262,11 +263,15 @@ export function Testimonials() {
                 onClick={() => setIndex(position)}
                 aria-label={`Avis de ${item.author}`}
                 aria-current={position === index ? "true" : undefined}
-                className={cn(
-                  "size-2.5 rounded-full border border-ink/40 transition-colors",
-                  position === index ? "bg-ink/70" : "hover:bg-ink/20",
-                )}
-              />
+                className="grid h-11 w-11 place-items-center"
+              >
+                <span
+                  className={cn(
+                    "block size-2.5 rounded-full border border-ink/40 transition-colors",
+                    position === index ? "bg-ink/70" : "hover:bg-ink/20",
+                  )}
+                />
+              </button>
             ))}
           </div>
 

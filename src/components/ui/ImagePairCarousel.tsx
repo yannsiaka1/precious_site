@@ -110,7 +110,7 @@ export function ImagePairCarousel({
       ))}
 
       {pages > 1 ? (
-        <div className="mt-1 flex items-center gap-2.5">
+        <div className="-mx-3 flex items-center">
           {Array.from({ length: pages }, (_, index) => (
             <button
               key={index}
@@ -122,13 +122,18 @@ export function ImagePairCarousel({
                   : `Voir les visuels ${index * 2 + 1} et ${index * 2 + 2}`
               }
               aria-current={index === page ? "true" : undefined}
-              className={cn(
-                "h-1.5 rounded-full transition-all duration-300 ease-(--ease-out-soft)",
-                index === page
-                  ? "w-7 bg-forest"
-                  : "w-1.5 bg-ink/25 hover:bg-ink/45",
-              )}
-            />
+              // Zone tactile de 44 px, repère visuel inchangé.
+              className="grid h-11 w-11 place-items-center"
+            >
+              <span
+                className={cn(
+                  "block h-1.5 rounded-full transition-all duration-300 ease-(--ease-out-soft)",
+                  index === page
+                    ? "w-7 bg-forest"
+                    : "w-1.5 bg-ink/25 hover:bg-ink/45",
+                )}
+              />
+            </button>
           ))}
         </div>
       ) : null}

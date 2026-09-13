@@ -1,14 +1,5 @@
 export type ServiceId = "jus" | "donuts" | "evenements";
 
-export interface Media {
-  /** Chemin dans /public. */
-  src: string;
-  /** Description pour les lecteurs d'écran. Jamais vide sur une image porteuse de sens. */
-  alt: string;
-  /** Cadrage CSS `object-position`. */
-  focus: string;
-}
-
 export interface GalleryImage {
   src: string;
   alt: string;
@@ -40,7 +31,6 @@ export interface Service {
   features: string[];
   /** Texte du bouton, à l'infinitif, décrivant ce qui se passe au clic. */
   action: string;
-  media: Media;
   /** Visuels qui défilent à gauche quand cet univers est ouvert. */
   gallery: GalleryImage[];
   /**

@@ -155,7 +155,7 @@ export function Contact({
               <li>
                 <a
                   href={`mailto:${site.contact.email}`}
-                  className="font-display text-lg text-forest decoration-1 underline-offset-[6px] hover:underline"
+                  className="inline-block py-2 font-display text-lg text-forest decoration-1 underline-offset-[6px] hover:underline"
                 >
                   {site.contact.email}
                 </a>
@@ -163,7 +163,7 @@ export function Contact({
               <li>
                 <a
                   href={`tel:${site.contact.phone.replace(/[^+\d]/g, "")}`}
-                  className="font-display text-lg text-forest decoration-1 underline-offset-[6px] hover:underline"
+                  className="inline-block py-2 font-display text-lg text-forest decoration-1 underline-offset-[6px] hover:underline"
                 >
                   {site.contact.phone}
                 </a>
