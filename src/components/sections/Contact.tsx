@@ -8,6 +8,7 @@ import {
 } from "@/lib/submitRequest";
 import { EVENT_SUBJECT, eventFields } from "@/content/forms";
 import { Field } from "@/components/ui/Field";
+import { releverDetails } from "@/lib/champs";
 import { fieldClass, labelClass, limits } from "@/components/ui/formStyles";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Reveal, STAGGER } from "@/components/ui/Reveal";
@@ -95,12 +96,8 @@ export function Contact({
 
     // Les questions événementielles ne sont envoyées que si elles étaient
     // affichées, c'est-à-dire si la demande concerne un événement.
-    const details: Record<string, string> = {};
-    if (subject === EVENT_SUBJECT) {
-      for (const field of eventFields) {
-        details[field.label] = String(data.get(field.name) ?? "");
-      }
-    }
+    const details =
+      subject === EVENT_SUBJECT ? releverDetails(eventFields, data) : {};
 
     try {
       const result = await submitRequest({

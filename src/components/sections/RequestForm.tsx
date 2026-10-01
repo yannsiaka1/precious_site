@@ -7,6 +7,7 @@ import {
   type SubmitOutcome,
 } from "@/lib/submitRequest";
 import { Field } from "@/components/ui/Field";
+import { releverDetails } from "@/lib/champs";
 import { fieldClass, labelClass, limits } from "@/components/ui/formStyles";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
@@ -47,11 +48,8 @@ export function RequestForm({ service, onClose }: RequestFormProps) {
     setStatus("sending");
     setError("");
 
-    const details: Record<string, string> = {};
-    for (const field of service.fields) {
-      if (field.name === "date") continue;
-      details[field.label] = String(data.get(field.name) ?? "");
-    }
+    // La date est transmise à part, elle ne va pas dans les détails.
+    const details = releverDetails(service.fields, data, ["date"]);
 
     try {
       const result = await submitRequest({

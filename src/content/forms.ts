@@ -9,9 +9,9 @@ export const EVENT_SUBJECT = "Cocktails & événements";
 /**
  * Questions posées en plus lorsque la demande concerne un événement.
  *
- * Elles servent à établir un devis dès le premier échange : sans le nombre
- * d'invités, le lieu et l'heure, il faut relancer le client avant de pouvoir
- * chiffrer quoi que ce soit.
+ * Elles reprennent le formulaire de commande utilisé jusqu'ici par Precious,
+ * afin qu'une demande reçue par le site contienne les mêmes informations :
+ * un devis doit pouvoir être établi sans relance.
  */
 export const eventFields: RequestField[] = [
   {
@@ -24,10 +24,24 @@ export const eventFields: RequestField[] = [
       "Anniversaire",
       "Baptême ou dot",
       "Événement d'entreprise",
+      "Gala",
+      "Baby shower",
       "Remise de diplôme",
       "Festival ou marché",
       "Autre célébration",
     ],
+    // « Autre célébration » n'apprend rien : on demande alors de nommer
+    // l'occasion, faute de quoi il faut rappeler le client pour la connaître.
+    reveal: {
+      when: "Autre célébration",
+      field: {
+        name: "autreEvenement",
+        label: "Précisez la nature de l'événement",
+        type: "text",
+        half: true,
+        placeholder: "Soirée d'entreprise, retrouvailles…",
+      },
+    },
   },
   {
     name: "theme",
@@ -51,16 +65,38 @@ export const eventFields: RequestField[] = [
   },
   {
     name: "duree",
-    label: "Durée souhaitée",
+    label: "Durée de l'événement",
     type: "text",
     half: true,
     placeholder: "3 h, toute la soirée…",
   },
   {
     name: "lieu",
-    label: "Lieu de l'événement",
+    label: "Adresse où l'événement aura lieu",
     type: "text",
     half: true,
-    placeholder: "Salle, adresse ou quartier",
+    placeholder: "Salle, numéro et rue, ville",
+  },
+  {
+    name: "facturation",
+    label: "Adresse de facturation",
+    type: "text",
+    placeholder: "Si différente de l'adresse de l'événement",
+    required: false,
+  },
+  {
+    name: "saveurs",
+    label: "Ce qui vous ferait plaisir",
+    type: "checkboxes",
+    hint: "Cochez tout ce qui vous intéresse — la carte se compose ensuite avec vous.",
+    required: false,
+    options: [
+      "Cocktail de fruits personnalisé",
+      "Jus de gingembre",
+      "Jus de fleurs d'hibiscus",
+      "Verrines de fruits",
+      "Bouchées de donuts",
+      "Bouchées apéritives (mini-burgers, mini-sandwichs, plateaux d'apéro, cupcakes, croissants jambon-fromage…)",
+    ],
   },
 ];

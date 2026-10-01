@@ -17,7 +17,20 @@ import { cn } from "@/lib/cn";
  * Grille asymétrique : un grand album à gauche, deux petits à droite, un
  * large en dessous. Les quatre cases remplissent la grille sans trou.
  */
-const layout = ["sm:col-span-2 sm:row-span-2", "", "", "sm:col-span-2"];
+/**
+ * Gabarit de la mosaïque, une entrée par album.
+ *
+ * La première tuile occupe quatre cases, les deux suivantes une seule, les
+ * deux dernières une rangée à deux. Un album ajouté sans entrée ici
+ * retomberait sur la taille simple — d'où la liste explicite.
+ */
+const layout = [
+  "sm:col-span-2 sm:row-span-2",
+  "",
+  "",
+  "sm:col-span-2",
+  "sm:col-span-2",
+];
 
 export function Realisations() {
   const [openId, setOpenId] = useState<string | null>(null);

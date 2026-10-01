@@ -479,6 +479,36 @@ export const albums = [
     images: services[1]?.gallery ?? [],
   },
   {
+    id: "bouchees",
+    label: "Bouchées & apéritifs",
+    blurb: "Mini-burgers, sandwichs, croissants et douceurs à partager.",
+    images: [
+      {
+        src: "/assets/galerie/bouchees-1.webp",
+        alt: "Plateau de mini-burgers garnis, piqués de radis sur brochette",
+        caption: "Mini-burgers garnis",
+      },
+      {
+        src: "/assets/galerie/bouchees-2.webp",
+        alt: "Plateau de mini-croissants jambon-fromage et brochettes de tomates cerises",
+      },
+      {
+        src: "/assets/galerie/bouchees-3.webp",
+        alt: "Table d'apéritif Precious : croissants, mini-burgers et cupcakes aux fraises",
+        caption: "Table d'apéritif dressée",
+      },
+      {
+        src: "/assets/galerie/bouchees-4.webp",
+        alt: "Mini-sandwichs club au thon et aux œufs, brochettes de tomates cerises",
+      },
+      {
+        src: "/assets/galerie/bouchees-5.webp",
+        alt: "Coupe de fromages, noix, amandes et fraises fraîches",
+        caption: "Plateau de fromages et fruits",
+      },
+    ],
+  },
+  {
     id: "formations",
     label: "Formations",
     // Visuels provisoires : en attendant les photos d'atelier, on montre des

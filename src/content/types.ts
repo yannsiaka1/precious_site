@@ -11,14 +11,29 @@ export interface GalleryImage {
 export interface RequestField {
   name: string;
   label: string;
-  type: "text" | "email" | "tel" | "date" | "number" | "time" | "select";
+  type:
+    | "text"
+    | "email"
+    | "tel"
+    | "date"
+    | "number"
+    | "time"
+    | "select"
+    | "checkboxes";
   placeholder?: string;
   /** Par défaut un champ est obligatoire ; passer `false` pour l'ouvrir. */
   required?: boolean;
   /** Occupe une demi-largeur sur grand écran. */
   half?: boolean;
-  /** Choix proposés lorsque `type` vaut "select". */
+  /** Choix proposés lorsque `type` vaut "select" ou "checkboxes". */
   options?: string[];
+  /** Précision affichée sous le libellé, en petits caractères. */
+  hint?: string;
+  /**
+   * Champ qui n'apparaît que si l'option choisie correspond.
+   * Sert à demander une précision quand on sélectionne « Autre ».
+   */
+  reveal?: { when: string; field: RequestField };
 }
 
 export interface Service {
