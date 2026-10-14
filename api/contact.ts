@@ -55,22 +55,87 @@ const RATE_LIMIT = 12;
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 
 /**
- * Compteur d'envois par IP.
+ * Compteur de repli, en mémoire de l'instance.
  *
- * En mémoire, donc propre à chaque instance : c'est une gêne pour un envoi
- * répété, pas une garantie. Une vraie limite demanderait un stockage partagé
- * (Vercel KV, Upstash). Suffisant tant que le site reçoit quelques demandes
- * par jour.
+ * Une fonction sans serveur ne vit que quelques minutes et plusieurs instances
+ * tournent en parallèle : ce compteur disparaît à chaque redémarrage et ignore
+ * ce qu'ont vu les autres instances. Il gêne un envoi répété depuis le même
+ * appareil, il ne constitue pas une limite.
  */
 const hits = new Map<string, number[]>();
+
+/**
+ * Adresse et jeton d'un magasin Redis compatible Upstash.
+ *
+ * Vercel KV expose `KV_REST_API_URL` / `KV_REST_API_TOKEN` ; un magasin
+ * Upstash créé directement expose `UPSTASH_REDIS_REST_URL` / `_TOKEN`. On
+ * accepte les deux, sans dépendance supplémentaire : l'API est en HTTP, donc
+ * `fetch` suffit, ce qui compte sur l'environnement Edge où le client Node
+ * officiel ne fonctionne pas.
+ *
+ * Tant qu'aucune de ces variables n'est définie, le code se rabat sur le
+ * compteur en mémoire et le site fonctionne exactement comme avant : brancher
+ * un magasin KV ne demande donc aucune modification du code.
+ */
+const KV_URL = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL ?? "";
+const KV_TOKEN =
+  process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN ?? "";
+const KV_ACTIF = Boolean(KV_URL && KV_TOKEN);
+
+/**
+ * Exécute une commande Redis via l'API REST.
+ *
+ * Retourne `null` dès que quelque chose se passe mal — réseau, jeton refusé,
+ * réponse illisible. L'appelant traite ce `null` comme « je ne sais pas »,
+ * jamais comme « quota dépassé » : une panne du magasin ne doit pas empêcher
+ * un vrai client d'envoyer sa demande.
+ */
+async function kv(...commande: Array<string | number>): Promise<unknown | null> {
+  try {
+    const reponse = await fetch(KV_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${KV_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(commande),
+      // Au-delà d'une seconde, mieux vaut laisser passer la demande que de
+      // faire patienter la personne devant son formulaire.
+      signal: AbortSignal.timeout(1000),
+    });
+    if (!reponse.ok) return null;
+    const corps = (await reponse.json()) as { result?: unknown; error?: unknown };
+    return corps.error ? null : (corps.result ?? null);
+  } catch {
+    return null;
+  }
+}
 
 /**
  * Enregistre une tentative et indique si le quota est dépassé.
  *
  * Appelé seulement une fois la demande validée : une erreur de saisie ne doit
  * pas consommer le quota de la personne qui corrige et renvoie.
+ *
+ * Avec un magasin partagé, le compteur est un simple entier par adresse IP,
+ * dont la durée de vie est fixée à la fenêtre. `INCR` est atomique, donc deux
+ * instances qui comptent en même temps ne s'écrasent pas — c'est précisément
+ * ce que le compteur en mémoire ne savait pas faire. L'expiration n'est posée
+ * qu'au premier envoi de la fenêtre, pour que celle-ci soit glissante par
+ * période et non repoussée à chaque tentative.
  */
-function rateLimited(ip: string): boolean {
+async function rateLimited(ip: string): Promise<boolean> {
+  if (KV_ACTIF) {
+    const cle = `precious:contact:${ip}`;
+    const compte = await kv("INCR", cle);
+    if (typeof compte === "number") {
+      if (compte === 1) await kv("PEXPIRE", cle, RATE_WINDOW_MS);
+      return compte > RATE_LIMIT;
+    }
+    // Magasin injoignable : on retombe sur le compteur local plutôt que de
+    // refuser la demande.
+  }
+
   const now = Date.now();
   const recent = (hits.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
   recent.push(now);
@@ -365,7 +430,7 @@ export default async function handler(request: Request): Promise<Response> {
   // vrai envoi.
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "inconnue";
-  if (rateLimited(ip)) {
+  if (await rateLimited(ip)) {
     return json(
       {
         error:
