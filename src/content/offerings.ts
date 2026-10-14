@@ -146,6 +146,35 @@ export const services: Service[] = [
         alt: "Service Precious auprès des invités d'un événement",
         caption: "Nous servons, vous profitez",
       },
+      {
+        src: "/assets/galerie/cocktails-16.webp",
+        alt: "Bar à jus Precious dressé pour un événement : mocktails alignés, fontaines de jus de gingembre et de fleurs d'hibiscus",
+        caption: "Le bar monté chez vous",
+      },
+      {
+        src: "/assets/galerie/cocktails-10.webp",
+        alt: "Flûtes de mocktail orange et violet garnies d'orange et d'aneth, dressées en pyramide",
+      },
+      {
+        src: "/assets/galerie/cocktails-11.webp",
+        alt: "Pyramide de mocktails bicolores sur présentoir, décor floral blanc et orange",
+      },
+      {
+        src: "/assets/galerie/cocktails-12.webp",
+        alt: "Coupes de mocktail à l'ananas et flûtes bicolores, décor d'automne",
+      },
+      {
+        src: "/assets/galerie/cocktails-13.webp",
+        alt: "Coupes de mocktail crémeux à l'ananas, garnies d'une feuille de pandan",
+      },
+      {
+        src: "/assets/galerie/cocktails-14.webp",
+        alt: "Verres de mocktail doré coiffés de mousse et de citron séché, à côté de mocktails rouges",
+      },
+      {
+        src: "/assets/galerie/cocktails-15.webp",
+        alt: "Présentoir de mocktails dorés et rouges, décor floral blanc et orange",
+      },
     ],
     formIntro:
       "Racontez-nous votre événement : nous vous proposons une carte et un devis.",
@@ -243,10 +272,18 @@ export const inscription = [
 
 export const ebook: Ebook = {
   badge: "Ebook",
-  format: "Format numérique · Téléchargement immédiat",
+  // Le guide existe, mais il n'est pas vendu séparément : il est remis aux
+  // personnes inscrites à l'une des deux formations. Le texte le dit
+  // franchement plutôt que de laisser croire à une vente en ligne, ce qui
+  // vaut mieux qu'un visiteur qui cherche un bouton d'achat et n'en trouve
+  // pas.
+  format: "Format numérique · Remis aux personnes inscrites",
   title: "Le guide Precious",
   intro:
-    "Le livre que reçoivent nos participants, disponible seul. On y trouve la méthode de la maison : comment une recette se construit, pourquoi certaines associations fonctionnent et d'autres non, et les gestes qui font la différence entre une boisson correcte et une boisson dont on se souvient.",
+    "Le livre que reçoivent nos participants. On y trouve la méthode de la maison : comment une recette se construit, pourquoi certaines associations fonctionnent et d'autres non, et les gestes qui font la différence entre une boisson correcte et une boisson dont on se souvient.",
+  /** Précision affichée à la place d'un prix, tant que le guide n'est pas vendu seul. */
+  disponibilite:
+    "Il est inclus dans les deux formations, en présentiel comme en ligne, et n'est pas vendu séparément pour le moment.",
   highlights: [
     "Des recettes de jus, de cocktails et de mocktails, expliquées étape par étape",
     "La logique des accords de saveurs : sucre, acidité, amertume, épices",
@@ -260,8 +297,6 @@ export const ebook: Ebook = {
     title: "Precious",
     footer: "Boissons naturelles & créativité",
   },
-  cta: "Payer l'ebook",
-  url: "", // ← lien Payhip du guide, une fois le produit en ligne
 };
 
 export const savoirFaire: Array<{

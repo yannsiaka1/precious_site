@@ -194,11 +194,19 @@ export function Academy() {
                   ))}
                 </ul>
 
-                {/* Le guide n'est pas encore en vente : on renvoie au formulaire
-                  de contact pour être prévenu, plutôt qu'à un panier vide. */}
-                <div className="mt-auto pt-10">
-                  <Button as="a" href="#contact" variant="red">
-                    Être prévenu de sa sortie
+                {/* Le guide est remis aux personnes inscrites, il n'est pas
+                  vendu seul. On l'annonce avant le bouton — un visiteur qui
+                  lit « obtenir le guide » et tombe sur une page de formation
+                  se sent envoyé ailleurs ; prévenu, il comprend que c'est le
+                  même achat. Le bouton remonte donc vers les deux offres,
+                  plus haut dans la même section. */}
+                <p className="mt-8 border-l-2 border-mango pl-5 text-ink/75">
+                  {ebook.disponibilite}
+                </p>
+
+                <div className="mt-auto pt-8">
+                  <Button as="a" href="#academie" variant="red">
+                    Voir les deux formations
                   </Button>
                 </div>
               </article>

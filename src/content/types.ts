@@ -97,8 +97,17 @@ export interface Ebook {
   highlights: string[];
   /** Textes imprimés sur la couverture. */
   cover: { kicker: string; title: string; footer: string };
-  cta: string;
-  url: string;
+  /**
+   * Conditions d'obtention du guide.
+   *
+   * Le guide n'est pas vendu séparément : il est remis aux personnes
+   * inscrites à une formation. La section l'annonce donc explicitement et
+   * renvoie vers les formations, pas vers un panier. Il n'y a par conséquent
+   * ni libellé de paiement ni lien de vente à décrire ici — les anciens
+   * champs `cta` et `url` n'étaient lus nulle part, et un lien de paiement
+   * vide dans les données finit toujours par être branché par mégarde.
+   */
+  disponibilite: string;
 }
 
 export interface NavLink {
