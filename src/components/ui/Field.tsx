@@ -30,6 +30,33 @@ export function Field({ field }: { field: RequestField }) {
         ? "tel"
         : undefined;
 
+  /**
+   * Les champs numériques n'acceptent que des entiers.
+   *
+   * Un nombre d'invités ou de pièces ne se compte pas en décimales. Trois
+   * garde-fous se complètent, parce qu'aucun ne suffit seul :
+   *
+   *   - `step={1}` cadre la validation du navigateur et les flèches haut/bas ;
+   *   - `onBeforeInput` bloque la frappe du séparateur décimal et du signe,
+   *     que `step` laisserait saisir avant de signaler l'erreur ;
+   *   - `onKeyDown` neutralise « e » et « E » (notation scientifique), que
+   *     `<input type="number">` accepte sans les transmettre à `onBeforeInput`.
+   *
+   * La touche est simplement ignorée : rien n'est réécrit dans le champ, donc
+   * le curseur ne saute pas et le collage reste possible — la validation du
+   * navigateur prendra le relais si la valeur collée n'est pas entière.
+   */
+  const estNombre = field.type === "number";
+
+  const filtrerSaisie = (event: React.FormEvent<HTMLInputElement>) => {
+    const saisi = (event as unknown as { data: string | null }).data;
+    if (saisi && /[^0-9]/.test(saisi)) event.preventDefault();
+  };
+
+  const filtrerTouche = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (["e", "E", "+", "-", ".", ","].includes(event.key)) event.preventDefault();
+  };
+
   // ------------------------------------------------------------------
   // Cases à cocher : un groupe, pas un champ unique. On utilise donc un
   // <fieldset> avec sa légende, ce que les lecteurs d'écran annoncent
@@ -97,8 +124,11 @@ export function Field({ field }: { field: RequestField }) {
             required={required}
             placeholder={field.placeholder}
             inputMode={inputMode}
-            min={field.type === "number" ? 1 : undefined}
-            max={field.type === "number" ? 5000 : undefined}
+            min={estNombre ? 1 : undefined}
+            max={estNombre ? 5000 : undefined}
+            step={estNombre ? 1 : undefined}
+            onBeforeInput={estNombre ? filtrerSaisie : undefined}
+            onKeyDown={estNombre ? filtrerTouche : undefined}
             maxLength={field.type === "text" ? 120 : undefined}
             className={fieldClass}
           />
