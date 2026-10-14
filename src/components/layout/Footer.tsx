@@ -61,8 +61,24 @@ export function Footer({ onQuickWrite }: FooterProps) {
     <footer className="grain page-x bg-leaf pt-20 pb-8 text-paper">
       <div className="mx-auto grid w-full max-w-[82rem] gap-12 md:grid-cols-2 lg:grid-cols-[1.3fr_repeat(3,1fr)]">
         <Reveal>
-          <p className="font-display text-3xl tracking-wide">{site.name}</p>
-          <p className="mt-5 max-w-72 text-paper/85">{site.promise}</p>
+          {/* Le logo plutôt que le seul nom écrit : il ferme la page sur la
+              marque, comme l'en-tête l'ouvre. Mêmes dimensions déclarées que
+              dans l'en-tête, pour que le navigateur réserve la place avant le
+              chargement et que rien ne saute. Chargement différé : le pied de
+              page est hors écran à l'arrivée. */}
+          <a href="#accueil" aria-label={`${site.name} — haut de page`}>
+            <img
+              src="/assets/logo.webp"
+              alt={`${site.name} ${site.tagline}`}
+              width={201}
+              height={159}
+              loading="lazy"
+              decoding="async"
+              sizes="112px"
+              className="h-28 w-auto"
+            />
+          </a>
+          <p className="mt-6 max-w-72 text-paper/85">{site.promise}</p>
           <SocialLinks className="mt-7" />
         </Reveal>
 
@@ -171,11 +187,25 @@ export function Footer({ onQuickWrite }: FooterProps) {
         </div>
       </div>
 
-      <div className="mx-auto mt-16 flex w-full max-w-[82rem] flex-wrap items-center justify-between gap-4 border-t border-paper/20 pt-6 text-sm text-paper/80">
+      <div className="mx-auto mt-16 flex w-full max-w-[82rem] flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-paper/20 pt-6 text-sm text-paper/80">
         <p>
           © {year} {site.name}. Tous droits réservés.
         </p>
-        <p>Montréal, Québec</p>
+
+        {/* La Loi 25 exige que la politique soit « facilement accessible ».
+            Le bas de page est l'endroit où on la cherche, et c'est aussi là
+            que Google va la lire pour rattacher le site à une entreprise
+            identifiable. Lien ordinaire plutôt que composant : la page est un
+            fichier statique hors de l'application React. */}
+        <p className="flex flex-wrap items-center gap-x-5 gap-y-1">
+          <a
+            href="/confidentialite"
+            className="inline-block py-2 underline decoration-mango decoration-2 underline-offset-[6px] hover:text-paper"
+          >
+            Politique de confidentialité
+          </a>
+          <span>Montréal, Québec</span>
+        </p>
       </div>
     </footer>
   );
