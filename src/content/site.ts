@@ -57,8 +57,7 @@ export const site = {
       label: "TikTok",
       href: "https://www.tiktok.com/@precious100bio?_r=1&_t=ZS-98yAVVCb4hZ",
     },
-    // Instagram sera réintroduit quand la page existera : une icône grisée
-    // se lit comme un lien cassé.
+    { label: "Instagram", href: "https://www.instagram.com/precious100bio/" },
   ],
 } as const;
 
