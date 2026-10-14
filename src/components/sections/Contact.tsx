@@ -13,6 +13,7 @@ import { fieldClass, labelClass, limits } from "@/components/ui/formStyles";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Reveal, STAGGER } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
+import { MentionConsentement } from "@/components/ui/MentionConsentement";
 import { cn } from "@/lib/cn";
 
 /**
@@ -420,6 +421,8 @@ export function Contact({
                       ? "Envoi en cours…"
                       : "Envoyer ma demande"}
                   </Button>
+
+                  <MentionConsentement className="col-span-full" />
                 </form>
               )}
             </div>

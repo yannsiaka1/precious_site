@@ -10,6 +10,7 @@ import { Field } from "@/components/ui/Field";
 import { releverDetails } from "@/lib/champs";
 import { fieldClass, labelClass, limits } from "@/components/ui/formStyles";
 import { Button } from "@/components/ui/Button";
+import { MentionConsentement } from "@/components/ui/MentionConsentement";
 import { cn } from "@/lib/cn";
 
 type Status = "idle" | "sending" | "done" | "error";
@@ -239,6 +240,8 @@ export function RequestForm({ service, onClose }: RequestFormProps) {
         >
           {status === "sending" ? "Envoi en cours…" : "Envoyer ma demande"}
         </Button>
+
+        <MentionConsentement className="sm:col-span-2" />
       </form>
     </div>
   );

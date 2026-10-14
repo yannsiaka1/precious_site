@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="fr-CA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d5429" />
+
+    <title>Politique de confidentialité — Precious</title>
+    <meta
+      name="description"
+      content="Comment Precious recueille, utilise et protège vos renseignements personnels, conformément à la Loi 25 du Québec."
+    />
+    <link rel="canonical" href="https://precious-jus.com/confidentialite" />
+
+    <!-- Page légale : elle n'a pas à remonter dans les résultats de recherche
+         avant la page d'accueil, mais elle doit rester accessible et indexable
+         pour que l'obligation de publication soit réellement remplie. -->
+    <meta name="robots" content="index, follow" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!--
+      Page autonome, volontairement hors de l'application React.
+
+      Le site est généré en page unique : y ajouter une route demanderait de
+      changer le mode de génération pour un texte qui ne bouge qu'une fois par
+      an. Un fichier statique dans `public/` est servi tel quel par Vercel, et
+      `cleanUrls` lui donne l'adresse /confidentialite. Le style est écrit ici
+      plutôt qu'importé : la feuille de l'application porte un nom haché à
+      chaque build, qu'un fichier statique ne peut pas suivre.
+
+      Les polices sont celles du site, servies depuis le même domaine. La
+      politique de sécurité du contenu autorise `style-src 'unsafe-inline'`,
+      ce qui rend ce bloc licite ; aucun script n'est utilisé.
+    -->
+    <style>
+      @font-face {
+        font-family: "Cinzel";
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url("/fonts/cinzel-latin-400-normal.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Bellefair";
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url("/fonts/bellefair-latin-400-normal.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Akatab";
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url("/fonts/akatab-latin-400-normal.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Akatab";
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url("/fonts/akatab-latin-700-normal.woff2") format("woff2");
+      }
+
+      :root {
+        --ink: #17321f;
+        --forest: #0d5429;
+        --forest-deep: #07391c;
+        --mango: #f2a900;
+        --cream: #f7f2e7;
+        --paper: #fffdf8;
+        --leaf: #166905;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Akatab", system-ui, sans-serif;
+        font-size: 1.02rem;
+        line-height: 1.7;
+        /* Marge latérale de 20 px : la même règle que le site, qui évite tout
+           débordement horizontal sur un téléphone étroit. */
+        padding: 0 20px;
+        overflow-x: clip;
+      }
+
+      .enveloppe {
+        max-width: 46rem;
+        margin: 0 auto;
+      }
+
+      header.bandeau {
+        padding: 2rem 0 0;
+      }
+
+      header.bandeau img {
+        height: 5rem;
+        width: auto;
+      }
+
+      .retour {
+        display: inline-block;
+        margin-top: 1.4rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--forest);
+        text-decoration: none;
+        border-bottom: 2px solid var(--mango);
+        padding-bottom: 2px;
+      }
+
+      .retour:hover,
+      .retour:focus-visible {
+        color: var(--forest-deep);
+      }
+
+      h1 {
+        font-family: "Cinzel", Georgia, serif;
+        font-weight: 400;
+        font-size: clamp(2rem, 5vw, 2.9rem);
+        line-height: 1.18;
+        color: var(--forest);
+        margin: 2.6rem 0 0.6rem;
+      }
+
+      .date {
+        font-size: 0.9rem;
+        color: rgba(23, 50, 31, 0.7);
+        margin: 0 0 2.6rem;
+      }
+
+      h2 {
+        font-family: "Cinzel", Georgia, serif;
+        font-weight: 400;
+        font-size: clamp(1.35rem, 3vw, 1.75rem);
+        color: var(--forest);
+        margin: 2.8rem 0 0.9rem;
+        padding-top: 1.6rem;
+        border-top: 1px solid rgba(23, 50, 31, 0.15);
+      }
+
+      h3 {
+        font-family: "Bellefair", Georgia, serif;
+        font-weight: 400;
+        font-size: 1.3rem;
+        color: var(--forest-deep);
+        margin: 1.8rem 0 0.5rem;
+      }
+
+      p,
+      li {
+        color: rgba(23, 50, 31, 0.88);
+      }
+
+      ul {
+        padding-left: 1.2rem;
+      }
+
+      li {
+        margin-bottom: 0.5rem;
+      }
+
+      a {
+        color: var(--forest);
+      }
+
+      .encadre {
+        background: var(--cream);
+        border-left: 3px solid var(--mango);
+        padding: 1.3rem 1.5rem;
+        margin: 1.6rem 0;
+      }
+
+      .encadre p:first-child {
+        margin-top: 0;
+      }
+
+      .encadre p:last-child {
+        margin-bottom: 0;
+      }
+
+      dl {
+        margin: 1.2rem 0;
+      }
+
+      dt {
+        font-weight: 700;
+        margin-top: 1rem;
+      }
+
+      dd {
+        margin: 0.2rem 0 0 0;
+        color: rgba(23, 50, 31, 0.8);
+      }
+
+      footer.pied {
+        margin-top: 4rem;
+        padding: 2rem 0 3rem;
+        border-top: 1px solid rgba(23, 50, 31, 0.15);
+        font-size: 0.92rem;
+        color: rgba(23, 50, 31, 0.7);
+      }
+
+      /* Zone tactile d'au moins 44 px pour tous les liens du corps de texte,
+         même règle que sur le site. */
+      footer.pied a,
+      .retour {
+        display: inline-block;
+        padding: 0.5rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="enveloppe">
+      <header class="bandeau">
+        <a href="/" aria-label="Precious — retour à l'accueil">
+          <img
+            src="/assets/logo.webp"
+            alt="Precious — jus naturel, mocktails et cocktails"
+            width="201"
+            height="159"
+          />
+        </a>
+        <br />
+        <a class="retour" href="/">← Retour au site</a>
+      </header>
+
+      <main>
+        <h1>Politique de confidentialité</h1>
+        <p class="date">En vigueur le 14 octobre 2026</p>
+
+        <p>
+          Precious recueille le minimum de renseignements nécessaires pour
+          répondre à une demande, préparer une commande ou organiser un
+          événement. Cette page explique lesquels, pourquoi, combien de temps
+          ils sont conservés et comment en demander l'accès, la correction ou
+          la suppression.
+        </p>
+
+        <div class="encadre">
+          <p>
+            <strong>Ce site ne dépose aucun témoin (cookie)</strong> et
+            n'utilise ni Google Analytics, ni pixel publicitaire, ni aucun
+            autre outil de mesure d'audience. Rien n'est enregistré dans votre
+            navigateur, et aucune donnée n'est transmise à un tiers à des fins
+            de publicité ou de profilage.
+          </p>
+        </div>
+
+        <h2>Responsable de la protection des renseignements personnels</h2>
+        <p>
+          Conformément à la <em>Loi modernisant des dispositions législatives
+          en matière de protection des renseignements personnels</em> (Loi 25),
+          la personne responsable au sein de l'entreprise est&nbsp;:
+        </p>
+        <dl>
+          <dt>Precious — direction</dt>
+          <dd>
+            Par courriel&nbsp;:
+            <a href="mailto:Preciousck384@gmail.com"
+              >Preciousck384@gmail.com</a
+            >
+          </dd>
+          <dd>
+            Par téléphone&nbsp;:
+            <a href="tel:+15149772775">+1 514 977-2775</a>
+          </dd>
+        </dl>
+        <p>
+          Toute question sur cette politique, toute demande d'accès ou de
+          rectification et toute plainte peuvent lui être adressées. Une
+          réponse est fournie dans les trente jours.
+        </p>
+
+        <h2>Renseignements recueillis</h2>
+        <p>
+          Les seuls renseignements recueillis sont ceux que vous inscrivez
+          vous-même dans l'un des formulaires du site. Aucune collecte ne se
+          fait à votre insu.
+        </p>
+
+        <h3>Dans tous les formulaires</h3>
+        <ul>
+          <li>Votre nom</li>
+          <li>Votre adresse courriel</li>
+          <li>Votre numéro de téléphone</li>
+          <li>Le contenu du message que vous rédigez</li>
+        </ul>
+
+        <h3>En plus, pour une demande d'événement</h3>
+        <ul>
+          <li>La date, l'heure et la durée prévues</li>
+          <li>Le lieu de l'événement</li>
+          <li>Le nombre d'invités attendus</li>
+          <li>Le type d'occasion et le thème souhaité</li>
+          <li>Les options de carte qui vous intéressent</li>
+          <li>Les coordonnées de facturation que vous indiquez</li>
+        </ul>
+
+        <h3>Pour un avis publié sur le site</h3>
+        <ul>
+          <li>Votre prénom et l'initiale de votre nom</li>
+          <li>Le contexte de la prestation</li>
+          <li>Le texte de votre avis</li>
+        </ul>
+        <p>
+          Un avis n'est publié qu'avec votre accord, et seuls votre prénom et
+          l'initiale de votre nom apparaissent. Vous pouvez demander son
+          retrait à tout moment.
+        </p>
+
+        <h2>Utilisation</h2>
+        <p>Ces renseignements servent uniquement à&nbsp;:</p>
+        <ul>
+          <li>vous répondre et vous proposer une offre&nbsp;;</li>
+          <li>préparer et livrer une commande ou une prestation&nbsp;;</li>
+          <li>émettre une facture&nbsp;;</li>
+          <li>
+            publier un avis, lorsque vous l'avez explicitement demandé.
+          </li>
+        </ul>
+        <p>
+          Ils ne sont ni vendus, ni loués, ni échangés. Aucune liste de
+          diffusion n'est constituée à partir des formulaires&nbsp;: le champ
+          courriel du bas de page ne crée aucune inscription, il reporte
+          simplement votre adresse dans le formulaire de contact.
+        </p>
+        <p>
+          Aucune décision vous concernant n'est prise de façon automatisée, et
+          aucun profilage n'est effectué.
+        </p>
+
+        <h2>Consentement</h2>
+        <p>
+          En envoyant un formulaire, vous consentez à ce que les
+          renseignements qu'il contient soient utilisés aux fins décrites
+          ci-dessus. Ce consentement est donné librement&nbsp;: aucun champ
+          n'est pré-coché, et vous pouvez le retirer à tout moment en écrivant
+          à l'adresse indiquée plus haut.
+        </p>
+
+        <h2>Communication à des tiers</h2>
+        <p>
+          Les renseignements ne sont communiqués qu'aux prestataires
+          strictement nécessaires au fonctionnement du site, et uniquement
+          pour les fins ci-dessus&nbsp;:
+        </p>
+        <dl>
+          <dt>Vercel Inc. — hébergement du site</dt>
+          <dd>
+            Héberge les pages et exécute le formulaire. Serveurs situés aux
+            États-Unis.
+          </dd>
+
+          <dt>Resend (ou Brevo) — acheminement des courriels</dt>
+          <dd>
+            Transmet le contenu de votre formulaire à la boîte de Precious et
+            vous envoie l'accusé de réception. Serveurs situés aux États-Unis
+            ou dans l'Union européenne selon le prestataire utilisé.
+          </dd>
+        </dl>
+
+        <div class="encadre">
+          <p>
+            <strong>Communication hors du Québec.</strong> Ces prestataires
+            traitent les renseignements à l'extérieur du Québec. Precious a
+            évalué, avant de les retenir, que les renseignements en cause — un
+            nom, des coordonnées et le détail d'un événement — ne sont pas
+            sensibles, qu'ils bénéficient d'une protection adéquate chez ces
+            prestataires et qu'ils sont encadrés par leurs engagements
+            contractuels. Cette évaluation est documentée et peut être
+            consultée sur demande.
+          </p>
+        </div>
+
+        <h2>Conservation</h2>
+        <dl>
+          <dt>Demande sans suite</dt>
+          <dd>Conservée douze mois, puis supprimée.</dd>
+
+          <dt>Commande ou prestation réalisée</dt>
+          <dd>
+            Conservée sept ans, délai de conservation des pièces
+            justificatives exigé par les autorités fiscales.
+          </dd>
+
+          <dt>Avis publié</dt>
+          <dd>
+            Conservé tant que l'avis figure sur le site, et supprimé dès son
+            retrait.
+          </dd>
+        </dl>
+        <p>
+          Au terme de ces délais, les renseignements sont détruits ou
+          anonymisés de façon irréversible.
+        </p>
+
+        <h2>Sécurité</h2>
+        <ul>
+          <li>
+            Le site est servi exclusivement en HTTPS, avec une politique de
+            sécurité du contenu stricte.
+          </li>
+          <li>
+            Les formulaires sont protégés contre les envois automatisés et
+            limités en nombre d'envois.
+          </li>
+          <li>
+            L'accès à la boîte de réception est restreint à la direction de
+            Precious.
+          </li>
+          <li>
+            Tout incident de confidentialité est consigné dans un registre. Si
+            un incident présente un risque de préjudice sérieux, la Commission
+            d'accès à l'information et les personnes concernées en sont
+            avisées sans délai.
+          </li>
+        </ul>
+
+        <h2>Vos droits</h2>
+        <p>
+          La loi québécoise vous reconnaît le droit d'obtenir&nbsp;:
+        </p>
+        <ul>
+          <li>
+            <strong>l'accès</strong> aux renseignements que Precious détient
+            sur vous&nbsp;;
+          </li>
+          <li>
+            <strong>la rectification</strong> de ceux qui sont inexacts,
+            incomplets ou équivoques&nbsp;;
+          </li>
+          <li>
+            <strong>la suppression</strong> de ceux dont la conservation n'est
+            plus justifiée&nbsp;;
+          </li>
+          <li>
+            <strong>le retrait de votre consentement</strong>, à tout
+            moment&nbsp;;
+          </li>
+          <li>
+            <strong>la portabilité</strong>&nbsp;: recevoir dans un format
+            technologique structuré et couramment utilisé les renseignements
+            que vous avez fournis.
+          </li>
+        </ul>
+        <p>
+          Pour exercer l'un de ces droits, écrivez à
+          <a href="mailto:Preciousck384@gmail.com">Preciousck384@gmail.com</a>.
+          Si la réponse ne vous satisfait pas, vous pouvez porter plainte
+          auprès de la
+          <a
+            href="https://www.cai.gouv.qc.ca/"
+            target="_blank"
+            rel="noreferrer noopener"
+            >Commission d'accès à l'information du Québec</a
+          >.
+        </p>
+
+        <h2>Modifications</h2>
+        <p>
+          Cette politique peut être mise à jour. La date d'entrée en vigueur
+          indiquée en tête de page signale la version en cours. Toute
+          modification substantielle sera signalée sur la page d'accueil.
+        </p>
+      </main>
+
+      <footer class="pied">
+        <p>
+          <strong>Precious</strong> — Montréal, Québec<br />
+          <a href="mailto:Preciousck384@gmail.com">Preciousck384@gmail.com</a>
+          · <a href="tel:+15149772775">+1 514 977-2775</a>
+        </p>
+        <p>
+          Les boissons sont fabriquées dans un atelier qui n'accueille pas de
+          public. Les commandes se font par le site, par courriel ou par
+          téléphone, et les jus sont également offerts chez nos détaillants.
+        </p>
+        <p><a href="/">← Retour au site</a></p>
+      </footer>
+    </div>
+  </body>
+</html>

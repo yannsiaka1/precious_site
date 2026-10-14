@@ -4,6 +4,7 @@ import { site } from "@/content/site";
 import { submitRequest, useFormStart } from "@/lib/submitRequest";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
+import { MentionConsentement } from "@/components/ui/MentionConsentement";
 import { fieldClass, labelClass, limits } from "@/components/ui/formStyles";
 import { cn } from "@/lib/cn";
 
@@ -183,6 +184,8 @@ function ShareForm({ onClose }: { onClose: () => void }) {
           Annuler
         </Button>
       </div>
+
+      <MentionConsentement className="sm:col-span-2" />
     </form>
   );
 }

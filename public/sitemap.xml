@@ -2,8 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://precious-jus.com/</loc>
-    <lastmod>2026-09-12</lastmod>
+    <lastmod>2026-10-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <!-- Page légale : indexable, mais d'une priorité délibérément basse. Elle
+       doit être trouvable, pas concurrencer la page d'accueil. -->
+  <url>
+    <loc>https://precious-jus.com/confidentialite</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
   </url>
 </urlset>
