@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { services } from "@/content/offerings";
+import { site } from "@/content/site";
 import type { ServiceId } from "@/content/types";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ImagePairCarousel } from "@/components/ui/ImagePairCarousel";
@@ -151,7 +152,12 @@ export function Services({ activeId, onActiveChange }: ServicesProps) {
                   onClose={() => setFormFor(null)}
                 />
               ) : (
-                <div className="flex h-full flex-col justify-center p-8 sm:p-10 lg:p-14">
+                // Le contenu était centré verticalement. Pour l'univers des
+                // jus, la liste des détaillants s'ajoute sous les boutons :
+                // en restant centré, l'ensemble descendait trop bas et le
+                // titre quittait l'écran sur un téléphone. On cale donc en
+                // haut, ce qui laisse la liste s'allonger vers le bas.
+                <div className="flex h-full flex-col justify-start p-8 sm:p-10 lg:p-14">
                   <Eyebrow>{active.eyebrow}</Eyebrow>
                   <h3 className="mt-4 text-[clamp(1.75rem,2.6vw,2.5rem)] text-forest">
                     {active.title}
@@ -182,6 +188,36 @@ export function Services({ activeId, onActiveChange }: ServicesProps) {
                       Poser une question
                     </Button>
                   </div>
+
+                  {/* Détaillants, sous l'univers des jus uniquement.
+                      Quelqu'un qui veut du jus aujourd'hui n'a pas envie
+                      d'attendre une commande : lui donner l'adresse la plus
+                      proche au moment où il regarde les jus vaut mieux que
+                      de la cacher au bas de la page de contact, où elle
+                      figure aussi. Les deux listes lisent la même source,
+                      donc une adresse ne peut pas diverger de l'autre. */}
+                  {active.id === "jus" ? (
+                    <div className="mt-10 border-t border-ink/15 pt-7">
+                      <p className="font-ui text-xs font-bold tracking-[0.14em] text-ink/70 uppercase">
+                        Ou passez nous voir
+                      </p>
+                      <ul className="mt-4 grid gap-2.5 text-[0.95rem]">
+                        {site.pointsDeVente.map((point) => (
+                          <li
+                            key={point.adresse}
+                            className="flex flex-col sm:flex-row sm:gap-2"
+                          >
+                            <span className="font-medium text-ink">
+                              {point.nom}
+                            </span>
+                            <span className="text-ink/65">
+                              {point.adresse}, {point.ville}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
                 </div>
               )}
             </div>
