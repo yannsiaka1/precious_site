@@ -3,6 +3,7 @@ import type { ServiceId } from "@/content/types";
 import { defilerVers, installerDefilementAncres } from "@/lib/defiler";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { Intro } from "@/components/sections/Intro";
 import { Hero } from "@/components/sections/Hero";
 import { SavoirFaire } from "@/components/sections/SavoirFaire";
 import { Services } from "@/components/sections/Services";
@@ -48,6 +49,13 @@ export default function App() {
       >
         Aller au contenu
       </a>
+
+      {/* L'ouverture précède l'en-tête, et c'est voulu : l'en-tête est en
+          `sticky top-0`, il reste donc dans le flux tant qu'il n'a pas
+          atteint le haut de la fenêtre. Placé ici, il n'apparaît qu'une fois
+          la vidéo dépassée — on arrive sur la vidéo seule, et le site se
+          révèle au défilement, sans écouteur de défilement à écrire. */}
+      <Intro />
 
       <Header />
 
