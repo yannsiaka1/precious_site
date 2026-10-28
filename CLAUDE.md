@@ -48,9 +48,16 @@ police distante. La politique de sécurité du contenu est verrouillée sur
 c'est ce qui permet de se passer de bandeau de consentement. Toute dépendance
 externe ajoutée casse cet équilibre et doit être discutée.
 
-**Les images de galerie** font 820×615 en WebP, 80 Ko au maximum, et portent
-`loading="lazy"`. Un format différent sera rogné au centre par le navigateur,
-sans égard pour le sujet.
+**Les images de galerie** font 820×615 en WebP, 80 Ko visés, et portent
+`loading="lazy"`. Le carrousel les affiche en `object-cover` : un fichier d'un
+autre format y sera rogné au centre par le navigateur.
+
+Une exception existe, et elle est volontaire. La visionneuse, elle, affiche en
+`object-contain` — donc le fichier entier. Une photo verticale dont le sujet ne
+survit pas à un recadrage en 4:3 est donc stockée dans sa proportion d'origine :
+le carrousel en montre la bande centrale, la visionneuse la montre entière.
+Un portrait comptant plus de pixels, le plafond passe à 90 Ko pour ces
+fichiers-là. `cocktails-20` est le seul dans ce cas à ce jour.
 
 **Rien n'est inventé dans les contenus.** Tarifs, adresses, témoignages,
 délais : si l'information n'a pas été fournie, on ne la met pas et on la
