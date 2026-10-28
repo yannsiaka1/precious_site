@@ -72,6 +72,30 @@ export function Intro() {
     video.current?.play().catch(() => undefined);
   }, [large, anime]);
 
+  /**
+   * Met la lecture en pause dès que la section est entièrement recouverte,
+   * et la relance quand elle réapparaît.
+   *
+   * L'observateur surveille l'attribut que `useRecouvrement` pose sur cette
+   * même section. Passer par le DOM plutôt que par une propriété React évite
+   * de faire remonter l'état du défilement jusqu'à `App` pour le redescendre
+   * ensuite — et surtout de relancer un rendu à chaque image.
+   */
+  useEffect(() => {
+    const element = document.getElementById("intro");
+    const lecteur = video.current;
+    if (!element || !lecteur) return;
+
+    const suivre = () => {
+      if (element.hasAttribute("data-couvert")) lecteur.pause();
+      else lecteur.play().catch(() => undefined);
+    };
+
+    const observateur = new MutationObserver(suivre);
+    observateur.observe(element, { attributeFilter: ["data-couvert"] });
+    return () => observateur.disconnect();
+  }, [large, anime]);
+
   function basculerSon() {
     const lecteur = video.current;
     if (!lecteur) return;
@@ -87,7 +111,26 @@ export function Intro() {
     <section
       id="intro"
       aria-label={`${site.name} en images`}
-      className="relative h-svh w-full overflow-hidden bg-forest-deep"
+      /*
+        `sticky top-0` : la section reste épinglée pendant que le site monte
+        par-dessus. `origin-top` pour que le léger recul se fasse depuis le
+        haut du cadre, sinon l'image semble glisser vers le bas.
+
+        Les trois propriétés pilotées par `--recouvrement` sont écrites en
+        style direct : elles dépendent d'une variable que le JavaScript met à
+        jour à chaque image, ce qu'une classe utilitaire ne sait pas exprimer.
+        Toutes trois — transform, opacity, border-radius — sont traitées par
+        le compositeur, sans recalcul de mise en page.
+
+        `[&[data-couvert]]:invisible` : une fois la section entièrement
+        masquée, on la retire de la composition. Rien ne la regarde plus.
+      */
+      style={{
+        transform: "scale(calc(1 - 0.06 * var(--recouvrement, 0)))",
+        borderBottomLeftRadius: "calc(var(--recouvrement, 0) * 2.75rem)",
+        borderBottomRightRadius: "calc(var(--recouvrement, 0) * 2.75rem)",
+      }}
+      className="sticky top-0 h-svh w-full origin-top overflow-hidden bg-forest-deep [&[data-couvert]]:invisible"
     >
       {/*
         `prefers-reduced-motion` : on ne joue rien et on montre une image fixe
@@ -107,10 +150,12 @@ export function Intro() {
           poster={`/assets/video/affiche-${suffixe}.webp`}
           className="absolute inset-0 h-full w-full object-cover"
         >
-          <source src={`/assets/video/accueil-${suffixe}.mp4`} type="video/mp4" />
+          <source
+            src={`/assets/video/accueil-${suffixe}.mp4`}
+            type="video/mp4"
+          />
         </video>
-      ) : large === null ? (
-        /*
+      ) : large === null ? /*
           Mesure pas encore faite : on n'affiche rien du tout.
 
           Tentant d'y mettre une image d'attente, mais laquelle ? Sans
@@ -119,8 +164,7 @@ export function Intro() {
           qu'on puisse la remplacer. Le fond vert de la section est de toute
           façon la première image exacte du film : il n'y a rien à cacher.
         */
-        null
-      ) : (
+      null : (
         <img
           src={`/assets/video/repli-${large ? "pc" : "mobile"}.webp`}
           alt=""
@@ -128,6 +172,18 @@ export function Intro() {
           className="absolute inset-0 h-full w-full object-cover"
         />
       )}
+
+      {/*
+        Assombrissement progressif pendant que le site recouvre la section.
+        Sans lui, l'ouverture resterait aussi lumineuse que le contenu qui
+        arrive, et les deux se disputeraient le regard au lieu de se passer
+        le relais.
+      */}
+      <div
+        aria-hidden="true"
+        style={{ opacity: "calc(var(--recouvrement, 0) * 0.72)" }}
+        className="pointer-events-none absolute inset-0 z-[5] bg-forest-deep"
+      />
 
       {/*
         Voile en pied de cadre. Il ne décore pas : sans lui, l'invitation à
@@ -151,7 +207,9 @@ export function Intro() {
           className="absolute top-6 right-5 z-10 grid h-11 w-11 place-items-center rounded-full bg-ink/35 text-paper backdrop-blur-sm transition-colors duration-300 hover:bg-ink/55 sm:top-8 sm:right-8"
         >
           <span className="sr-only">
-            {sonActif ? "Couper le son de la vidéo" : "Activer le son de la vidéo"}
+            {sonActif
+              ? "Couper le son de la vidéo"
+              : "Activer le son de la vidéo"}
           </span>
           <svg
             viewBox="0 0 24 24"

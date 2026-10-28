@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { ServiceId } from "@/content/types";
 import { defilerVers, installerDefilementAncres } from "@/lib/defiler";
+import { useRecouvrement } from "@/hooks/useRecouvrement";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Intro } from "@/components/sections/Intro";
@@ -21,6 +22,10 @@ export default function App() {
   // Tous les liens d'ancre de la page passent par un défilement de durée
   // bornée, posé une seule fois ici.
   useEffect(() => installerDefilementAncres(), []);
+
+  // Le bloc du site recouvre l'ouverture au défilement. La référence se pose
+  // sur ce qui recouvre ; l'avancement est écrit sur ce qui est recouvert.
+  const recouvrant = useRecouvrement<HTMLDivElement>("intro");
 
   /**
    * Amène le visiteur à la destination d'une carte « savoir-faire » :
@@ -50,31 +55,61 @@ export default function App() {
         Aller au contenu
       </a>
 
-      {/* L'ouverture précède l'en-tête, et c'est voulu : l'en-tête est en
-          `sticky top-0`, il reste donc dans le flux tant qu'il n'a pas
-          atteint le haut de la fenêtre. Placé ici, il n'apparaît qu'une fois
-          la vidéo dépassée — on arrive sur la vidéo seule, et le site se
-          révèle au défilement, sans écouteur de défilement à écrire. */}
-      <Intro />
+      {/*
+        L'ouverture et le reste du site sont frères dans un même bloc
+        positionné. C'est ce qui permet le recouvrement : l'ouverture est
+        collante et reste épinglée, le bloc du site passe par-dessus.
 
-      <Header />
+        L'en-tête est à l'intérieur du bloc recouvrant, et non avant lui.
+        Deux raisons : il monte avec le site au lieu de flotter au-dessus de
+        la vidéo, où son texte sombre serait illisible ; et il ne se fige en
+        haut de fenêtre qu'une fois l'ouverture dépassée.
+      */}
+      <div className="relative">
+        <Intro />
 
-      <main id="contenu">
-        <Hero />
-        <SavoirFaire onGoTo={goTo} />
-        <Services activeId={activeService} onActiveChange={setActiveService} />
-        <Academy />
-        <Maison />
-        <Realisations />
-        <Testimonials />
-        <Contact
-          subject={subject}
-          onSubjectChange={setSubject}
-          prefillEmail={prefillEmail}
-        />
-      </main>
+        {/*
+          Le bloc qui recouvre. Ses coins s'arrondissent quand il arrive par
+          le bas puis s'aplatissent une fois calé en haut, et une ombre portée
+          vers le haut le détache de l'ouverture : c'est ce qui le fait lire
+          comme une surface qui glisse par-dessus, et non comme une simple
+          section qui suit.
 
-      <Footer onQuickWrite={quickWrite} />
+          Le fond opaque est indispensable : sans lui, l'ouverture restée
+          épinglée se verrait par transparence à travers toute la page.
+        */}
+        <div
+          ref={recouvrant}
+          style={{
+            borderTopLeftRadius: "calc((1 - var(--recouvrement, 0)) * 2.75rem)",
+            borderTopRightRadius:
+              "calc((1 - var(--recouvrement, 0)) * 2.75rem)",
+          }}
+          className="relative z-10 bg-blush shadow-[0_-26px_52px_-18px_rgba(7,57,28,0.5)]"
+        >
+          <Header />
+
+          <main id="contenu">
+            <Hero />
+            <SavoirFaire onGoTo={goTo} />
+            <Services
+              activeId={activeService}
+              onActiveChange={setActiveService}
+            />
+            <Academy />
+            <Maison />
+            <Realisations />
+            <Testimonials />
+            <Contact
+              subject={subject}
+              onSubjectChange={setSubject}
+              prefillEmail={prefillEmail}
+            />
+          </main>
+
+          <Footer onQuickWrite={quickWrite} />
+        </div>
+      </div>
     </>
   );
 }
