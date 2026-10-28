@@ -175,6 +175,26 @@ export const services: Service[] = [
         src: "/assets/galerie/cocktails-15.webp",
         alt: "Présentoir de mocktails dorés et rouges, décor floral blanc et orange",
       },
+      // Deux événements en plein air. Jusqu'ici la galerie ne montrait que des
+      // salles : un visiteur qui prépare un mariage au jardin ou un barbecue
+      // d'entreprise ne s'y reconnaissait pas.
+      {
+        src: "/assets/galerie/cocktails-19.webp",
+        alt: "Bar à jus Precious installé en plein air : mojitos, cocktails orange et fontaine de jus de gingembre",
+        caption: "Aussi en plein air",
+      },
+      {
+        src: "/assets/galerie/cocktails-20.webp",
+        alt: "Cocktails bleus et coupes au fruit de la passion dressés dehors, décor floral blanc et doré",
+      },
+      {
+        src: "/assets/galerie/cocktails-17.webp",
+        alt: "Table de réception Precious dressée sur toute sa longueur : margaritas, mimosas et mocktails dorés",
+      },
+      {
+        src: "/assets/galerie/cocktails-18.webp",
+        alt: "Bar à jus Precious vu en enfilade, présentoirs étagés et compositions florales",
+      },
     ],
     formIntro:
       "Racontez-nous votre événement : nous vous proposons une carte et un devis.",
@@ -361,7 +381,11 @@ export const maison = [
       "Aujourd'hui, ces trois univers avancent ensemble avec la même ambition : des produits et des expériences sincères, accessibles et créatives.",
     ],
     image: "/assets/maison-portrait.webp",
-    alt: "Coupes de cocktail mangue et fruits rouges dressées par Precious",
+    // Une section qui raconte une histoire gagne à montrer la personne qui la
+    // vit. La nature morte qui occupait cette place disait la même chose que
+    // les vingt photos de la galerie ; celle-ci met un visage sur la marque,
+    // ce qui compte pour un service qu'on fait venir chez soi.
+    alt: "Precious devant un bar à jus qu'elle vient de dresser pour un événement",
     imageStyle: "portrait" as const,
   },
   {
