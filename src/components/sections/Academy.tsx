@@ -97,16 +97,47 @@ function CarteFormation({
             {formation.priceNote}
           </p>
 
-          <Button
-            as="a"
-            href={formation.url}
-            target="_blank"
-            rel="noreferrer noopener"
-            variant="onDark"
-            className="mt-7"
-          >
-            {formation.cta}
-          </Button>
+          {/*
+            Deux boutons plutôt qu'un sélecteur : la page de commande Payhip
+            n'offre aucun choix de plan, chaque lien en force un.
+
+            Les deux portent la même variante, volontairement. `cn` concatène
+            sans arbitrer — le dépôt n'embarque pas `tailwind-merge` —, donc
+            une classe de couleur passée ici serait écrasée par celle de la
+            variante sans que rien ne le signale. Les distinguer demanderait
+            une variante sombre secondaire dans `Button`, importé par sept
+            sections. L'ordre de lecture désigne l'action principale, et la
+            mention de prix juste au-dessus explique les deux.
+          */}
+          <div className="mt-7 flex flex-wrap items-center gap-4">
+            {/* Le nom accessible répète le libellé visible avant de le
+                préciser : « En une fois » seul ne dit pas de quelle formation
+                il s'agit pour qui parcourt la page lien par lien, et garder le
+                libellé en tête préserve la commande vocale. */}
+            <Button
+              as="a"
+              href={formation.url}
+              target="_blank"
+              rel="noreferrer noopener"
+              variant="onDark"
+              aria-label={formation.ctaAria}
+            >
+              {formation.cta}
+            </Button>
+
+            {formation.echelonne ? (
+              <Button
+                as="a"
+                href={formation.echelonne.url}
+                target="_blank"
+                rel="noreferrer noopener"
+                variant="onDark"
+                aria-label={formation.echelonne.ctaAria}
+              >
+                {formation.echelonne.cta}
+              </Button>
+            ) : null}
+          </div>
         </div>
       </article>
     </Reveal>

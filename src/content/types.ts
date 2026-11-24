@@ -76,11 +76,36 @@ export interface Formation {
   duree: string;
   /** Tarif affiché, devise comprise. */
   price: string;
-  /** Mention sous le tarif (paiement unique, conditions). */
+  /** Mention sous le tarif : modes de règlement, conditions. */
   priceNote: string;
   cta: string;
+  /**
+   * Nom accessible du bouton principal.
+   *
+   * Le libellé visible tient en trois mots pour que les deux boutons
+   * entrent côte à côte ; hors de la carte, il ne dirait pas de quelle
+   * formation il s'agit. Doit commencer par `cta` à l'identique, sans quoi
+   * la commande vocale ne reconnaît plus le bouton qu'on lui nomme.
+   */
+  ctaAria: string;
   /** Lien de paiement Payhip. */
   url: string;
+  /**
+   * Second mode de règlement, quand il est offert.
+   *
+   * Facultatif plutôt qu'obligatoire : une formation sans plan échelonné
+   * n'affiche simplement pas le second bouton, sans qu'il faille toucher au
+   * composant. Chaque lien Payhip force un plan tarifaire précis — la page de
+   * commande n'offre aucun choix —, d'où deux adresses distinctes.
+   */
+  echelonne?: {
+    /** Intitulé du bouton, montant par versement compris. */
+    cta: string;
+    /** Nom accessible, aux mêmes conditions que `ctaAria`. */
+    ctaAria: string;
+    /** Lien Payhip pointant sur le plan échelonné. */
+    url: string;
+  };
 }
 
 /** Question courante affichée en accordéon sous les offres. */
