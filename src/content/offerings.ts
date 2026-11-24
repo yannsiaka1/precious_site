@@ -242,9 +242,13 @@ export const formations: Formation[] = [
     ],
     price: "2 000 $ CAD",
     priceNote:
-      "Paiement unique. Inscription confirmée dès validation du paiement. Les stages pratiques sont proposés selon les prestations, événements et places disponibles.",
-    cta: "S'inscrire à la formation présentielle — 2 000 $",
+      "Payable en une fois, ou en 3 versements mensuels de 667 $ — soit 2 001 $, sans frais d'échelonnement. Inscription confirmée dès le premier paiement. Les stages pratiques sont proposés selon les prestations, événements et places disponibles.",
+    cta: "En une fois — 2 000 $",
     url: "https://payhip.com/order?link=reUX6&pricing_plan=18B15gV2BZ",
+    echelonne: {
+      cta: "En 3 fois — 667 $/mois",
+      url: "https://payhip.com/order?link=reUX6&pricing_plan=ZjBLo40rzm",
+    },
   },
   {
     id: "en-ligne",
@@ -271,9 +275,13 @@ export const formations: Formation[] = [
     ],
     price: "1 500 $ CAD",
     priceNote:
-      "Paiement unique. Inscription confirmée dès validation du paiement. Les stages pratiques sont proposés selon les prestations, événements et places disponibles.",
-    cta: "S'inscrire à la formation en ligne — 1 500 $",
+      "Payable en une fois, ou en 3 versements mensuels de 500 $, sans frais d'échelonnement. Inscription confirmée dès le premier paiement. Les stages pratiques sont proposés selon les prestations, événements et places disponibles.",
+    cta: "En une fois — 1 500 $",
     url: "https://payhip.com/order?link=X3taT&pricing_plan=V6B73gDJBr",
+    echelonne: {
+      cta: "En 3 fois — 500 $/mois",
+      url: "https://payhip.com/order?link=X3taT&pricing_plan=YLBNg0rMGK",
+    },
   },
 ];
 
@@ -513,7 +521,7 @@ export const questionsFormation: Question[] = [
   {
     question: "Comment se passe le paiement ?",
     reponse:
-      "Paiement unique et sécurisé. Votre inscription est confirmée dès la validation, et vous ouvrez aussitôt votre espace participant.",
+      "Au choix : en une fois, ou en 3 versements mensuels sans frais. Le paiement est sécurisé, votre inscription est confirmée dès le premier versement et vous ouvrez aussitôt votre espace participant.",
   },
 ];
 

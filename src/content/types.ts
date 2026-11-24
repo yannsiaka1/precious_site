@@ -81,6 +81,20 @@ export interface Formation {
   cta: string;
   /** Lien de paiement Payhip. */
   url: string;
+  /**
+   * Second mode de règlement, quand il est offert.
+   *
+   * Facultatif plutôt qu'obligatoire : une formation sans plan échelonné
+   * n'affiche simplement pas le second bouton, sans qu'il faille toucher au
+   * composant. Chaque lien Payhip force un plan tarifaire précis — la page de
+   * commande n'offre aucun choix —, d'où deux adresses distinctes.
+   */
+  echelonne?: {
+    /** Intitulé du bouton, montant par versement compris. */
+    cta: string;
+    /** Lien Payhip pointant sur le plan échelonné. */
+    url: string;
+  };
 }
 
 /** Question courante affichée en accordéon sous les offres. */

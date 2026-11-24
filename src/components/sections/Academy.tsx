@@ -97,16 +97,55 @@ function CarteFormation({
             {formation.priceNote}
           </p>
 
-          <Button
-            as="a"
-            href={formation.url}
-            target="_blank"
-            rel="noreferrer noopener"
-            variant="onDark"
-            className="mt-7"
-          >
-            {formation.cta}
-          </Button>
+          {/*
+            Deux appels à l'action lorsque le paiement échelonné est offert :
+            le visiteur choisit son mode de règlement sans quitter la carte.
+            Chaque lien Payhip force un plan tarifaire, la page de commande
+            n'en propose aucun choix — il faut donc bien deux boutons.
+
+            Le conteneur reprend le motif des autres paires du site
+            (`Services`, `Testimonials`) : `flex flex-wrap` et `gap-4`, pour
+            que les deux boutons passent l'un sous l'autre sur téléphone.
+          */}
+          <div className="mt-7 flex flex-wrap items-center gap-4">
+            {/*
+              Le nom accessible reprend le libellé visible, puis précise la
+              formation : « En une fois » seul ne dit rien à qui parcourt la
+              page lien par lien. Le libellé visible reste en tête pour que la
+              commande vocale continue de fonctionner.
+            */}
+            <Button
+              as="a"
+              href={formation.url}
+              target="_blank"
+              rel="noreferrer noopener"
+              variant="onDark"
+              aria-label={`${formation.cta}, formation ${formation.badge.toLowerCase()}`}
+            >
+              {formation.cta}
+            </Button>
+
+            {/*
+              Le second bouton est volontairement plus discret : le paiement en
+              une fois reste l'action principale. Il n'existe pas de variante
+              secondaire sur fond sombre, et en créer une modifierait un
+              fichier partagé par sept sections — d'où cette atténuation
+              locale, sur des paliers d'opacité déjà employés ailleurs.
+            */}
+            {formation.echelonne ? (
+              <Button
+                as="a"
+                href={formation.echelonne.url}
+                target="_blank"
+                rel="noreferrer noopener"
+                variant="onDark"
+                className="border-paper/30 text-paper/85"
+                aria-label={`${formation.echelonne.cta}, formation ${formation.badge.toLowerCase()}`}
+              >
+                {formation.echelonne.cta}
+              </Button>
+            ) : null}
+          </div>
         </div>
       </article>
     </Reveal>
