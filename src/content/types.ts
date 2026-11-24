@@ -76,9 +76,18 @@ export interface Formation {
   duree: string;
   /** Tarif affiché, devise comprise. */
   price: string;
-  /** Mention sous le tarif (paiement unique, conditions). */
+  /** Mention sous le tarif : modes de règlement, conditions. */
   priceNote: string;
   cta: string;
+  /**
+   * Nom accessible du bouton principal.
+   *
+   * Le libellé visible tient en trois mots pour que les deux boutons
+   * entrent côte à côte ; hors de la carte, il ne dirait pas de quelle
+   * formation il s'agit. Doit commencer par `cta` à l'identique, sans quoi
+   * la commande vocale ne reconnaît plus le bouton qu'on lui nomme.
+   */
+  ctaAria: string;
   /** Lien de paiement Payhip. */
   url: string;
   /**
@@ -92,6 +101,8 @@ export interface Formation {
   echelonne?: {
     /** Intitulé du bouton, montant par versement compris. */
     cta: string;
+    /** Nom accessible, aux mêmes conditions que `ctaAria`. */
+    ctaAria: string;
     /** Lien Payhip pointant sur le plan échelonné. */
     url: string;
   };

@@ -98,40 +98,33 @@ function CarteFormation({
           </p>
 
           {/*
-            Deux appels à l'action lorsque le paiement échelonné est offert :
-            le visiteur choisit son mode de règlement sans quitter la carte.
-            Chaque lien Payhip force un plan tarifaire, la page de commande
-            n'en propose aucun choix — il faut donc bien deux boutons.
+            Deux boutons plutôt qu'un sélecteur : la page de commande Payhip
+            n'offre aucun choix de plan, chaque lien en force un.
 
-            Le conteneur reprend le motif des autres paires du site
-            (`Services`, `Testimonials`) : `flex flex-wrap` et `gap-4`, pour
-            que les deux boutons passent l'un sous l'autre sur téléphone.
+            Les deux portent la même variante, volontairement. `cn` concatène
+            sans arbitrer — le dépôt n'embarque pas `tailwind-merge` —, donc
+            une classe de couleur passée ici serait écrasée par celle de la
+            variante sans que rien ne le signale. Les distinguer demanderait
+            une variante sombre secondaire dans `Button`, importé par sept
+            sections. L'ordre de lecture désigne l'action principale, et la
+            mention de prix juste au-dessus explique les deux.
           */}
           <div className="mt-7 flex flex-wrap items-center gap-4">
-            {/*
-              Le nom accessible reprend le libellé visible, puis précise la
-              formation : « En une fois » seul ne dit rien à qui parcourt la
-              page lien par lien. Le libellé visible reste en tête pour que la
-              commande vocale continue de fonctionner.
-            */}
+            {/* Le nom accessible répète le libellé visible avant de le
+                préciser : « En une fois » seul ne dit pas de quelle formation
+                il s'agit pour qui parcourt la page lien par lien, et garder le
+                libellé en tête préserve la commande vocale. */}
             <Button
               as="a"
               href={formation.url}
               target="_blank"
               rel="noreferrer noopener"
               variant="onDark"
-              aria-label={`${formation.cta}, formation ${formation.badge.toLowerCase()}`}
+              aria-label={formation.ctaAria}
             >
               {formation.cta}
             </Button>
 
-            {/*
-              Le second bouton est volontairement plus discret : le paiement en
-              une fois reste l'action principale. Il n'existe pas de variante
-              secondaire sur fond sombre, et en créer une modifierait un
-              fichier partagé par sept sections — d'où cette atténuation
-              locale, sur des paliers d'opacité déjà employés ailleurs.
-            */}
             {formation.echelonne ? (
               <Button
                 as="a"
@@ -139,8 +132,7 @@ function CarteFormation({
                 target="_blank"
                 rel="noreferrer noopener"
                 variant="onDark"
-                className="border-paper/30 text-paper/85"
-                aria-label={`${formation.echelonne.cta}, formation ${formation.badge.toLowerCase()}`}
+                aria-label={formation.echelonne.ctaAria}
               >
                 {formation.echelonne.cta}
               </Button>

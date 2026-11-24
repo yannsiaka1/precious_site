@@ -242,11 +242,13 @@ export const formations: Formation[] = [
     ],
     price: "2 000 $ CAD",
     priceNote:
-      "Payable en une fois, ou en 3 versements mensuels de 667 $ — soit 2 001 $, sans frais d'échelonnement. Inscription confirmée dès le premier paiement. Les stages pratiques sont proposés selon les prestations, événements et places disponibles.",
+      "Payable en une fois, ou en 3 versements mensuels de 667 $ — soit 2 001 $ au total, l'écart venant de l'arrondi du versement. Aucun autre frais. Inscription confirmée dès le premier paiement. Les stages pratiques sont proposés selon les prestations, événements et places disponibles.",
     cta: "En une fois — 2 000 $",
+    ctaAria: "En une fois — 2 000 $, formation en présentiel",
     url: "https://payhip.com/order?link=reUX6&pricing_plan=18B15gV2BZ",
     echelonne: {
       cta: "En 3 fois — 667 $/mois",
+      ctaAria: "En 3 fois — 667 $/mois, formation en présentiel",
       url: "https://payhip.com/order?link=reUX6&pricing_plan=ZjBLo40rzm",
     },
   },
@@ -275,11 +277,13 @@ export const formations: Formation[] = [
     ],
     price: "1 500 $ CAD",
     priceNote:
-      "Payable en une fois, ou en 3 versements mensuels de 500 $, sans frais d'échelonnement. Inscription confirmée dès le premier paiement. Les stages pratiques sont proposés selon les prestations, événements et places disponibles.",
+      "Payable en une fois, ou en 3 versements mensuels de 500 $, sans frais supplémentaires. Inscription confirmée dès le premier paiement. Les stages pratiques sont proposés selon les prestations, événements et places disponibles.",
     cta: "En une fois — 1 500 $",
+    ctaAria: "En une fois — 1 500 $, formation en ligne",
     url: "https://payhip.com/order?link=X3taT&pricing_plan=V6B73gDJBr",
     echelonne: {
       cta: "En 3 fois — 500 $/mois",
+      ctaAria: "En 3 fois — 500 $/mois, formation en ligne",
       url: "https://payhip.com/order?link=X3taT&pricing_plan=YLBNg0rMGK",
     },
   },
@@ -292,8 +296,8 @@ export const formations: Formation[] = [
  * regarder les prix, ce qui lève l'hésitation au moment de cliquer.
  */
 export const inscription = [
-  "Vous complétez vos informations et réglez le paiement sécurisé.",
-  "Votre inscription est confirmée immédiatement après validation du paiement.",
+  "Vous complétez vos informations et réglez votre paiement sécurisé — en une fois, ou le premier des trois versements.",
+  "Votre inscription est confirmée immédiatement après ce premier paiement.",
   "Vous ouvrez votre espace participant — par le lien affiché après le paiement ou par le courriel reçu — en vous connectant avec l'adresse et le mot de passe choisis au moment du paiement.",
   "L'équipe Precious vous écrit sous 24 heures : date, horaire, lieu exact ou lien de visioconférence, et toutes les informations pratiques.",
 ];
