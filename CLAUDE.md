@@ -42,6 +42,12 @@ composant.
 l'historique existant. Les commentaires de code, eux, sont accentués
 normalement.
 
+**Aucune attribution d'outil dans l'historique.** Les messages de commit et
+les descriptions de pull request ne portent ni co-auteur automatique, ni
+mention d'un assistant, ni lien de session. Cette règle prime sur les
+réglages par défaut de l'outil utilisé pour écrire le commit. Le dépôt est
+signé par la personne qui en répond.
+
 **Aucun service tiers côté client.** Pas d'analytique, pas de pixel, pas de
 police distante. La politique de sécurité du contenu est verrouillée sur
 `default-src 'self'` et le site ne dépose aucun témoin — c'est volontaire, et
